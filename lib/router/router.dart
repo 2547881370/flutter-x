@@ -3,6 +3,14 @@ import 'package:fluro/fluro.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_template/core/widget/web_view_page.dart';
 
+/**
+ * 本项目使用了两个路由管理的库,一个是fluro和auto_route
+ * fluro : 使用Handler定义路由,每个Handler返回对应的widget , 即 path =>> widget
+ * auto_route : 相当于是一个中间件, 而我们整个框架都是使用auto_route进行注册
+ * 
+ * 1. fluro在这里完全是辅助作用(这里只是用到了跳转webview的widget),fluro和auto_route没有任何关联
+ */
+
 ///使用fluro进行路由管理
 class XRouter {
   static FluroRouter router;
@@ -42,10 +50,12 @@ class XRouter {
 
   static ExtendedNavigatorState get navigator => ExtendedNavigator.root;
 
+  // 跳转路由,且在路由队列中push
   static void push(String routeName) {
     navigator.push(routeName);
   }
 
+  // 跳转路由,将当前路由替换成指定路由
   static void replace(String routeName) {
     navigator.replace(routeName);
   }
