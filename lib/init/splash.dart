@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_template/router/route_map.gr.dart';
 import 'package:flutter_template/router/router.dart';
+import 'package:flutter_template/utils/sputils.dart';
 
 //类似广告启动页
 class SplashPage extends StatefulWidget {
@@ -12,6 +13,8 @@ class _SplashPageState extends State<SplashPage> {
   @override
   void initState() {
     super.initState();
+    /// 设置沉浸式状态栏
+    SPUtils.statusBar();
     countDown();
   }
 
