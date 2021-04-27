@@ -40,18 +40,6 @@ class _LoginPageState extends State<LoginPage> {
   Widget build(BuildContext context) {
     return WillPopScope(
         child: Scaffold(
-          appBar: AppBar(
-            // leading: _leading(context),
-            title: Text(I18n.of(context).login),
-            actions: <Widget>[
-              TextButton(
-                child: Text(I18n.of(context).register, style: TextStyle(color: Colors.white)),
-                onPressed: () {
-                  XRouter.push(Routes.registerPage);
-                },
-              )
-            ],
-          ),
           body: GestureDetector(
             onTap: () {
               // 点击空白页面关闭键盘
@@ -76,11 +64,6 @@ class _LoginPageState extends State<LoginPage> {
       autovalidateMode: AutovalidateMode.disabled,
       child: Column(
         children: <Widget>[
-          Center(
-              heightFactor: 1.5,
-              child: FlutterLogo(
-                size: 64,
-              )),
           TextFormField(
               autofocus: false,
               controller: _unameController,
