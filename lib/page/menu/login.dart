@@ -10,6 +10,7 @@ import 'package:flutter_template/router/router.dart';
 import 'package:flutter_template/utils/provider.dart';
 import 'package:flutter_template/utils/sputils.dart';
 import 'package:provider/provider.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class LoginPage extends StatefulWidget {
   @override
@@ -52,7 +53,7 @@ class _LoginPageState extends State<LoginPage> {
                     children: <Widget>[
                       Container(
                         width: double.infinity,
-                        height: 300,
+                        height: ScreenUtil().setHeight(300),
                         decoration: BoxDecoration(
                             color: Theme.of(context).primaryColor),
                       ),

@@ -10,6 +10,7 @@ import 'package:flutter_template/router/router.dart';
 import 'package:flutter_template/utils/provider.dart';
 import 'package:flutter_template/utils/sputils.dart';
 import 'package:provider/provider.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 //默认App的启动
 class DefaultApp {
@@ -34,38 +35,40 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return Consumer2<AppTheme, LocaleModel>(
         builder: (context, appTheme, localeModel, _) {
-      return MaterialApp(
-        title: 'Flutter Project',
-        theme: ThemeData(
-          primarySwatch: appTheme.themeColor,
-          buttonColor: appTheme.themeColor,
-        ),
-        builder: ExtendedNavigator<RouterMap>(
-          router: RouterMap(),
-          guards: [AuthGuard()],
-        ),
-        locale: localeModel.getLocale(),
-        supportedLocales: I18n.delegate.supportedLocales,
-        localizationsDelegates: [
-          I18n.delegate,
-          GlobalMaterialLocalizations.delegate,
-          GlobalWidgetsLocalizations.delegate,
-          GlobalCupertinoLocalizations.delegate,
-        ],
-        localeResolutionCallback:
-            (Locale _locale, Iterable<Locale> supportedLocales) {
-          if (localeModel.getLocale() != null) {
-            //如果已经选定语言，则不跟随系统
-            return localeModel.getLocale();
-          } else {
-            //跟随系统
-            if (I18n.delegate.isSupported(_locale)) {
-              return _locale;
-            }
-            return supportedLocales.first;
-          }
-        },
-      );
+      return ScreenUtilInit(
+          designSize: Size(750, 1334),
+          builder: () => MaterialApp(
+                title: 'Flutter Project',
+                theme: ThemeData(
+                  primarySwatch: appTheme.themeColor,
+                  buttonColor: appTheme.themeColor,
+                ),
+                builder: ExtendedNavigator<RouterMap>(
+                  router: RouterMap(),
+                  guards: [AuthGuard()],
+                ),
+                locale: localeModel.getLocale(),
+                supportedLocales: I18n.delegate.supportedLocales,
+                localizationsDelegates: [
+                  I18n.delegate,
+                  GlobalMaterialLocalizations.delegate,
+                  GlobalWidgetsLocalizations.delegate,
+                  GlobalCupertinoLocalizations.delegate,
+                ],
+                localeResolutionCallback:
+                    (Locale _locale, Iterable<Locale> supportedLocales) {
+                  if (localeModel.getLocale() != null) {
+                    //如果已经选定语言，则不跟随系统
+                    return localeModel.getLocale();
+                  } else {
+                    //跟随系统
+                    if (I18n.delegate.isSupported(_locale)) {
+                      return _locale;
+                    }
+                    return supportedLocales.first;
+                  }
+                },
+              ));
     });
   }
 }
