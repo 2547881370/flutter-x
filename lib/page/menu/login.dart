@@ -46,19 +46,13 @@ class _LoginPageState extends State<LoginPage> {
               // 点击空白页面关闭键盘
               closeKeyboard(context);
             },
-            child: SingleChildScrollView(
+            child: Container(
+              width: double.infinity,
+              height: double.infinity,
               child: Stack(
                 children: <Widget>[
-                  Column(
-                    children: <Widget>[
-                      Container(
-                        width: double.infinity,
-                        height: ScreenUtil().setHeight(300),
-                        decoration: BoxDecoration(
-                            color: Theme.of(context).primaryColor),
-                      ),
-                    ],
-                  )
+                  topContainerColor(),
+                  topPositioned(child: buildForm(context))
                 ],
               ),
             ),
@@ -76,42 +70,55 @@ class _LoginPageState extends State<LoginPage> {
       autovalidateMode: AutovalidateMode.disabled,
       child: Column(
         children: <Widget>[
-          TextFormField(
-              autofocus: false,
-              controller: _unameController,
-              decoration: InputDecoration(
-                  labelText: I18n.of(context).loginName,
+          Container(
+            decoration: BoxDecoration(
+                color: Colors.grey[300],
+                borderRadius: BorderRadius.all(Radius.circular(8))),
+            child: TextFormField(
+                autofocus: false,
+                controller: _unameController,
+                decoration: InputDecoration(
+                  // labelText: I18n.of(context).loginName,
                   hintText: I18n.of(context).loginNameHint,
                   hintStyle: TextStyle(fontSize: 12),
-                  icon: Icon(Icons.person)),
-              //校验用户名
-              validator: (v) {
-                return v.trim().length > 0
-                    ? null
-                    : I18n.of(context).loginNameError;
-              }),
-          TextFormField(
-              controller: _pwdController,
-              decoration: InputDecoration(
-                  labelText: I18n.of(context).password,
-                  hintText: I18n.of(context).passwordHint,
-                  hintStyle: TextStyle(fontSize: 12),
-                  icon: Icon(Icons.lock),
-                  suffixIcon: IconButton(
-                      icon: Icon(
-                        _isShowPassWord
-                            ? Icons.visibility
-                            : Icons.visibility_off,
-                        color: Colors.black,
-                      ),
-                      onPressed: showPassWord)),
-              obscureText: !_isShowPassWord,
-              //校验密码
-              validator: (v) {
-                return v.trim().length >= 6
-                    ? null
-                    : I18n.of(context).passwordError;
-              }),
+                  border: OutlineInputBorder(borderSide: BorderSide.none),
+                ),
+                //校验用户名
+                validator: (v) {
+                  return v.trim().length > 0
+                      ? null
+                      : I18n.of(context).loginNameError;
+                }),
+          ),
+          SizedBox(
+            height: ScreenUtil().setHeight(20),
+          ),
+          Container(
+              decoration: BoxDecoration(
+                  color: Colors.grey[300],
+                  borderRadius: BorderRadius.all(Radius.circular(8))),
+              child: TextFormField(
+                  controller: _pwdController,
+                  decoration: InputDecoration(
+                      hintText: I18n.of(context).passwordHint,
+                      hintStyle: TextStyle(fontSize: 12),
+                      border: OutlineInputBorder(borderSide: BorderSide.none),
+                      suffixIcon: IconButton(
+                          icon: Icon(
+                            _isShowPassWord
+                                ? Icons.visibility
+                                : Icons.visibility_off,
+                            color: Colors.black,
+                          ),
+                          onPressed: showPassWord)),
+                  obscureText: !_isShowPassWord,
+                  //校验密码
+                  validator: (v) {
+                    return v.trim().length >= 6
+                        ? null
+                        : I18n.of(context).passwordError;
+                  })),
+
           // 登录按钮
           Padding(
             padding: const EdgeInsets.only(top: 28.0),
@@ -190,5 +197,85 @@ class _LoginPageState extends State<LoginPage> {
       Navigator.of(context).pop();
       ToastUtils.error(onError);
     });
+  }
+}
+
+class topPositioned extends StatelessWidget {
+  final Widget child;
+  const topPositioned({Key key, this.child}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Positioned(
+      top: ScreenUtil().setHeight(260),
+      child: Container(
+        width: ScreenUtil().setWidth(750),
+        padding: EdgeInsets.symmetric(
+            vertical: ScreenUtil().setHeight(10),
+            horizontal: ScreenUtil().setWidth(20)),
+        decoration: BoxDecoration(
+            border: Border.all(
+          color: Colors.black,
+          width: 0.0,
+          style: BorderStyle.none,
+        )),
+        child: Container(
+          child: Column(
+            children: <Widget>[
+              Center(
+                child: Container(
+                  width: ScreenUtil().setWidth(200),
+                  height: ScreenUtil().setHeight(100),
+                  alignment: Alignment.center,
+                  decoration: BoxDecoration(
+                      border: Border(
+                          bottom: BorderSide(
+                              width: ScreenUtil().setHeight(5),
+                              color: Theme.of(context).primaryColor))),
+                  child: Text(
+                    "登录",
+                    style: TextStyle(
+                        color: Theme.of(context).primaryColor,
+                        fontSize: ScreenUtil().setSp(50),
+                        fontWeight: FontWeight.bold),
+                  ),
+                ),
+              ),
+              SizedBox(
+                height: ScreenUtil().setHeight(20),
+              ),
+              child
+            ],
+          ),
+          padding: EdgeInsets.symmetric(
+              vertical: ScreenUtil().setHeight(10),
+              horizontal: ScreenUtil().setWidth(20)),
+          decoration: BoxDecoration(
+              color: Colors.white,
+              boxShadow: [
+                BoxShadow(
+                    color: Colors.black, blurRadius: 15, spreadRadius: 0.1)
+              ],
+              borderRadius: BorderRadius.all(
+                Radius.circular(8),
+              )),
+        ),
+      ),
+    );
+  }
+}
+
+class topContainerColor extends StatelessWidget {
+  const topContainerColor({
+    Key key,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      width: double.infinity,
+      height: ScreenUtil().setHeight(400),
+      decoration: BoxDecoration(color: Theme.of(context).primaryColor),
+    );
   }
 }
