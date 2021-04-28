@@ -46,9 +46,20 @@ class _LoginPageState extends State<LoginPage> {
               closeKeyboard(context);
             },
             child: SingleChildScrollView(
-              padding:
-                  const EdgeInsets.symmetric(vertical: 16.0, horizontal: 24.0),
-              child: buildForm(context),
+              child: Stack(
+                children: <Widget>[
+                  Column(
+                    children: <Widget>[
+                      Container(
+                        width: double.infinity,
+                        height: 300,
+                        decoration: BoxDecoration(
+                            color: Theme.of(context).primaryColor),
+                      ),
+                    ],
+                  )
+                ],
+              ),
             ),
           ),
         ),
