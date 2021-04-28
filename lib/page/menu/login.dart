@@ -110,7 +110,8 @@ class _LoginPageState extends State<LoginPage> {
                     style: TextButton.styleFrom(
                         primary: Theme.of(context).primaryColor,
                         padding: EdgeInsets.all(15.0)),
-                    child: Text(I18n.of(context).login, style: TextStyle(color: Colors.white)),
+                    child: Text(I18n.of(context).login,
+                        style: TextStyle(color: Colors.white)),
                     onPressed: () {
                       //由于本widget也是Form的子代widget，所以可以通过下面方式获取FormState
                       if (Form.of(context).validate()) {
@@ -153,6 +154,12 @@ class _LoginPageState extends State<LoginPage> {
           );
         });
 
+    /// context.watch<T>()， 一方法使得widget能够监听泛型T上发生的改变。
+    /// context.read<T>()，直接返回T，不会监听改变。
+    /// context.select<T， R>(R cb(T value))，允许widget只监听T上的一部分(R)。
+    /// 或者使用 Provider.of<T>(context) 这一静态方法，它的表现类似 watch ，而在你为 listen 参数传入 false 时(如 Provider.of<T>(context，listen: false) ), 它的表现类似于 read。
+    /// 值得注意的是，context.read<T>() 方法不会在值变化时使得widget重新构建， 并且不能在 StatelessWidget.build/State.build 内调用. 换句话说， 它可以在除了这两个方法以外的任意之处调用。
+    /// 即当前返回的是一个read,不会监听值的变化,一般这种用于直接获取参数,不用于更新widget的用途
     UserProfile userProfile = Provider.of<UserProfile>(context, listen: false);
 
     XHttp.post("/user/login", {
