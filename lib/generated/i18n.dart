@@ -126,6 +126,8 @@ class I18n implements WidgetsLocalizations {
   String get welcome5 => " the full text.";
   /// "Privacy agreement agreed!"
   String get agreePrivacy => "Privacy agreement agreed!";
+  /// "Sign In"
+  String get signIn => "Sign In";
 }
 
 class _I18n_en_US extends I18n {
@@ -279,6 +281,9 @@ class _I18n_zh_CN extends I18n {
   /// "已同意隐私协议!"
   @override
   String get agreePrivacy => "已同意隐私协议!";
+  /// "登录"
+  @override
+  String get signIn => "登录";
 
   @override
   TextDirection get textDirection => TextDirection.ltr;

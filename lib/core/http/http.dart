@@ -8,7 +8,7 @@ class XHttp {
 
   ///网络请求配置
   static final Dio dio = Dio(BaseOptions(
-    baseUrl: "https://www.wanandroid.com",
+    baseUrl: "http://localhost:3000",
     connectTimeout: 5000,
     receiveTimeout: 3000,
   ));
@@ -81,6 +81,14 @@ class XHttp {
     Response response = await dio.post(url, data: data);
     return response.data;
   }
+
+  /// request请求
+  static Future request(String url, Map<String, dynamic> param ) async {
+    Response response = await dio.request(url,
+        data: param, options: Options(method: 'post'));
+    return response.data;
+  }
+
 
   ///下载文件
   static Future downloadFile(urlPath, savePath) async {

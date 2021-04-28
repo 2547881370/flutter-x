@@ -24,6 +24,8 @@ class _LoginPageState extends State<LoginPage> {
   TextEditingController _unameController = TextEditingController();
   TextEditingController _pwdController = TextEditingController();
   GlobalKey _formKey = GlobalKey<FormState>();
+  bool _isUnameErrorText = false;
+  bool _isPwdErrorText = false;
 
   @override
   void initState() {
@@ -69,10 +71,12 @@ class _LoginPageState extends State<LoginPage> {
       key: _formKey, //设置globalKey，用于后面获取FormState
       autovalidateMode: AutovalidateMode.disabled,
       child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
           Container(
+            height: ScreenUtil().setHeight(100),
             decoration: BoxDecoration(
-                color: Colors.grey[300],
+                color: Colors.grey[200],
                 borderRadius: BorderRadius.all(Radius.circular(8))),
             child: TextFormField(
                 autofocus: false,
@@ -85,17 +89,32 @@ class _LoginPageState extends State<LoginPage> {
                 ),
                 //校验用户名
                 validator: (v) {
-                  return v.trim().length > 0
-                      ? null
-                      : I18n.of(context).loginNameError;
+                  if (v.trim().length > 0) {
+                    setState(() {
+                      _isUnameErrorText = false;
+                    });
+                  } else {
+                    setState(() {
+                      _isUnameErrorText = true;
+                    });
+                  }
                 }),
           ),
+          _isUnameErrorText
+              ? Padding(
+                  padding: const EdgeInsets.only(top: 3),
+                  child: Text(I18n.of(context).loginNameError,
+                      style: TextStyle(
+                          color: Colors.red, fontSize: ScreenUtil().setSp(25))),
+                )
+              : Container(),
           SizedBox(
-            height: ScreenUtil().setHeight(20),
+            height: ScreenUtil().setHeight(30),
           ),
           Container(
+              height: ScreenUtil().setHeight(100),
               decoration: BoxDecoration(
-                  color: Colors.grey[300],
+                  color: Colors.grey[200],
                   borderRadius: BorderRadius.all(Radius.circular(8))),
               child: TextFormField(
                   controller: _pwdController,
@@ -114,14 +133,26 @@ class _LoginPageState extends State<LoginPage> {
                   obscureText: !_isShowPassWord,
                   //校验密码
                   validator: (v) {
-                    return v.trim().length >= 6
-                        ? null
-                        : I18n.of(context).passwordError;
+                    if(v.trim().length >= 6){
+                      setState(() {
+                        _isPwdErrorText = false;
+                      });
+                    }else{
+                      setState(() {
+                        _isPwdErrorText = true;
+                      });
+                    }
                   })),
+          _isPwdErrorText ?  Padding(
+            padding: const EdgeInsets.only(top: 3),
+            child: Text(I18n.of(context).passwordError,
+                style: TextStyle(
+                    color: Colors.red, fontSize: ScreenUtil().setSp(25))),
+          ) : Container(),
 
           // 登录按钮
           Padding(
-            padding: const EdgeInsets.only(top: 28.0),
+            padding: const EdgeInsets.only(top: 20),
             child: Row(
               children: <Widget>[
                 Expanded(child: Builder(builder: (context) {
@@ -181,7 +212,7 @@ class _LoginPageState extends State<LoginPage> {
     /// 即当前返回的是一个read,不会监听值的变化,一般这种用于直接获取参数,不用于更新widget的用途
     UserProfile userProfile = Provider.of<UserProfile>(context, listen: false);
 
-    XHttp.post("/user/login", {
+    XHttp.request("/auth/login", {
       "username": _unameController.text,
       "password": _pwdController.text
     }).then((response) {
@@ -211,8 +242,8 @@ class topPositioned extends StatelessWidget {
       child: Container(
         width: ScreenUtil().setWidth(750),
         padding: EdgeInsets.symmetric(
-            vertical: ScreenUtil().setHeight(10),
-            horizontal: ScreenUtil().setWidth(20)),
+            vertical: ScreenUtil().setHeight(20),
+            horizontal: ScreenUtil().setWidth(50)),
         decoration: BoxDecoration(
             border: Border.all(
           color: Colors.black,
@@ -233,23 +264,23 @@ class topPositioned extends StatelessWidget {
                               width: ScreenUtil().setHeight(5),
                               color: Theme.of(context).primaryColor))),
                   child: Text(
-                    "登录",
+                    I18n.of(context).signIn,
                     style: TextStyle(
                         color: Theme.of(context).primaryColor,
-                        fontSize: ScreenUtil().setSp(50),
+                        fontSize: ScreenUtil().setSp(40),
                         fontWeight: FontWeight.bold),
                   ),
                 ),
               ),
               SizedBox(
-                height: ScreenUtil().setHeight(20),
+                height: ScreenUtil().setHeight(30),
               ),
               child
             ],
           ),
           padding: EdgeInsets.symmetric(
-              vertical: ScreenUtil().setHeight(10),
-              horizontal: ScreenUtil().setWidth(20)),
+              vertical: ScreenUtil().setHeight(50),
+              horizontal: ScreenUtil().setWidth(40)),
           decoration: BoxDecoration(
               color: Colors.white,
               boxShadow: [

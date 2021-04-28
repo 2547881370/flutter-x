@@ -47,12 +47,12 @@ class AppTheme with ChangeNotifier {
   static final List<MaterialColor> materialColors = [
     Colors.orange,
     Colors.red,
+    Colors.amber,
     Colors.blue,
     Colors.lightBlue,
     Colors.pink,
     Colors.purple,
     Colors.grey,
-    Colors.amber,
     Colors.yellow,
     Colors.lightGreen,
     Colors.green,
