@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_template/core/utils/toast.dart';
 import 'package:flutter_template/core/utils/xuifont.dart';
 import 'package:flutter_template/generated/i18n.dart';
@@ -30,9 +31,15 @@ class MenuDrawer extends StatelessWidget {
                       padding: const EdgeInsets.symmetric(horizontal: 16),
                       child: ClipOval(
                         // 如果已登录，则显示用户头像；若未登录，则显示默认头像
-                        child: FlutterLogo(
-                          size: 80,
-                        ),
+                        child: value.userInfo != null
+                            ? Container(
+                                child:
+                                    Image.network(value.userInfo?.data?.avatar),
+                                height: ScreenUtil().setHeight(100),
+                              )
+                            : FlutterLogo(
+                                size: 80,
+                              ),
                       ),
                     ),
                     Expanded(
@@ -139,6 +146,7 @@ class MenuDrawer extends StatelessWidget {
                     title: Text(I18n.of(context).logout),
                     onTap: () {
                       value.nickName = "";
+                      value.userInfo = null;
                       XRouter.replace(Routes.loginPage);
                     },
                   )

@@ -1,8 +1,11 @@
+import 'dart:convert';
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_template/models/auth_%E2%80%8Blogin_model.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'dart:convert' as convert;
 
 class SPUtils {
   /// 内部构造方法，可避免外部暴露构造函数，进行实例化
@@ -47,6 +50,32 @@ class SPUtils {
     return _spf.getString('key_nickname');
   }
 
+  ///用户信息
+  static Future<bool> saveUserInfo(AuthLoginModel userInfo) {
+    // JSON转字符串 JsonEncoder().convert()
+    return _spf.setString('key_userInfo', JsonEncoder().convert(userInfo));
+  }
+
+  static AuthLoginModel getUserInfo() {
+    if (_spf.getString('key_userInfo') != 'null' &&
+        _spf.getString('key_userInfo') != null) {
+      // 字符串转JSON JsonDecoder().convert()
+      Map<String, dynamic> userInfo =
+          JsonDecoder().convert(_spf.getString('key_userInfo'));
+      return AuthLoginModel.fromJson(userInfo);
+    } else {
+      return null as AuthLoginModel;
+    }
+  }
+
+  static String getToken() {
+    if (getUserInfo() != null) {
+      return getUserInfo().data.token;
+    } else {
+      return '';
+    }
+  }
+
   ///是否同意隐私协议
   static Future<bool> saveIsAgreePrivacy(bool isAgree) {
     return _spf.setBool('key_agree_privacy', isAgree);
@@ -68,28 +97,30 @@ class SPUtils {
   /// 设置沉浸式状态栏
   /// 状态栏样式 沉浸式状态栏
   static statusBar() {
-      // 白色沉浸式状态栏颜色  白色文字
-      SystemUiOverlayStyle light = SystemUiOverlayStyle(
-        systemNavigationBarColor: Color(0xFF000000),
-        systemNavigationBarDividerColor: null,
-        /// 注意安卓要想实现沉浸式的状态栏 需要底部设置透明色
-        statusBarColor: Colors.transparent,
-        systemNavigationBarIconBrightness: Brightness.light,
-        statusBarIconBrightness: Brightness.light,
-        statusBarBrightness: Brightness.dark,
-      );
+    // 白色沉浸式状态栏颜色  白色文字
+    SystemUiOverlayStyle light = SystemUiOverlayStyle(
+      systemNavigationBarColor: Color(0xFF000000),
+      systemNavigationBarDividerColor: null,
 
-      // 黑色沉浸式状态栏颜色 黑色文字
-      SystemUiOverlayStyle dark = SystemUiOverlayStyle(
-        systemNavigationBarColor: Color(0xFF000000),
-        systemNavigationBarDividerColor: null,
-        /// 注意安卓要想实现沉浸式的状态栏 需要底部设置透明色
-        statusBarColor: Colors.transparent,
-        systemNavigationBarIconBrightness: Brightness.light,
-        statusBarIconBrightness: Brightness.dark,
-        statusBarBrightness: Brightness.light,
-      );
-      // 这个地方你可以去掉三目运算符 直接调用你想要的 效果即可
-      SystemChrome.setSystemUIOverlayStyle(light);
+      /// 注意安卓要想实现沉浸式的状态栏 需要底部设置透明色
+      statusBarColor: Colors.transparent,
+      systemNavigationBarIconBrightness: Brightness.light,
+      statusBarIconBrightness: Brightness.light,
+      statusBarBrightness: Brightness.dark,
+    );
+
+    // 黑色沉浸式状态栏颜色 黑色文字
+    SystemUiOverlayStyle dark = SystemUiOverlayStyle(
+      systemNavigationBarColor: Color(0xFF000000),
+      systemNavigationBarDividerColor: null,
+
+      /// 注意安卓要想实现沉浸式的状态栏 需要底部设置透明色
+      statusBarColor: Colors.transparent,
+      systemNavigationBarIconBrightness: Brightness.light,
+      statusBarIconBrightness: Brightness.dark,
+      statusBarBrightness: Brightness.light,
+    );
+    // 这个地方你可以去掉三目运算符 直接调用你想要的 效果即可
+    SystemChrome.setSystemUIOverlayStyle(light);
   }
 }

@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
+import 'package:flutter_template/core/http/baseApi.dart';
 import 'package:flutter_template/core/http/http.dart';
 import 'package:flutter_template/core/utils/privacy.dart';
 import 'package:flutter_template/core/utils/toast.dart';
 import 'package:flutter_template/core/widget/loading_dialog.dart';
 import 'package:flutter_template/generated/i18n.dart';
 import 'package:flutter_template/models/auth_%E2%80%8Blogin_model.dart';
+import 'package:flutter_template/models/auth_add_user_model.dart';
 import 'package:flutter_template/router/route_map.gr.dart';
 import 'package:flutter_template/router/router.dart';
 import 'package:flutter_template/utils/provider.dart';
@@ -55,7 +57,11 @@ class _LoginPageState extends State<LoginPage> {
               child: Stack(
                 children: <Widget>[
                   topContainerColor(),
-                  topPositioned(child: buildForm(context))
+                  topInkWell(),
+                  topPositioned(
+                    child: buildForm(context),
+                    title: I18n.of(context).signIn,
+                  )
                 ],
               ),
             ),
@@ -128,7 +134,7 @@ class _LoginPageState extends State<LoginPage> {
                             _isShowPassWord
                                 ? Icons.visibility
                                 : Icons.visibility_off,
-                            color: Colors.black,
+                            color: Theme.of(context).primaryColor,
                           ),
                           onPressed: showPassWord)),
                   obscureText: !_isShowPassWord,
@@ -167,7 +173,8 @@ class _LoginPageState extends State<LoginPage> {
                         style: TextStyle(color: Colors.white)),
                     onPressed: () {
                       //由于本widget也是Form的子代widget，所以可以通过下面方式获取FormState
-                      if (Form.of(context).validate()) {
+                      Form.of(context).validate();
+                      if (isFormValue()) {
                         onSubmit(context);
                       }
                     },
@@ -179,6 +186,11 @@ class _LoginPageState extends State<LoginPage> {
         ],
       ),
     );
+  }
+
+  /// 表单数据是否为空
+  bool isFormValue() {
+    return !_isUnameErrorText && !_isPwdErrorText;
   }
 
   ///点击控制密码是否显示
@@ -215,7 +227,7 @@ class _LoginPageState extends State<LoginPage> {
     /// 即当前返回的是一个read,不会监听值的变化,一般这种用于直接获取参数,不用于更新widget的用途
     UserProfile userProfile = Provider.of<UserProfile>(context, listen: false);
 
-    XHttp.postJson("/auth/login", {
+    XHttp.postJson(NWApi.loginPath, {
       "username": _unameController.text,
       "password": _pwdController.text
     }).then((response) {
@@ -223,6 +235,7 @@ class _LoginPageState extends State<LoginPage> {
       AuthLoginModel data = AuthLoginModel.fromJson(response);
       if (data.code == 200) {
         userProfile.nickName = data.data.nick;
+        userProfile.userInfo = data;
         ToastUtils.toast(I18n.of(context).loginSuccess);
         XRouter.replace(Routes.mainHomePage);
       } else {
@@ -235,14 +248,49 @@ class _LoginPageState extends State<LoginPage> {
   }
 }
 
+class topInkWell extends StatelessWidget {
+  const topInkWell({
+    Key key,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      alignment: Alignment.centerRight,
+      height: MediaQuery.of(context).padding.top * 4,
+      child: InkWell(
+        onTap: () {
+          XRouter.push(Routes.registerPage);
+        },
+        child: Padding(
+          padding: EdgeInsets.symmetric(vertical: 0, horizontal: 10),
+          child: Container(
+            width: ScreenUtil().setWidth(100),
+            height: MediaQuery.of(context).padding.top * 4,
+            alignment: Alignment.centerRight,
+            child: Text(I18n.of(context).register,
+                style: TextStyle(
+                    fontSize: ScreenUtil().setSp(35),
+                    fontWeight: FontWeight.bold,
+                    color: Colors.white)),
+          ),
+        ),
+      ),
+    );
+  }
+}
+
 class topPositioned extends StatelessWidget {
   final Widget child;
-  const topPositioned({Key key, this.child}) : super(key: key);
+  final double top;
+  final String title;
+  const topPositioned({Key key, this.child, this.top = 260, this.title})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Positioned(
-      top: ScreenUtil().setHeight(260),
+      top: ScreenUtil().setHeight(this.top),
       child: Container(
         width: ScreenUtil().setWidth(750),
         padding: EdgeInsets.symmetric(
@@ -268,7 +316,7 @@ class topPositioned extends StatelessWidget {
                               width: ScreenUtil().setHeight(5),
                               color: Theme.of(context).primaryColor))),
                   child: Text(
-                    I18n.of(context).signIn,
+                    this.title,
                     style: TextStyle(
                         color: Theme.of(context).primaryColor,
                         fontSize: ScreenUtil().setSp(40),
@@ -301,15 +349,14 @@ class topPositioned extends StatelessWidget {
 }
 
 class topContainerColor extends StatelessWidget {
-  const topContainerColor({
-    Key key,
-  }) : super(key: key);
+  final double height;
+  const topContainerColor({Key key, this.height = 400}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Container(
       width: double.infinity,
-      height: ScreenUtil().setHeight(400),
+      height: ScreenUtil().setHeight(this.height),
       decoration: BoxDecoration(color: Theme.of(context).primaryColor),
     );
   }

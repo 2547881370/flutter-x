@@ -3,13 +3,16 @@ import 'package:dio/dio.dart';
 import 'package:dio_cookie_manager/dio_cookie_manager.dart';
 import 'package:flutter_template/core/utils/path.dart';
 import 'package:flutter_template/core/utils/toast.dart';
+import 'package:flutter_template/utils/sputils.dart';
+
+import 'baseApi.dart';
 
 class XHttp {
   XHttp._internal();
 
   ///网络请求配置
   static final Dio dio = Dio(BaseOptions(
-    baseUrl: "http://192.168.43.70:3000",
+    baseUrl: NWApi.baseApi,
     connectTimeout: 5000,
     receiveTimeout: 3000,
   ));
@@ -26,6 +29,7 @@ class XHttp {
     //添加拦截器
     dio.interceptors.add(InterceptorsWrapper(onRequest: (options, handler) {
       print("请求之前");
+      dio.options.headers['token'] = SPUtils.getToken();
       return handler.next(options);
     }, onResponse: (response, handler) {
       print("响应之前");

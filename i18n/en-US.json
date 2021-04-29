@@ -46,5 +46,6 @@
     "welcome4": "   For more details, please refer to",
     "welcome5": " the full text.",
     "agreePrivacy": "Privacy agreement agreed!",
-    "signIn" : "Sign In"
+    "signIn" : "Sign In",
+    "passwordRepeaError": "The two passwords are inconsistent, please re-enter!"
 }

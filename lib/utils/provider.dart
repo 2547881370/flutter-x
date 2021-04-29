@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_template/generated/i18n.dart';
+import 'package:flutter_template/models/auth_%E2%80%8Blogin_model.dart';
+import 'package:flutter_template/models/auth_add_user_model.dart';
 import 'package:provider/provider.dart';
 
 import 'sputils.dart';
@@ -15,7 +17,8 @@ class Store {
       providers: [
         ChangeNotifierProvider(create: (_) => AppTheme(getDefaultTheme())),
         ChangeNotifierProvider.value(value: LocaleModel(SPUtils.getLocale())),
-        ChangeNotifierProvider.value(value: UserProfile(SPUtils.getNickName())),
+        ChangeNotifierProvider.value(
+            value: UserProfile(SPUtils.getNickName(), SPUtils.getUserInfo())),
         ChangeNotifierProvider.value(value: AppStatus(TAB_HOME_INDEX)),
       ],
       child: child,
@@ -107,14 +110,22 @@ class LocaleModel with ChangeNotifier {
 ///用户账户信息
 class UserProfile with ChangeNotifier {
   String _nickName;
+  AuthLoginModel _userInfo;
 
-  UserProfile(this._nickName);
+  UserProfile(this._nickName, this._userInfo);
 
   String get nickName => _nickName;
+  AuthLoginModel get userInfo => _userInfo;
 
   set nickName(String nickName) {
     _nickName = nickName;
     SPUtils.saveNickName(nickName);
+    notifyListeners();
+  }
+
+  set userInfo(AuthLoginModel userInfo) {
+    _userInfo = userInfo;
+    SPUtils.saveUserInfo(userInfo);
     notifyListeners();
   }
 }

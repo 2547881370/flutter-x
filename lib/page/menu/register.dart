@@ -1,9 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
+import 'package:flutter_template/core/http/baseApi.dart';
 import 'package:flutter_template/core/http/http.dart';
 import 'package:flutter_template/core/utils/toast.dart';
 import 'package:flutter_template/core/widget/loading_dialog.dart';
 import 'package:flutter_template/generated/i18n.dart';
+import 'package:flutter_template/models/auth_add_user_model.dart';
+
+import 'login.dart';
 
 class RegisterPage extends StatefulWidget {
   @override
@@ -19,19 +24,46 @@ class _RegisterPageState extends State<RegisterPage> {
   TextEditingController _pwdController = TextEditingController();
   TextEditingController _pwdRepeatController = TextEditingController();
   GlobalKey _formKey = GlobalKey<FormState>();
+  bool _isUnameErrorText = false;
+  bool _isPwdErrorText = false;
+  bool _isPwdRepeatErrorText = false;
+  String _passwordRepeaErrorTitle;
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text(I18n.of(context).register)),
+      appBar: AppBar(
+          // 去除阴影
+          elevation: 0,
+          leading: IconButton(
+            icon: Icon(
+              Icons.keyboard_arrow_left,
+              color: Colors.white,
+            ),
+            color: Colors.white,
+            onPressed: () {
+              Navigator.pop(context);
+            },
+          )),
       body: GestureDetector(
         onTap: () {
           // 点击空白页面关闭键盘
           closeKeyboard(context);
         },
-        child: SingleChildScrollView(
-          padding: const EdgeInsets.symmetric(vertical: 16.0, horizontal: 24.0),
-          child: buildForm(context),
+        child: Container(
+          width: double.infinity,
+          height: double.infinity,
+          child: Stack(
+            children: <Widget>[
+              topContainerColor(height: 252),
+              topInkWell(),
+              topPositioned(
+                top: 10,
+                child: buildForm(context),
+                title: I18n.of(context).register,
+              )
+            ],
+          ),
         ),
       ),
     );
@@ -43,66 +75,145 @@ class _RegisterPageState extends State<RegisterPage> {
       key: _formKey, //设置globalKey，用于后面获取FormState
       autovalidateMode: AutovalidateMode.disabled,
       child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
-          TextFormField(
-              autofocus: false,
-              controller: _unameController,
-              decoration: InputDecoration(
-                  labelText: I18n.of(context).loginName,
+          Container(
+            height: ScreenUtil().setHeight(100),
+            decoration: BoxDecoration(
+                color: Colors.grey[200],
+                borderRadius: BorderRadius.all(Radius.circular(8))),
+            child: TextFormField(
+                autofocus: false,
+                controller: _unameController,
+                decoration: InputDecoration(
+                  border: OutlineInputBorder(borderSide: BorderSide.none),
                   hintText: I18n.of(context).loginNameHint,
                   hintStyle: TextStyle(fontSize: 12),
-                  icon: Icon(Icons.person)),
-              //校验用户名
-              validator: (v) {
-                return v.trim().length > 0
-                    ? null
-                    : I18n.of(context).loginNameError;
-              }),
-          TextFormField(
-              controller: _pwdController,
-              decoration: InputDecoration(
-                  labelText: I18n.of(context).password,
-                  hintText: I18n.of(context).passwordHint,
-                  hintStyle: TextStyle(fontSize: 12),
-                  icon: Icon(Icons.lock),
-                  suffixIcon: IconButton(
-                      icon: Icon(
-                        _isShowPassWord
-                            ? Icons.visibility
-                            : Icons.visibility_off,
-                        color: Colors.black,
-                      ),
-                      onPressed: showPassWord)),
-              obscureText: !_isShowPassWord,
-              //校验密码
-              validator: (v) {
-                return v.trim().length >= 6
-                    ? null
-                    : I18n.of(context).passwordError;
-              }),
+                ),
+                //校验用户名
+                validator: (v) {
+                  if (v.trim().length > 0) {
+                    setState(() {
+                      _isUnameErrorText = false;
+                    });
+                  } else {
+                    setState(() {
+                      _isUnameErrorText = true;
+                    });
+                  }
+                }),
+          ),
 
-          TextFormField(
-              controller: _pwdRepeatController,
-              decoration: InputDecoration(
-                  labelText: I18n.of(context).repeatPassword,
-                  hintText: I18n.of(context).passwordHint,
-                  hintStyle: TextStyle(fontSize: 12),
-                  icon: Icon(Icons.lock),
-                  suffixIcon: IconButton(
-                      icon: Icon(
-                        _isShowPassWordRepeat
-                            ? Icons.visibility
-                            : Icons.visibility_off,
-                        color: Colors.black,
-                      ),
-                      onPressed: showPassWordRepeat)),
-              obscureText: !_isShowPassWordRepeat,
-              //校验密码
-              validator: (v) {
-                return v.trim().length >= 6
-                    ? null
-                    : I18n.of(context).passwordError;
-              }),
+          _isUnameErrorText
+              ? Padding(
+                  padding: const EdgeInsets.only(top: 3),
+                  child: Text(I18n.of(context).loginNameError,
+                      style: TextStyle(
+                          color: Colors.red, fontSize: ScreenUtil().setSp(25))),
+                )
+              : Container(),
+          SizedBox(
+            height: ScreenUtil().setHeight(30),
+          ),
+
+          Container(
+            height: ScreenUtil().setHeight(100),
+            decoration: BoxDecoration(
+                color: Colors.grey[200],
+                borderRadius: BorderRadius.all(Radius.circular(8))),
+            child: TextFormField(
+                controller: _pwdController,
+                decoration: InputDecoration(
+                    hintText: I18n.of(context).passwordHint,
+                    hintStyle: TextStyle(fontSize: 12),
+                    border: OutlineInputBorder(borderSide: BorderSide.none),
+                    suffixIcon: IconButton(
+                        icon: Icon(
+                          _isShowPassWord
+                              ? Icons.visibility
+                              : Icons.visibility_off,
+                          color: Theme.of(context).primaryColor,
+                        ),
+                        onPressed: showPassWord)),
+                obscureText: !_isShowPassWord,
+                //校验密码
+                validator: (v) {
+                  if (v.trim().length >= 6) {
+                    setState(() {
+                      _isPwdErrorText = false;
+                    });
+                  } else {
+                    setState(() {
+                      _isPwdErrorText = true;
+                    });
+                  }
+                }),
+          ),
+          _isPwdErrorText
+              ? Padding(
+                  padding: const EdgeInsets.only(top: 3),
+                  child: Text(I18n.of(context).passwordError,
+                      style: TextStyle(
+                          color: Colors.red, fontSize: ScreenUtil().setSp(25))),
+                )
+              : Container(),
+          SizedBox(
+            height: ScreenUtil().setHeight(30),
+          ),
+
+          Container(
+            height: ScreenUtil().setHeight(100),
+            decoration: BoxDecoration(
+                color: Colors.grey[200],
+                borderRadius: BorderRadius.all(Radius.circular(8))),
+            child: TextFormField(
+                controller: _pwdRepeatController,
+                decoration: InputDecoration(
+                    hintText: I18n.of(context).passwordHint,
+                    hintStyle: TextStyle(fontSize: 12),
+                    border: OutlineInputBorder(borderSide: BorderSide.none),
+                    suffixIcon: IconButton(
+                        icon: Icon(
+                          _isShowPassWordRepeat
+                              ? Icons.visibility
+                              : Icons.visibility_off,
+                          color: Theme.of(context).primaryColor,
+                        ),
+                        onPressed: showPassWordRepeat)),
+                obscureText: !_isShowPassWordRepeat,
+                //校验密码
+                validator: (v) {
+                  if (v.trim().length >= 6) {
+                    if (_pwdController.text == _pwdRepeatController.text) {
+                      setState(() {
+                        _isPwdRepeatErrorText = false;
+                      });
+                    } else {
+                      // 密码不一致
+                      _passwordRepeaErrorTitle =
+                          I18n.of(context).passwordRepeaError;
+                      setState(() {
+                        _isPwdRepeatErrorText = true;
+                      });
+                    }
+                  } else {
+                    // 密码少于个数
+                    _passwordRepeaErrorTitle = I18n.of(context).passwordError;
+                    setState(() {
+                      _isPwdRepeatErrorText = true;
+                    });
+                  }
+                }),
+          ),
+
+          _isPwdRepeatErrorText
+              ? Padding(
+                  padding: const EdgeInsets.only(top: 3),
+                  child: Text(_passwordRepeaErrorTitle,
+                      style: TextStyle(
+                          color: Colors.red, fontSize: ScreenUtil().setSp(25))),
+                )
+              : Container(),
 
           // 登录按钮
           Padding(
@@ -118,7 +229,8 @@ class _RegisterPageState extends State<RegisterPage> {
                         style: TextStyle(color: Colors.white)),
                     onPressed: () {
                       //由于本widget也是Form的子代widget，所以可以通过下面方式获取FormState
-                      if (Form.of(context).validate()) {
+                      Form.of(context).validate();
+                      if (isFormValue()) {
                         onSubmit(context);
                       }
                     },
@@ -130,6 +242,11 @@ class _RegisterPageState extends State<RegisterPage> {
         ],
       ),
     );
+  }
+
+  /// 表单数据是否为空
+  bool isFormValue() {
+    return !_isUnameErrorText && !_isPwdErrorText && !_isPwdRepeatErrorText;
   }
 
   ///点击控制密码是否显示
@@ -165,21 +282,21 @@ class _RegisterPageState extends State<RegisterPage> {
           );
         });
 
-    XHttp.post("/user/register", {
+    XHttp.postJson(NWApi.addUser, {
       "username": _unameController.text,
-      "password": _pwdController.text,
-      "repassword": _pwdRepeatController.text
+      "password": _pwdController.text
     }).then((response) {
       Navigator.pop(context);
-      if (response['errorCode'] == 0) {
+      AuthAddUserModel data = AuthAddUserModel.fromJson(response);
+      if (data.code == 200) {
         ToastUtils.toast(I18n.of(context).registerSuccess);
         Navigator.of(context).pop();
       } else {
-        ToastUtils.error(response['errorMsg']);
+        ToastUtils.error(data.message);
       }
     }).catchError((onError) {
       Navigator.of(context).pop();
-      ToastUtils.error(onError);
+      ToastUtils.error(onError.response.data["message"]);
     });
   }
 }

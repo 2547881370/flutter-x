@@ -50,7 +50,7 @@ class XRouter {
 
   static ExtendedNavigatorState get navigator => ExtendedNavigator.root;
 
-  // 跳转路由,且在路由队列中push
+  // 跳转路由,且在路由队列中push,上一个路由会保存状态
   static void push(String routeName) {
     navigator.push(routeName);
   }

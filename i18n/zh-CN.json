@@ -46,5 +46,6 @@
     "welcome4": "   更多详情，敬请查阅",
     "welcome5": "全文。",
     "agreePrivacy": "已同意隐私协议!",
-    "signIn" : "登录"
+    "signIn" : "登录",
+    "passwordRepeaError": "两次密码不一致,请重新输入!"
 }

@@ -128,6 +128,8 @@ class I18n implements WidgetsLocalizations {
   String get agreePrivacy => "Privacy agreement agreed!";
   /// "Sign In"
   String get signIn => "Sign In";
+  /// "The two passwords are inconsistent, please re-enter!"
+  String get passwordRepeaError => "The two passwords are inconsistent, please re-enter!";
 }
 
 class _I18n_en_US extends I18n {
@@ -284,6 +286,9 @@ class _I18n_zh_CN extends I18n {
   /// "登录"
   @override
   String get signIn => "登录";
+  /// "两次密码不一致,请重新输入!"
+  @override
+  String get passwordRepeaError => "两次密码不一致,请重新输入!";
 
   @override
   TextDirection get textDirection => TextDirection.ltr;
