@@ -2,13 +2,14 @@ import 'package:cookie_jar/cookie_jar.dart';
 import 'package:dio/dio.dart';
 import 'package:dio_cookie_manager/dio_cookie_manager.dart';
 import 'package:flutter_template/core/utils/path.dart';
+import 'package:flutter_template/core/utils/toast.dart';
 
 class XHttp {
   XHttp._internal();
 
   ///网络请求配置
   static final Dio dio = Dio(BaseOptions(
-    baseUrl: "http://localhost:3000",
+    baseUrl: "http://192.168.43.70:3000",
     connectTimeout: 5000,
     receiveTimeout: 3000,
   ));
@@ -39,22 +40,22 @@ class XHttp {
   static void handleError(DioError e) {
     switch (e.type) {
       case DioErrorType.connectTimeout:
-        print("连接超时");
+        ToastUtils.error("连接超时");
         break;
       case DioErrorType.sendTimeout:
-        print("请求超时");
+        ToastUtils.error("请求超时");
         break;
       case DioErrorType.receiveTimeout:
-        print("响应超时");
+        ToastUtils.error("响应超时");
         break;
       case DioErrorType.response:
-        print("出现异常");
+        ToastUtils.error("出现异常");
         break;
       case DioErrorType.cancel:
-        print("请求取消");
+        ToastUtils.error("请求取消");
         break;
       default:
-        print("未知错误");
+        ToastUtils.error("未知错误");
         break;
     }
   }
@@ -81,14 +82,6 @@ class XHttp {
     Response response = await dio.post(url, data: data);
     return response.data;
   }
-
-  /// request请求
-  static Future request(String url, Map<String, dynamic> param ) async {
-    Response response = await dio.request(url,
-        data: param, options: Options(method: 'post'));
-    return response.data;
-  }
-
 
   ///下载文件
   static Future downloadFile(urlPath, savePath) async {

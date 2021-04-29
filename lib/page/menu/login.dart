@@ -5,6 +5,7 @@ import 'package:flutter_template/core/utils/privacy.dart';
 import 'package:flutter_template/core/utils/toast.dart';
 import 'package:flutter_template/core/widget/loading_dialog.dart';
 import 'package:flutter_template/generated/i18n.dart';
+import 'package:flutter_template/models/auth_%E2%80%8Blogin_model.dart';
 import 'package:flutter_template/router/route_map.gr.dart';
 import 'package:flutter_template/router/router.dart';
 import 'package:flutter_template/utils/provider.dart';
@@ -133,22 +134,24 @@ class _LoginPageState extends State<LoginPage> {
                   obscureText: !_isShowPassWord,
                   //校验密码
                   validator: (v) {
-                    if(v.trim().length >= 6){
+                    if (v.trim().length >= 6) {
                       setState(() {
                         _isPwdErrorText = false;
                       });
-                    }else{
+                    } else {
                       setState(() {
                         _isPwdErrorText = true;
                       });
                     }
                   })),
-          _isPwdErrorText ?  Padding(
-            padding: const EdgeInsets.only(top: 3),
-            child: Text(I18n.of(context).passwordError,
-                style: TextStyle(
-                    color: Colors.red, fontSize: ScreenUtil().setSp(25))),
-          ) : Container(),
+          _isPwdErrorText
+              ? Padding(
+                  padding: const EdgeInsets.only(top: 3),
+                  child: Text(I18n.of(context).passwordError,
+                      style: TextStyle(
+                          color: Colors.red, fontSize: ScreenUtil().setSp(25))),
+                )
+              : Container(),
 
           // 登录按钮
           Padding(
@@ -212,21 +215,22 @@ class _LoginPageState extends State<LoginPage> {
     /// 即当前返回的是一个read,不会监听值的变化,一般这种用于直接获取参数,不用于更新widget的用途
     UserProfile userProfile = Provider.of<UserProfile>(context, listen: false);
 
-    XHttp.request("/auth/login", {
+    XHttp.postJson("/auth/login", {
       "username": _unameController.text,
       "password": _pwdController.text
     }).then((response) {
       Navigator.pop(context);
-      if (response['errorCode'] == 0) {
-        userProfile.nickName = response['data']['nickname'];
+      AuthLoginModel data = AuthLoginModel.fromJson(response);
+      if (data.code == 200) {
+        userProfile.nickName = data.data.nick;
         ToastUtils.toast(I18n.of(context).loginSuccess);
         XRouter.replace(Routes.mainHomePage);
       } else {
-        ToastUtils.error(response['errorMsg']);
+        ToastUtils.error(data.message);
       }
     }).catchError((onError) {
       Navigator.of(context).pop();
-      ToastUtils.error(onError);
+      ToastUtils.error(onError.response.data["message"]);
     });
   }
 }
