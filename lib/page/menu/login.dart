@@ -234,7 +234,7 @@ class _LoginPageState extends State<LoginPage> {
       Navigator.pop(context);
       AuthLoginModel data = AuthLoginModel.fromJson(response);
       if (data.code == 200) {
-        userProfile.nickName = data.data.nick;
+        userProfile.nickName = data.data.username;
         userProfile.userInfo = data;
         ToastUtils.toast(I18n.of(context).loginSuccess);
         XRouter.replace(Routes.mainHomePage);
