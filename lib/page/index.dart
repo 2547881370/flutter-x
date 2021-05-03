@@ -61,60 +61,60 @@ class _MainHomePageState extends State<MainHomePage> {
       return WillPopScope(
           child: Scaffold(
             key: _scaffoldKey,
-            appBar: AppBar(
-              title: Text(tabs[status.tabIndex].label),
-              actions: <Widget>[
-                IconButton(
-                    icon: Icon(Icons.security),
-                    onPressed: () {
-                      PrivacyUtils.showPrivacyDialog(context,
-                          onAgressCallback: () {
-                        Navigator.of(context).pop();
-                        ToastUtils.success(I18n.of(context).agreePrivacy);
-                      });
-                    }),
-                PopupMenuButton<String>(
-                    itemBuilder: (BuildContext context) =>
-                        <PopupMenuEntry<String>>[
-                          PopupMenuItem<String>(
-                            value: "sponsor",
-                            child: ListTile(
-                              contentPadding:
-                                  EdgeInsets.symmetric(horizontal: 10),
-                              leading: Icon(
-                                Icons.attach_money,
-                              ),
-                              title: Text(I18n.of(context).sponsor),
-                            ),
-                          ),
-                          PopupMenuItem<String>(
-                            value: "settings",
-                            child: ListTile(
-                              contentPadding:
-                                  EdgeInsets.symmetric(horizontal: 10),
-                              leading: Icon(
-                                Icons.settings,
-                              ),
-                              title: Text(I18n.of(context).settings),
-                            ),
-                          ),
-                          PopupMenuItem<String>(
-                            value: "about",
-                            child: ListTile(
-                              contentPadding:
-                                  EdgeInsets.symmetric(horizontal: 10),
-                              leading: Icon(
-                                Icons.error_outline,
-                              ),
-                              title: Text(I18n.of(context).about),
-                            ),
-                          ),
-                        ],
-                    onSelected: (String action) {
-                      XRouter.push('/menu/$action-page');
-                    })
-              ],
-            ),
+            // appBar: AppBar(
+            //   title: Text(tabs[status.tabIndex].label),
+            //   actions: <Widget>[
+            //     IconButton(
+            //         icon: Icon(Icons.security),
+            //         onPressed: () {
+            //           PrivacyUtils.showPrivacyDialog(context,
+            //               onAgressCallback: () {
+            //             Navigator.of(context).pop();
+            //             ToastUtils.success(I18n.of(context).agreePrivacy);
+            //           });
+            //         }),
+            //     PopupMenuButton<String>(
+            //         itemBuilder: (BuildContext context) =>
+            //             <PopupMenuEntry<String>>[
+            //               PopupMenuItem<String>(
+            //                 value: "sponsor",
+            //                 child: ListTile(
+            //                   contentPadding:
+            //                       EdgeInsets.symmetric(horizontal: 10),
+            //                   leading: Icon(
+            //                     Icons.attach_money,
+            //                   ),
+            //                   title: Text(I18n.of(context).sponsor),
+            //                 ),
+            //               ),
+            //               PopupMenuItem<String>(
+            //                 value: "settings",
+            //                 child: ListTile(
+            //                   contentPadding:
+            //                       EdgeInsets.symmetric(horizontal: 10),
+            //                   leading: Icon(
+            //                     Icons.settings,
+            //                   ),
+            //                   title: Text(I18n.of(context).settings),
+            //                 ),
+            //               ),
+            //               PopupMenuItem<String>(
+            //                 value: "about",
+            //                 child: ListTile(
+            //                   contentPadding:
+            //                       EdgeInsets.symmetric(horizontal: 10),
+            //                   leading: Icon(
+            //                     Icons.error_outline,
+            //                   ),
+            //                   title: Text(I18n.of(context).about),
+            //                 ),
+            //               ),
+            //             ],
+            //         onSelected: (String action) {
+            //           XRouter.push('/menu/$action-page');
+            //         })
+            //   ],
+            // ),
             drawer: MenuDrawer(),
             body: IndexedStack(
               index: status.tabIndex,

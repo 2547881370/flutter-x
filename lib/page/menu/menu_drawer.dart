@@ -31,7 +31,7 @@ class MenuDrawer extends StatelessWidget {
                       padding: const EdgeInsets.symmetric(horizontal: 16),
                       child: ClipOval(
                         // 如果已登录，则显示用户头像；若未登录，则显示默认头像
-                        child: value.userInfo != null
+                        child: value.userInfo?.data?.avatar != null
                             ? Container(
                                 child:
                                     Image.network(value.userInfo?.data?.avatar),

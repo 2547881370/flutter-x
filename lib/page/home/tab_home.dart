@@ -1,12 +1,26 @@
+import 'dart:math';
+
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_easyrefresh/easy_refresh.dart';
 import 'package:flutter_easyrefresh/material_footer.dart';
 import 'package:flutter_easyrefresh/material_header.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_swiper/flutter_swiper.dart';
 import 'package:flutter_template/core/utils/toast.dart';
 import 'package:flutter_template/core/widget/grid/grid_item.dart';
 import 'package:flutter_template/core/widget/list/article_item.dart';
+import 'package:gzx_dropdown_menu/gzx_dropdown_menu.dart';
+
+class SortCondition {
+  String name;
+  bool isSelected;
+
+  SortCondition({
+    this.name,
+    this.isSelected,
+  });
+}
 
 class TabHomePage extends StatefulWidget {
   @override
@@ -15,80 +29,335 @@ class TabHomePage extends StatefulWidget {
 
 class _TabHomePageState extends State<TabHomePage> {
   int _count = 5;
+  List<String> _dropDownHeaderItemStrings = ['回复时间'];
+  List<SortCondition> _distanceSortConditions = [];
+  SortCondition _selectDistanceSortCondition;
+  GZXDropdownMenuController _dropdownMenuController =
+      GZXDropdownMenuController();
+  GlobalKey _stackKey = GlobalKey();
+
+  String _dropdownMenuChange = '';
+
+  @override
+  void initState() {
+    super.initState();
+
+    _distanceSortConditions.add(SortCondition(name: '回复时间', isSelected: false));
+    _distanceSortConditions.add(SortCondition(name: '发布时间', isSelected: false));
+
+    _selectDistanceSortCondition = _distanceSortConditions[0];
+  }
+
+  _buildConditionListWidget(
+      items, void itemOnTap(SortCondition sortCondition)) {
+    return MediaQuery.removePadding(
+        removeTop: true,
+        context: context,
+        child: ListView.separated(
+          shrinkWrap: true,
+          scrollDirection: Axis.vertical,
+          itemCount: items.length,
+          // item 的个数
+          separatorBuilder: (BuildContext context, int index) =>
+              Divider(height: 1.0),
+          // 添加分割线
+          itemBuilder: (BuildContext context, int index) {
+            return gestureDetector(items, index, itemOnTap, context);
+          },
+        ));
+  }
+
+  GestureDetector gestureDetector(items, int index,
+      void itemOnTap(SortCondition sortCondition), BuildContext context) {
+    SortCondition goodsSortCondition = items[index];
+    return GestureDetector(
+      onTap: () {
+        for (var value in items) {
+          value.isSelected = false;
+        }
+        goodsSortCondition.isSelected = true;
+
+        itemOnTap(goodsSortCondition);
+      },
+      child: Container(
+        height: 40,
+        child: Row(
+          children: <Widget>[
+            SizedBox(
+              width: 16,
+            ),
+            Expanded(
+              child: Text(
+                goodsSortCondition.name,
+                style: TextStyle(
+                  color: goodsSortCondition.isSelected
+                      ? Theme.of(context).primaryColor
+                      : Colors.black,
+                ),
+              ),
+            ),
+            goodsSortCondition.isSelected
+                ? Icon(
+                    Icons.check,
+                    color: Theme.of(context).primaryColor,
+                    size: 16,
+                  )
+                : SizedBox(),
+            SizedBox(
+              width: 16,
+            ),
+          ],
+        ),
+      ),
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
-    return EasyRefresh.custom(
-      header: MaterialHeader(),
-      footer: MaterialFooter(),
-      onRefresh: () async {
-        await Future.delayed(Duration(seconds: 1), () {
-          setState(() {
-            _count = 5;
-          });
-        });
-      },
-      onLoad: () async {
-        await Future.delayed(Duration(seconds: 1), () {
-          setState(() {
-            _count += 5;
-          });
-        });
-      },
-      slivers: <Widget>[
-        //=====轮播图=====//
-        SliverToBoxAdapter(child: getBannerWidget()),
+    print(kToolbarHeight);
+    return Scaffold(
+        body: Stack(
+      key: _stackKey,
+      children: <Widget>[
+        Column(
+          children: <Widget>[
+            MediaQuery.removePadding(
+                context: context,
+                //=====自定义tabBar====//
+                child: Container(
+                  width: MediaQuery.of(context).size.width,
+                  height: kToolbarHeight + MediaQuery.of(context).padding.top,
+                  color: Theme.of(context).primaryColor,
+                  alignment: Alignment.center,
+                  child: Row(children: <Widget>[
+                    Container(
+                        width: ScreenUtil().setWidth(250),
+                        alignment: Alignment.center,
+                        height: ScreenUtil().setHeight(120),
+                        // color: Colors.cyanAccent,
+                        child: GZXDropDownHeader(
+                          // 下拉的头部项，目前每一项，只能自定义显示的文字、图标、图标大小修改
+                          items: [
+                            GZXDropDownHeaderItem(_dropDownHeaderItemStrings[0],
+                                iconData: Icons.keyboard_arrow_down,
+                                iconDropDownData: Icons.keyboard_arrow_up,
+                                style: TextStyle(
+                                    color: Colors.white,
+                                    fontSize: ScreenUtil().setSp(35),
+                                    fontWeight: FontWeight.bold)),
+                          ],
+                          // GZXDropDownHeader对应第一父级Stack的key
+                          stackKey: _stackKey,
+                          // controller用于控制menu的显示或隐藏
+                          controller: _dropdownMenuController,
+                          // 头部的高度
+                          height: kToolbarHeight +
+                              MediaQuery.of(context).padding.top,
+                          // 头部背景颜色
+                          color: Theme.of(context).primaryColor,
+                          // 头部边框宽度
+                          borderWidth: 0.000001,
+                          style: TextStyle(
+                              color: Colors.white,
+                              fontSize: ScreenUtil().setSp(35),
+                              fontWeight: FontWeight.bold),
+                          // 下拉时文字样式
+                          dropDownStyle: TextStyle(
+                            fontSize: ScreenUtil().setSp(35),
+                            fontWeight: FontWeight.bold,
+                            color: Colors.white,
+                          ),
+                          // 图标大小
+                          iconSize: ScreenUtil().setSp(35),
+                          // 图标颜色
+                          iconColor: Colors.white,
+                          // 下拉时图标颜色
+                          iconDropDownColor: Colors.white,
+                        )),
+                    Expanded(
+                        child: Container(
+                            padding: EdgeInsets.only(
+                                top: ScreenUtil().setHeight(25)),
+                            alignment: Alignment.centerLeft,
+                            child: Container(
+                                margin: EdgeInsets.only(
+                                    right: ScreenUtil().setWidth(30)),
+                                padding: EdgeInsets.symmetric(
+                                    horizontal: ScreenUtil().setWidth(20)),
+                                width: double.infinity,
+                                height: ScreenUtil().setHeight(80),
+                                alignment: Alignment.centerLeft,
+                                decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(10),
+                                    border: Border.all(
+                                        width: 1, color: Colors.white)),
+                                child: Text("请输入帖子名字......",
+                                    style: TextStyle(color: Colors.white)))))
+                  ]),
+                )),
 
-        //=====网格菜单=====//
-        SliverPadding(
-            padding: EdgeInsets.only(top: 10),
-            sliver: SliverGrid(
-              gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                crossAxisCount: 4,
-                mainAxisSpacing: 0,
-                crossAxisSpacing: 10,
-              ),
-              delegate: SliverChildBuilderDelegate(
-                (BuildContext context, int index) {
-                  //创建子widget
-                  var action = actions[index];
-                  return GridItem(
-                      title: action.title,
-                      color: action.color,
-                      onTap: () {
-                        ToastUtils.toast('点击-->${action.title}');
-                      });
-                },
-                childCount: actions.length,
-              ),
-            )),
+            //=====内容区域=====//
+            Expanded(
+                child: Container(
+                    color: Colors.deepPurple,
+                    child: EasyRefresh.custom(
+                        header: MaterialHeader(),
+                        footer: MaterialFooter(),
+                        onRefresh: () async {
+                          await Future.delayed(Duration(seconds: 1), () {
+                            setState(() {
+                              _count = 5;
+                            });
+                          });
+                        },
+                        onLoad: () async {
+                          await Future.delayed(Duration(seconds: 1), () {
+                            setState(() {
+                              _count += 5;
+                            });
+                          });
+                        },
+                        slivers: <Widget>[
+                          //=====轮播图=====//
+                          SliverToBoxAdapter(child: getBannerWidget()),
 
-        SliverToBoxAdapter(
-            child: Padding(
-                padding: EdgeInsets.fromLTRB(16, 10, 16, 10),
-                child: Text(
-                  '资讯',
-                  style: TextStyle(fontSize: 18),
-                ))),
+                          //=====tab菜单=====//
+                          initSliverPersistentHeader('tab菜单'),
 
-        //=====列表=====//
-        SliverList(
-          delegate: SliverChildBuilderDelegate(
-            (context, index) {
-              ArticleInfo info = articles[index % 5];
-              return ArticleListItem(
-                  articleUrl: info.articleUrl,
-                  imageUrl: info.imageUrl,
-                  title: info.title,
-                  author: info.author,
-                  description: info.description,
-                  summary: info.summary);
-            },
-            childCount: _count,
-          ),
+                          //=====ListView=====//
+                          SliverList(
+                            delegate: SliverChildBuilderDelegate(
+                              (context, index) {
+                                print(index);
+                                ArticleInfo info = articles[index % 5];
+                                return ArticleListItem(
+                                    articleUrl: info.articleUrl,
+                                    imageUrl: info.imageUrl,
+                                    title: info.title,
+                                    author: info.author,
+                                    description: info.description,
+                                    summary: info.summary);
+                              },
+                              childCount: _count,
+                            ),
+                          ),
+                        ]))),
+          ],
+        ),
+        // 下拉菜单
+        GZXDropDownMenu(
+          // controller用于控制menu的显示或隐藏
+          controller: _dropdownMenuController,
+          // 下拉菜单显示或隐藏动画时长
+          animationMilliseconds: 300,
+          // 下拉后遮罩颜色
+          //  maskColor: Theme.of(context).primaryColor.withOpacity(0.5),
+          //  maskColor: Colors.red.withOpacity(0.5),
+          dropdownMenuChanging: (isShow, index) {
+            setState(() {
+              _dropdownMenuChange = '(正在${isShow ? '显示' : '隐藏'}$index)';
+              print(_dropdownMenuChange);
+            });
+          },
+          dropdownMenuChanged: (isShow, index) {
+            setState(() {
+              _dropdownMenuChange = '(已经${isShow ? '显示' : '隐藏'}$index)';
+              print(_dropdownMenuChange);
+            });
+          },
+          // 下拉菜单，高度自定义，你想显示什么就显示什么，完全由你决定，你只需要在选择后调用_dropdownMenuController.hide();即可
+          menus: [
+            GZXDropdownMenuBuilder(
+                dropDownHeight: 40.0 * _distanceSortConditions.length,
+                dropDownWidget:
+                    _buildConditionListWidget(_distanceSortConditions, (value) {
+                  _selectDistanceSortCondition = value;
+                  _dropDownHeaderItemStrings[0] =
+                      _selectDistanceSortCondition.name;
+                  _dropdownMenuController.hide();
+                  setState(() {});
+                })),
+          ],
         ),
       ],
-    );
+    )
+
+        // Container(
+        //     width: double.infinity,
+        //     height: double.infinity,
+        //     color: Colors.green,
+        //     child: Column(children: <Widget>[
+        //       //=====自定义tabBar====//
+        //       Container(
+        //           padding: EdgeInsets.only(
+        //               top: MediaQuery.of(context).padding.top),
+        //           width: double.infinity,
+        //           height:
+        //               kToolbarHeight + MediaQuery.of(context).padding.top,
+        //           decoration: BoxDecoration(
+        //             color: Theme.of(context).primaryColor,
+        //           ),
+        //           child: Row(children: <Widget>[
+        //             Container(
+        //                 width: ScreenUtil().setWidth(300),
+        //                 height: double.infinity,
+        //                 color: Colors.deepPurple,
+        //                 child: Stack(children: <Widget>[]))
+        //           ])),
+        //
+        //       //=====内容区域=====//
+        //       Expanded(
+        //           child: Container(
+        //               color: Colors.deepPurple,
+        //               child: EasyRefresh.custom(
+        //                   header: MaterialHeader(),
+        //                   footer: MaterialFooter(),
+        //                   onRefresh: () async {
+        //                     await Future.delayed(Duration(seconds: 1), () {
+        //                       setState(() {
+        //                         _count = 5;
+        //                       });
+        //                     });
+        //                   },
+        //                   onLoad: () async {
+        //                     await Future.delayed(Duration(seconds: 1), () {
+        //                       setState(() {
+        //                         _count += 5;
+        //                       });
+        //                     });
+        //                   },
+        //                   slivers: <Widget>[
+        //                     //=====轮播图=====//
+        //                     SliverToBoxAdapter(
+        //                         child: Container(
+        //                             height: ScreenUtil().setHeight(367),
+        //                             decoration: BoxDecoration(
+        //                                 color: Colors.deepPurpleAccent),
+        //                             child: Center(child: Text("轮播图")))),
+        //
+        //                     //=====tab菜单=====//
+        //                     initSliverPersistentHeader('tab菜单'),
+        //
+        //                     //=====ListView=====//
+        //                     SliverList(
+        //                       delegate: SliverChildBuilderDelegate(
+        //                         (context, index) {
+        //                           print(index);
+        //                           ArticleInfo info = articles[index % 5];
+        //                           return ArticleListItem(
+        //                               articleUrl: info.articleUrl,
+        //                               imageUrl: info.imageUrl,
+        //                               title: info.title,
+        //                               author: info.author,
+        //                               description: info.description,
+        //                               summary: info.summary);
+        //                         },
+        //                         childCount: _count,
+        //                       ),
+        //                     ),
+        //                   ])))
+        //     ]))
+        );
   }
 
   //这里是演示，所以写死
@@ -130,18 +399,6 @@ class _TabHomePageState extends State<TabHomePage> {
   }
 
   //这里是演示，所以写死
-  final List<ActionItem> actions = [
-    ActionItem('美食', Color(0xFFEF5362)),
-    ActionItem('甜点', Color(0xFFFE6D4B)),
-    ActionItem('烧烤', Color(0xFFFFCF47)),
-    ActionItem('夜宵', Color(0xFF9FD661)),
-    ActionItem('水果', Color(0xFF3FD0AD)),
-    ActionItem('药品', Color(0xFF2BBDF3)),
-    ActionItem('蔬菜', Color(0xFF5A9AEF)),
-    ActionItem('跑腿', Color(0xFFAC8FEF)),
-  ];
-
-  //这里是演示，所以写死
   final List<ArticleInfo> articles = [
     ArticleInfo(
         'https://juejin.im/post/5c3ed1dae51d4543805ea48d',
@@ -169,4 +426,59 @@ class _TabHomePageState extends State<TabHomePage> {
         'Flutter学习指南App,一起来玩Flutter吧~',
         'Flutter是谷歌的移动UI框架，可以快速在iOS、Android、Web和PC上构建高质量的原生用户界面。 Flutter可以与现有的代码一起工作。在全世界，Flutter正在被越来越多的开发者和组织使用，并且Flutter是完全免费、开源的。同时它也是构建未来的Google Fuchsia应用的主要方式。'),
   ];
+}
+
+initSliverPersistentHeader(String title) {
+  return SliverPersistentHeader(
+      //是否固定头布局 默认false
+      pinned: true,
+      //是否浮动 默认false
+      floating: false,
+      //必传参数,头布局内容
+      delegate: MySliverDelegate(
+        //缩小后的布局高度
+        minHeight: 80.0,
+        //展开后的高度
+        maxHeight: 80.0,
+        child: Container(
+            color: Colors.redAccent,
+            child: Center(
+              child: Text(
+                title,
+                style: TextStyle(fontSize: 18, shadows: [
+                  Shadow(color: Colors.white, offset: Offset(1, 1))
+                ]),
+              ),
+            )),
+      ));
+}
+
+class MySliverDelegate extends SliverPersistentHeaderDelegate {
+  MySliverDelegate({
+    @required this.minHeight,
+    @required this.maxHeight,
+    @required this.child,
+  });
+  final double minHeight; //最小高度
+  final double maxHeight; //最大高度
+  final Widget child; //子Widget布局
+
+  @override
+  double get minExtent => minHeight;
+
+  @override
+  double get maxExtent => max(maxHeight, minHeight);
+
+  @override
+  Widget build(
+      BuildContext context, double shrinkOffset, bool overlapsContent) {
+    return new SizedBox.expand(child: child);
+  }
+
+  @override //是否需要重建
+  bool shouldRebuild(MySliverDelegate oldDelegate) {
+    return maxHeight != oldDelegate.maxHeight ||
+        minHeight != oldDelegate.minHeight ||
+        child != oldDelegate.child;
+  }
 }
