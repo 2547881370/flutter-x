@@ -1,6 +1,7 @@
 import 'dart:math';
 
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:extended_nested_scroll_view/extended_nested_scroll_view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_easyrefresh/easy_refresh.dart';
 import 'package:flutter_easyrefresh/material_footer.dart';
@@ -22,12 +23,23 @@ class SortCondition {
   });
 }
 
+class TagId {
+  String name;
+  int id;
+
+  TagId({
+    this.name,
+    this.id,
+  });
+}
+
 class TabHomePage extends StatefulWidget {
   @override
   _TabHomePageState createState() => _TabHomePageState();
 }
 
-class _TabHomePageState extends State<TabHomePage> {
+class _TabHomePageState extends State<TabHomePage>
+    with TickerProviderStateMixin {
   int _count = 5;
   List<String> _dropDownHeaderItemStrings = ['回复时间'];
   List<SortCondition> _distanceSortConditions = [];
@@ -38,14 +50,29 @@ class _TabHomePageState extends State<TabHomePage> {
 
   String _dropdownMenuChange = '';
 
+  TabController _tabController;
+  List<TagId> _tagIds = [
+    TagId(name: '全部', id: 0),
+    TagId(name: '原创', id: 5601),
+    TagId(name: '网络', id: 5602),
+  ];
+
   @override
   void initState() {
     super.initState();
 
-    _distanceSortConditions.add(SortCondition(name: '回复时间', isSelected: false));
+    _distanceSortConditions.add(SortCondition(name: '回复时间', isSelected: true));
     _distanceSortConditions.add(SortCondition(name: '发布时间', isSelected: false));
 
     _selectDistanceSortCondition = _distanceSortConditions[0];
+
+    _tabController = TabController(vsync: this, length: _tagIds.length);
+  }
+
+  @override
+  void dispose() {
+    _tabController.dispose();
+    super.dispose();
   }
 
   _buildConditionListWidget(
@@ -130,6 +157,7 @@ class _TabHomePageState extends State<TabHomePage> {
                   color: Theme.of(context).primaryColor,
                   alignment: Alignment.center,
                   child: Row(children: <Widget>[
+                    //=====select=====//
                     Container(
                         width: ScreenUtil().setWidth(250),
                         alignment: Alignment.center,
@@ -174,6 +202,8 @@ class _TabHomePageState extends State<TabHomePage> {
                           // 下拉时图标颜色
                           iconDropDownColor: Colors.white,
                         )),
+
+                    //=====搜索=====//
                     Expanded(
                         child: Container(
                             padding: EdgeInsets.only(
@@ -199,7 +229,6 @@ class _TabHomePageState extends State<TabHomePage> {
             //=====内容区域=====//
             Expanded(
                 child: Container(
-                    color: Colors.deepPurple,
                     child: EasyRefresh.custom(
                         header: MaterialHeader(),
                         footer: MaterialFooter(),
@@ -218,30 +247,91 @@ class _TabHomePageState extends State<TabHomePage> {
                           });
                         },
                         slivers: <Widget>[
-                          //=====轮播图=====//
-                          SliverToBoxAdapter(child: getBannerWidget()),
+                  //=====轮播图=====//
+                  SliverToBoxAdapter(child: getBannerWidget()),
 
-                          //=====tab菜单=====//
-                          initSliverPersistentHeader('tab菜单'),
+                  //=====tab菜单=====//
+                  initSliverPersistentHeader(
+                      tabController: _tabController, tagIds: _tagIds),
 
-                          //=====ListView=====//
-                          SliverList(
-                            delegate: SliverChildBuilderDelegate(
-                              (context, index) {
-                                print(index);
-                                ArticleInfo info = articles[index % 5];
-                                return ArticleListItem(
-                                    articleUrl: info.articleUrl,
-                                    imageUrl: info.imageUrl,
-                                    title: info.title,
-                                    author: info.author,
-                                    description: info.description,
-                                    summary: info.summary);
-                              },
-                              childCount: _count,
-                            ),
-                          ),
-                        ]))),
+                  //=====ListView=====//
+                  // SliverList(
+                  //   delegate: SliverChildBuilderDelegate(
+                  //     (context, index) {
+                  //       print(index);
+                  //       ArticleInfo info = articles[index % 5];
+                  //       return ArticleListItem(
+                  //           articleUrl: info.articleUrl,
+                  //           imageUrl: info.imageUrl,
+                  //           title: info.title,
+                  //           author: info.author,
+                  //           description: info.description,
+                  //           summary: info.summary);
+                  //     },
+                  //     childCount: _count,
+                  //   ),
+                  // ),
+
+                  // SliverFillRemaining(
+                  //     child: TabBarView(
+                  //         controller: _tabController,
+                  //         children: _tagIds
+                  //             .map((e) => ListView.builder(
+                  //                   itemCount: articles.length,
+                  //                   itemBuilder: (context, index) {
+                  //                     var info = articles[index];
+                  //                     return ArticleListItem(
+                  //                         articleUrl: info.articleUrl,
+                  //                         imageUrl: info.imageUrl,
+                  //                         title: info.title,
+                  //                         author: info.author,
+                  //                         description: info.description,
+                  //                         summary: info.summary);
+                  //                   },
+                  //                 ))
+                  //             .toList()))
+
+                  // SliverToBoxAdapter(
+                  //     child: Container(
+                  //         color: Colors.purple,
+                  //         width: MediaQuery.of(context).size.width,
+                  //         height: 200,
+                  //         child: TabBarView(
+                  //             controller: _tabController,
+                  //             children: _tagIds
+                  //                 .map((e) => Center(
+                  //                         child: Text(
+                  //                       e.name,
+                  //                       style: TextStyle(
+                  //                           color: Colors.white, fontSize: 20),
+                  //                     )))
+                  //                 .toList())))
+
+                  // TabBarView(
+                  //     controller: _tabController,
+                  //     children: _tagIds
+                  //         .map((e) => Center(
+                  //                 child: Text(
+                  //               e.name,
+                  //               style: TextStyle(
+                  //                   color: Colors.white, fontSize: 20),
+                  //             )))
+                  //         .toList())
+
+                // NestedScrollViewInnerScrollPositionKeyWidget(
+                //     widget.tabKey,
+                //     ListView.builder(
+                //         itemBuilder: (c, i) {
+                //           return Container(
+                //             alignment: Alignment.center,
+                //             height: 60.0,
+                //             child: Text(": List$i"),
+                //           );
+                //         },
+                //         itemCount: 100)
+                // );
+
+                ]))),
           ],
         ),
         // 下拉菜单
@@ -280,84 +370,7 @@ class _TabHomePageState extends State<TabHomePage> {
           ],
         ),
       ],
-    )
-
-        // Container(
-        //     width: double.infinity,
-        //     height: double.infinity,
-        //     color: Colors.green,
-        //     child: Column(children: <Widget>[
-        //       //=====自定义tabBar====//
-        //       Container(
-        //           padding: EdgeInsets.only(
-        //               top: MediaQuery.of(context).padding.top),
-        //           width: double.infinity,
-        //           height:
-        //               kToolbarHeight + MediaQuery.of(context).padding.top,
-        //           decoration: BoxDecoration(
-        //             color: Theme.of(context).primaryColor,
-        //           ),
-        //           child: Row(children: <Widget>[
-        //             Container(
-        //                 width: ScreenUtil().setWidth(300),
-        //                 height: double.infinity,
-        //                 color: Colors.deepPurple,
-        //                 child: Stack(children: <Widget>[]))
-        //           ])),
-        //
-        //       //=====内容区域=====//
-        //       Expanded(
-        //           child: Container(
-        //               color: Colors.deepPurple,
-        //               child: EasyRefresh.custom(
-        //                   header: MaterialHeader(),
-        //                   footer: MaterialFooter(),
-        //                   onRefresh: () async {
-        //                     await Future.delayed(Duration(seconds: 1), () {
-        //                       setState(() {
-        //                         _count = 5;
-        //                       });
-        //                     });
-        //                   },
-        //                   onLoad: () async {
-        //                     await Future.delayed(Duration(seconds: 1), () {
-        //                       setState(() {
-        //                         _count += 5;
-        //                       });
-        //                     });
-        //                   },
-        //                   slivers: <Widget>[
-        //                     //=====轮播图=====//
-        //                     SliverToBoxAdapter(
-        //                         child: Container(
-        //                             height: ScreenUtil().setHeight(367),
-        //                             decoration: BoxDecoration(
-        //                                 color: Colors.deepPurpleAccent),
-        //                             child: Center(child: Text("轮播图")))),
-        //
-        //                     //=====tab菜单=====//
-        //                     initSliverPersistentHeader('tab菜单'),
-        //
-        //                     //=====ListView=====//
-        //                     SliverList(
-        //                       delegate: SliverChildBuilderDelegate(
-        //                         (context, index) {
-        //                           print(index);
-        //                           ArticleInfo info = articles[index % 5];
-        //                           return ArticleListItem(
-        //                               articleUrl: info.articleUrl,
-        //                               imageUrl: info.imageUrl,
-        //                               title: info.title,
-        //                               author: info.author,
-        //                               description: info.description,
-        //                               summary: info.summary);
-        //                         },
-        //                         childCount: _count,
-        //                       ),
-        //                     ),
-        //                   ])))
-        //     ]))
-        );
+    ));
   }
 
   //这里是演示，所以写死
@@ -428,7 +441,7 @@ class _TabHomePageState extends State<TabHomePage> {
   ];
 }
 
-initSliverPersistentHeader(String title) {
+initSliverPersistentHeader({TabController tabController, List<TagId> tagIds}) {
   return SliverPersistentHeader(
       //是否固定头布局 默认false
       pinned: true,
@@ -437,18 +450,32 @@ initSliverPersistentHeader(String title) {
       //必传参数,头布局内容
       delegate: MySliverDelegate(
         //缩小后的布局高度
-        minHeight: 80.0,
+        minHeight: 60.0,
         //展开后的高度
-        maxHeight: 80.0,
+        maxHeight: 60.0,
         child: Container(
-            color: Colors.redAccent,
-            child: Center(
-              child: Text(
-                title,
-                style: TextStyle(fontSize: 18, shadows: [
-                  Shadow(color: Colors.white, offset: Offset(1, 1))
-                ]),
-              ),
+            color: Colors.white,
+            child: TabBar(
+              onTap: (tab) {
+                print(tab);
+              },
+              labelStyle: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+              unselectedLabelStyle: TextStyle(fontSize: 16),
+              isScrollable: true,
+              controller: tabController,
+              labelColor: Colors.blue,
+              indicatorWeight: 3,
+              indicatorPadding: EdgeInsets.symmetric(horizontal: 10),
+              unselectedLabelColor: Colors.black,
+              indicatorColor: Colors.blue,
+              tabs: tagIds
+                  .map((e) => Container(
+                      width: ScreenUtil().setWidth(190),
+                      alignment: Alignment.center,
+                      child: Tab(
+                        text: e.name,
+                      )))
+                  .toList(),
             )),
       ));
 }
