@@ -8,12 +8,14 @@ import 'package:flutter_easyrefresh/material_header.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_swiper/flutter_swiper.dart';
 import 'package:flutter_template/core/utils/toast.dart';
-import 'package:flutter_template/core/widget/grid/grid_item.dart';
 import 'package:flutter_template/core/widget/list/article_item.dart';
 import 'package:gzx_dropdown_menu/gzx_dropdown_menu.dart';
 
 import 'package:extended_nested_scroll_view/extended_nested_scroll_view.dart'
     as extended;
+
+// 布局 Scaffold( Stack(  [ Column(  )  GZXDropDownMenu()]  ) )
+// Column( Container(自定义tabBar) , Expanded(内容区域) )
 
 class SortCondition {
   String name;
@@ -119,6 +121,7 @@ class _TabHomePageState extends State<TabHomePage>
 
                           //=====轮播图=====//
                           [SliverToBoxAdapter(child: getBannerWidget())],
+                      // 缩小后的布局高度
                       pinnedHeaderSliverHeightBuilder: () {
                         return 0;
                       },
@@ -130,11 +133,14 @@ class _TabHomePageState extends State<TabHomePage>
 
                       //=====主体内容=====//
                       body: Column(children: <Widget>[
+                        //=====TabBar=====//
                         Container(
                             color: Colors.white,
                             child: TabHomeTabBar(
                                 tabController: _tabController,
                                 tagIds: _tagIds)),
+
+                        //=====TabBarView=====//
                         Expanded(
                             child: TabBarView(
                                 controller: _tabController,
