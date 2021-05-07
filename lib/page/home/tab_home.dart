@@ -1,5 +1,3 @@
-import 'dart:math';
-
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_easyrefresh/easy_refresh.dart';
@@ -14,8 +12,17 @@ import 'package:gzx_dropdown_menu/gzx_dropdown_menu.dart';
 import 'package:extended_nested_scroll_view/extended_nested_scroll_view.dart'
     as extended;
 
-// 布局 Scaffold( Stack(  [ Column(  )  GZXDropDownMenu()]  ) )
-// Column( Container(自定义tabBar) , Expanded(内容区域) )
+/**
+ 1. 布局 Scaffold( Stack(  [ Column(  )  GZXDropDownMenu()]  ) )
+ 2. Column( Container(自定义tabBar) , Expanded(内容区域) )
+ 3. 参考布局
+    3.1 https://github.com/xuelongqy/flutter_easyrefresh/blob/v2/example/lib/page/sample/nested_scroll_view.dart
+    3.2 https://github.com/fluttercandies/extended_nested_scroll_view/blob/master/example/lib/pages/simple/dynamic_pinned_header_height.dart
+ 4. 主要使用了三个插件
+     4.1 gzx_dropdown_menu : 下拉菜单
+     4.2 flutter_easyrefresh : 下拉刷新
+     4.3 extended_nested_scroll_view : 解决在CustomScrollView中使用tabBar和TabBarView的问题
+ */
 
 class SortCondition {
   String name;
