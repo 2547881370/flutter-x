@@ -260,7 +260,7 @@ class _TabHomePageState extends State<TabHomePage>
                                       await _getPostsList(TAB_ID_ARR, 1);
                                     },
                                     onLoad: () async {
-                                      pageArr += 1;
+                                      pageArr = pageArr + 1;
                                       await _getPostsList(TAB_ID_ARR, pageArr);
                                     },
                                     child: ListView.builder(

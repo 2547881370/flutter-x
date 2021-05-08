@@ -2,6 +2,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_template/core/utils/utils.dart';
 import 'package:flutter_template/models/posts_list_model.dart';
 
 /// 三张图片以上
@@ -86,7 +87,7 @@ class ThreeImageItem extends StatelessWidget {
                                                   Container(
                                                     color: Colors.grey[200],
                                                   ),
-                                              imageUrl: b),
+                                              imageUrl: Utils.rtrim(b)),
                                         ))))
                                 .toList()),
                         Positioned(

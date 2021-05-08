@@ -40,4 +40,14 @@ class Utils {
 
   static String formatDateTime(DateTime dateTime) =>
       formatDate(dateTime, [yyyy, '-', mm, '-', dd]);
+
+  /// 去除左空格
+  static String ltrim(String str) {
+    return str.replaceFirst(new RegExp(r"^\s+"), "");
+  }
+
+  /// 去除右空格
+  static String rtrim(String str) {
+    return str.replaceFirst(new RegExp(r"\s+$"), "");
+  }
 }
