@@ -1,6 +1,8 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:auto_route/auto_route_annotations.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_template/page/home/PhotoGalleryPage.dart';
+import 'package:flutter_template/page/home/image_detailed.dart';
 import 'package:flutter_template/init/splash.dart';
 import 'package:flutter_template/page/index.dart';
 import 'package:flutter_template/page/menu/about.dart';
@@ -24,7 +26,9 @@ import 'package:flutter_template/utils/sputils.dart';
       AutoRoute(page: LoginPage),
       AutoRoute(page: RegisterPage),
       AutoRoute(page: ThemeColorPage),
-      AutoRoute(page: LanguagePage)
+      AutoRoute(page: LanguagePage),
+      AutoRoute(page: ImageDetailed),
+      AutoRoute(page: PhotpGalleryPage),
     ],
     routesClassName: 'Routes',
     transitionsBuilder: getTransitions,

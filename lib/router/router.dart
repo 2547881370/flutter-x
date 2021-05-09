@@ -51,8 +51,8 @@ class XRouter {
   static ExtendedNavigatorState get navigator => ExtendedNavigator.root;
 
   // 跳转路由,且在路由队列中push,上一个路由会保存状态
-  static void push(String routeName) {
-    navigator.push(routeName);
+  static void push(String routeName, {Map<String, String> queryParams}) {
+    navigator.push(routeName, queryParams: queryParams);
   }
 
   // 跳转路由,将当前路由替换成指定路由
