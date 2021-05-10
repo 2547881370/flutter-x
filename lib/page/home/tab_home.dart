@@ -48,6 +48,12 @@ class TagId {
   });
 }
 
+class CarouselMapData {
+  final int postID;
+  final String url;
+  CarouselMapData({this.postID, this.url});
+}
+
 class TabHomePage extends StatefulWidget {
   @override
   _TabHomePageState createState() => _TabHomePageState();
@@ -81,12 +87,11 @@ class _TabHomePageState extends State<TabHomePage>
   ScrollController sc = ScrollController();
 
   // 轮播图数据
-  final List<String> urls = [
-    "http://photocdn.sohu.com/tvmobilemvms/20150907/144160323071011277.jpg", //伪装者:胡歌演绎"痞子特工"
-    "http://photocdn.sohu.com/tvmobilemvms/20150907/144158380433341332.jpg", //无心法师:生死离别!月牙遭虐杀
-    "http://photocdn.sohu.com/tvmobilemvms/20150907/144160286644953923.jpg", //花千骨:尊上沦为花千骨
-    "http://photocdn.sohu.com/tvmobilemvms/20150902/144115156939164801.jpg", //综艺饭:胖轩偷看夏天洗澡掀波澜
-    "http://photocdn.sohu.com/tvmobilemvms/20150907/144159406950245847.jpg", //碟中谍4:阿汤哥高塔命悬一线,超越不可能
+  List<CarouselMapData> urls = [
+    CarouselMapData(
+        postID: 0,
+        url:
+            'http://cdn.u1.huluxia.com/g4/M01/80/BB/rBAAdmCYBbyAGIBWAACnLvVEMuE283.jpg')
   ];
 
   // 全部列表数据
@@ -112,6 +117,7 @@ class _TabHomePageState extends State<TabHomePage>
 
     _tabController = TabController(vsync: this, length: _tagIds.length);
 
+    _getArticleCarouselMap();
     _getPostsList(TAB_ID_ARR, pageArr);
     _getPostsList(TAB_ID_ORIGINAL, originalArr);
     _getPostsList(TAB_ID_NETWORK, networkArr);
@@ -163,6 +169,20 @@ class _TabHomePageState extends State<TabHomePage>
       }
     }
     return res.data;
+  }
+
+  Future _getArticleCarouselMap() async {
+    final response = await XHttp.get(
+      NWApi.getArticleCarouselMap,
+    );
+    PostsListModel res = PostsListModel.fromJson(response);
+    List<CarouselMapData> _urls = res.data.map((b) {
+      print(b.images);
+      return CarouselMapData(url: b.images[0].url, postID: b.postId);
+    }).toList();
+    setState(() {
+      urls = _urls;
+    });
   }
 
   @override
@@ -531,13 +551,16 @@ class _TabHomePageState extends State<TabHomePage>
                 child: Image(
                   fit: BoxFit.cover,
                   image: CachedNetworkImageProvider(
-                    urls[index],
+                    urls[index].url,
                   ),
                 )),
           );
         },
         onTap: (value) {
-          ToastUtils.toast("点击--->" + value.toString());
+          ToastUtils.toast("点击--->" +
+              value.toString() +
+              '--->' +
+              urls[value].postID.toString());
         },
         itemCount: urls.length,
         pagination: SwiperPagination(),

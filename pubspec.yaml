@@ -50,6 +50,8 @@ dependencies:
   gzx_dropdown_menu: ^3.1.0
   extended_nested_scroll_view: ^3.0.0
   photo_view: ^0.11.1
+  like_button: ^2.0.2
+  flutter_ijkplayer: ^0.3.5+1
 
 dev_dependencies:
   flutter_test:
@@ -68,3 +70,7 @@ flutter:
     - family: xuifont  #指定一个字体名
       fonts:
         - asset: assets/fonts/iconfont.ttf
+        - asset: assets/fonts/comment.ttf
+    - family: comment  #指定一个字体名
+      fonts:
+        - asset: assets/fonts/comment.ttf

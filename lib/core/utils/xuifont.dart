@@ -26,7 +26,11 @@ class XUIIcons {
     girl,
     eye_on,
     eye_off,
-    logout
+    logout,
+    shoucang_ash,
+    dianzan_ash,
+    shoucang,
+    dianzan
   ];
 
   static const IconData file =
@@ -73,4 +77,12 @@ class XUIIcons {
       const IconData(0xe749, fontFamily: 'xuifont', matchTextDirection: true);
   static const IconData logout =
       const IconData(0xe723, fontFamily: 'xuifont', matchTextDirection: true);
+  static const IconData shoucang_ash =
+      const IconData(0xf4f8, fontFamily: 'comment', matchTextDirection: true);
+  static const IconData dianzan_ash =
+      const IconData(0xe60c, fontFamily: 'comment', matchTextDirection: true);
+  static const IconData shoucang =
+      const IconData(0xf4f8, fontFamily: 'comment', matchTextDirection: true);
+  static const IconData dianzan =
+      const IconData(0xf4d9, fontFamily: 'comment', matchTextDirection: true);
 }

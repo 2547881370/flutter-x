@@ -48,11 +48,11 @@ MaterialColor getDefaultTheme() {
 ///主题
 class AppTheme with ChangeNotifier {
   static final List<MaterialColor> materialColors = [
+    Colors.lightBlue,
     Colors.orange,
     Colors.red,
     Colors.amber,
     Colors.blue,
-    Colors.lightBlue,
     Colors.pink,
     Colors.purple,
     Colors.grey,

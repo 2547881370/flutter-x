@@ -108,7 +108,7 @@ class OneImageItem extends StatelessWidget implements ImageItemInfo {
                                             flex: 1,
                                             child: Container(
                                                 padding: EdgeInsets.symmetric(
-                                                    horizontal: 1, vertical: 1),
+                                                    vertical: 1),
                                                 child: Row(children: <Widget>[
                                                   Expanded(
                                                       child: Container(
