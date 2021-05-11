@@ -176,7 +176,7 @@ class _TabHomePageState extends State<TabHomePage>
       NWApi.getArticleCarouselMap,
     );
     PostsListModel res = PostsListModel.fromJson(response);
-    List<CarouselMapData> _urls = res.data.map((b) {
+    List<CarouselMapData> _urls = res.data?.map((b) {
       print(b.images);
       return CarouselMapData(url: b.images[0].url, postID: b.postId);
     }).toList();
@@ -281,7 +281,7 @@ class _TabHomePageState extends State<TabHomePage>
                                           info.images =
                                               info.images.sublist(0, 3);
                                           return ThreeImageItem(
-                                              postId: index,
+                                              postId: info.postId,
                                               images: info.images
                                                   .map((b) => b.url)
                                                   .toList(),
@@ -292,7 +292,7 @@ class _TabHomePageState extends State<TabHomePage>
                                               hit: info.hit);
                                         } else if (imgLength >= 1) {
                                           return OneImageItem(
-                                              postId: index,
+                                              postId: info.postId,
                                               images: info.images
                                                   .map((b) => b.url)
                                                   .toList(),

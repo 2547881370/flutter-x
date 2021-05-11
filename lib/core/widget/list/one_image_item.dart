@@ -45,7 +45,7 @@ class OneImageItem extends StatelessWidget implements ImageItemInfo {
   Widget build(BuildContext context) {
     return InkWell(
         onTap: () {
-          XRouter.push(Routes.imageDetailed);
+          XRouter.push('${Routes.imageDetailed}?postId=${postId}');
         },
         child: Container(
             alignment: Alignment.center,

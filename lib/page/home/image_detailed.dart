@@ -1,12 +1,16 @@
 import 'dart:convert';
 import 'dart:math';
 
+import 'package:auto_route/auto_route_annotations.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_template/core/http/baseApi.dart';
+import 'package:flutter_template/core/http/http.dart';
 import 'package:flutter_template/core/utils/xuifont.dart';
 import 'package:flutter_template/generated/i18n.dart';
+import 'package:flutter_template/models/posts_details_model.dart';
 import 'package:flutter_template/router/route_map.gr.dart';
 import 'package:flutter_template/router/router.dart';
 import 'package:like_button/like_button.dart';
@@ -15,6 +19,10 @@ import 'package:flutter_ijkplayer/flutter_ijkplayer.dart';
 import 'PhotoGalleryPage.dart';
 
 class ImageDetailed extends StatefulWidget {
+  final String postId;
+
+  const ImageDetailed({Key key, @QueryParam('postId') this.postId})
+      : super(key: key);
   @override
   _ImageDetailedState createState() => _ImageDetailedState();
 }
@@ -56,10 +64,161 @@ class _ImageDetailedState extends State<ImageDetailed> {
   bool likeState = false;
   IjkMediaController controller = IjkMediaController();
 
+  PostsDetailsModel res = PostsDetailsModel.fromJson({
+    "data": {
+      "detailedId": 1344,
+      "posts": {
+        "postID": 47863583,
+        "title": "【网图】百合花开",
+        "detail": "这淡淡的花香味",
+        "voice": null,
+        "recommendationLevel": null,
+        "score": 0,
+        "scoreTxt": "",
+        "hit": 608,
+        "commentCount": 2,
+        "notice": 0,
+        "weight": 0,
+        "isGood": 0,
+        "createTime": "1620563913957",
+        "activeTime": "1620123837000",
+        "line": 0,
+        "tagid": 5602,
+        "status": 0,
+        "praise": 1,
+        "isAuthention": 0,
+        "isRich": 0,
+        "appOrientation": 0,
+        "isAppPost": 0,
+        "appSize": 0,
+        "isGif": 0,
+        "user": {
+          "userID": 16693142,
+          "username": "SH",
+          "password": "123456",
+          "nick": "殇孤",
+          "avatar":
+              "http://cdn.u1.huluxia.com/g3/M02/51/FE/wKgBOVq_YUiAZ-7vAADdwgZhlmY5486.ht",
+          "gender": 1,
+          "age": 20,
+          "role": 0,
+          "experience": 67685,
+          "credits": 1403,
+          "identityTitle": "",
+          "identityColor": "0",
+          "level": 7,
+          "levelColor": "4278190335",
+          "integral": 0,
+          "uuid": 0,
+          "integralNick": "初入门槛"
+        },
+        "images": [
+          {
+            "imgId": 11083,
+            "url":
+                "http://cdn.u1.huluxia.com/g4/M03/5C/DC/rBAAdmB_D1yAVxpSAAD3zHOJf3s230.jpg"
+          },
+          {
+            "imgId": 11084,
+            "url":
+                "http://cdn.u1.huluxia.com/g4/M03/5C/DC/rBAAdmB_D1yAJ0WOAADrbMdcQ4A522.jpg"
+          },
+          {
+            "imgId": 11085,
+            "url":
+                "http://cdn.u1.huluxia.com/g4/M03/5C/DC/rBAAdmB_D12AVqwnAAEY25i7CwE797.jpg"
+          },
+          {
+            "imgId": 11086,
+            "url":
+                "http://cdn.u1.huluxia.com/g4/M03/5C/DC/rBAAdmB_D16AQckpAAKQcuYNzJQ563.jpg"
+          },
+          {
+            "imgId": 11087,
+            "url":
+                "http://cdn.u1.huluxia.com/g4/M03/5C/DC/rBAAdmB_D1-AItT6AAD_Ysg8jvU007.jpg"
+          }
+        ]
+      },
+      "comments": [
+        {
+          "commentID": 639541866,
+          "text": "喜欢这种风格的话 说一声  指不定还能再找出来点呢",
+          "voice": "",
+          "voiceTime": 0,
+          "score": 0,
+          "scoreTxt": "",
+          "seq": 1,
+          "createTime": "1618999154000",
+          "state": 1,
+          "scoreUserCount": 0,
+          "scorecount": 0,
+          "praise": 0,
+          "images": [],
+          "user": {
+            "userID": 16693142,
+            "username": "SH",
+            "password": "123456",
+            "nick": "殇孤",
+            "avatar":
+                "http://cdn.u1.huluxia.com/g3/M02/51/FE/wKgBOVq_YUiAZ-7vAADdwgZhlmY5486.ht",
+            "gender": 1,
+            "age": 20,
+            "role": 0,
+            "experience": 67685,
+            "credits": 1403,
+            "identityTitle": "",
+            "identityColor": "0",
+            "level": 7,
+            "levelColor": "4278190335",
+            "integral": 0,
+            "uuid": 0,
+            "integralNick": "初入门槛"
+          }
+        },
+        {
+          "commentID": 640317154,
+          "text": "gkd[滑稽][滑稽][滑稽]",
+          "voice": "",
+          "voiceTime": 0,
+          "score": 0,
+          "scoreTxt": "",
+          "seq": 2,
+          "createTime": "1620123837000",
+          "state": 1,
+          "scoreUserCount": 0,
+          "scorecount": 0,
+          "praise": 0,
+          "images": [],
+          "user": {
+            "userID": 25042026,
+            "username": "SH",
+            "password": "123456",
+            "nick": "莫得感情的鸽子",
+            "avatar":
+                "http://cdn.u1.huluxia.com/g4/M03/40/6D/rBAAdmBqbx2ANQcQAADhalkRS7M475.jpg",
+            "gender": 2,
+            "age": 0,
+            "role": 0,
+            "experience": 2320,
+            "credits": 1,
+            "identityTitle": "",
+            "identityColor": "0",
+            "level": 3,
+            "levelColor": "4278255411",
+            "integral": 0,
+            "uuid": 0,
+            "integralNick": null
+          }
+        }
+      ]
+    },
+    "code": 200,
+    "message": "请求成功"
+  });
+
   Widget _mySliverAppBar() {
     return SliverAppBar(
-      pinned: false,
-      floating: true,
       leading: IconButton(
         color: Colors.white,
         icon: Icon(Icons.navigate_before),
@@ -67,8 +226,14 @@ class _ImageDetailedState extends State<ImageDetailed> {
           Navigator.pop(context);
         },
       ),
-      expandedHeight: kToolbarHeight,
-      flexibleSpace: Container(color: Theme.of(context).primaryColor),
+      expandedHeight: 200,
+      flexibleSpace: FlexibleSpaceBar(
+        background: Image.network(
+          res.data?.posts.images[res.data?.posts.images.length - 1].url,
+          fit: BoxFit.cover,
+        ),
+        collapseMode: CollapseMode.parallax,
+      ),
     );
   }
 
@@ -81,7 +246,7 @@ class _ImageDetailedState extends State<ImageDetailed> {
         //必传参数,头布局内容
         delegate: MySliverDelegate(
             //缩小后的布局高度
-            minHeight: 200.0,
+            minHeight: 100.0,
             //展开后的高度
             maxHeight: 200.0,
             child: Container(
@@ -104,7 +269,8 @@ class _ImageDetailedState extends State<ImageDetailed> {
             Expanded(
                 flex: 1,
                 child: Container(
-                    alignment: Alignment.centerLeft, child: Text("标题"))),
+                    alignment: Alignment.centerLeft,
+                    child: Text(res.data?.posts.title))),
             Expanded(
                 flex: 1,
                 child: Container(
@@ -117,7 +283,8 @@ class _ImageDetailedState extends State<ImageDetailed> {
                                   children: <Widget>[
                             Icon(Icons.message_outlined, color: Colors.black),
                             SizedBox(width: 10),
-                            Text('1000', style: TextStyle(color: Colors.black))
+                            Text(res.data?.posts.commentCount.toString(),
+                                style: TextStyle(color: Colors.black))
                           ]))),
                       Expanded(
                           child: Container(
@@ -126,7 +293,8 @@ class _ImageDetailedState extends State<ImageDetailed> {
                                   children: <Widget>[
                             Icon(Icons.remove_red_eye, color: Colors.black),
                             SizedBox(width: 10),
-                            Text('1000', style: TextStyle(color: Colors.black))
+                            Text(res.data?.posts.hit.toString(),
+                                style: TextStyle(color: Colors.black))
                           ])))
                     ])))
           ])),
@@ -143,57 +311,54 @@ class _ImageDetailedState extends State<ImageDetailed> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Row(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: <Widget>[
-                      Expanded(
-                          flex: 1,
-                          child: Container(
-                              child: Row(
-                                  mainAxisAlignment: MainAxisAlignment.start,
-                                  children: <Widget>[
-                                Container(
-                                    height: ScreenUtil().setHeight(100),
-                                    child: AspectRatio(
-                                      aspectRatio: 1,
-                                      child: ClipOval(
-                                          child: CachedNetworkImage(
-                                              fit: BoxFit.cover,
-                                              placeholder: (context, url) =>
-                                                  Container(
-                                                    color: Colors.grey[200],
-                                                  ),
-                                              imageUrl:
-                                                  'http://photocdn.sohu.com/tvmobilemvms/20150907/144160323071011277.jpg')),
-                                    )),
-                                Expanded(
-                                    child: Container(
-                                        alignment: Alignment.centerLeft,
-                                        margin: EdgeInsets.only(left: 10),
-                                        child: Column(
-                                            crossAxisAlignment:
-                                                CrossAxisAlignment.start,
-                                            children: <Widget>[
-                                              Text("昵称",
-                                                  style: TextStyle(
-                                                      color: Colors.black,
-                                                      fontWeight:
-                                                          FontWeight.bold)),
-                                              Text("个性签名",
-                                                  style: TextStyle(
-                                                      color: Colors.black,
-                                                      fontWeight:
-                                                          FontWeight.bold))
-                                            ])))
-                              ]))),
-                      Container(
-                          alignment: Alignment.topRight,
-                          width: ScreenUtil().setWidth(100),
-                          child: Text("楼主",
-                              style: TextStyle(
-                                  color: Colors.green,
-                                  fontWeight: FontWeight.bold)))
-                    ]),
+                Row(crossAxisAlignment: CrossAxisAlignment.start, children: <
+                    Widget>[
+                  Expanded(
+                      flex: 1,
+                      child: Container(
+                          child: Row(
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              children: <Widget>[
+                            Container(
+                                height: ScreenUtil().setHeight(100),
+                                child: AspectRatio(
+                                  aspectRatio: 1,
+                                  child: ClipOval(
+                                      child: CachedNetworkImage(
+                                          fit: BoxFit.cover,
+                                          placeholder: (context, url) =>
+                                              Container(
+                                                color: Colors.grey[200],
+                                              ),
+                                          imageUrl:
+                                              res.data?.posts.user.avatar)),
+                                )),
+                            Expanded(
+                                child: Container(
+                                    alignment: Alignment.centerLeft,
+                                    margin: EdgeInsets.only(left: 10),
+                                    child: Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: <Widget>[
+                                          Text(res.data?.posts.user.username,
+                                              style: TextStyle(
+                                                  color: Colors.black,
+                                                  fontWeight: FontWeight.bold)),
+                                          Text(res.data?.posts.user.nick,
+                                              style: TextStyle(
+                                                  color: Colors.black,
+                                                  fontWeight: FontWeight.bold))
+                                        ])))
+                          ]))),
+                  Container(
+                      alignment: Alignment.topRight,
+                      width: ScreenUtil().setWidth(100),
+                      child: Text("楼主",
+                          style: TextStyle(
+                              color: Colors.green,
+                              fontWeight: FontWeight.bold)))
+                ]),
                 SizedBox(
                   height: 10,
                 ),
@@ -201,10 +366,7 @@ class _ImageDetailedState extends State<ImageDetailed> {
                     padding: EdgeInsets.symmetric(
                         horizontal: ScreenUtil().setWidth(10)),
                     child: Text(
-                      "文字内容文字内容文字内容文字内容文字内容文字内容文字内容"
-                      "文字内容文字内容文字内容文字内容文字内容文字内容文字内容"
-                      "文字内容文字内容文字内容文字内容文字内容文字内容文字内容"
-                      "文字内容文字内容文字内容文字内容文字内容文字内容文字内容",
+                      res.data?.posts.detail,
                     )),
                 GridView.builder(
                   shrinkWrap: true, //解决 listview 嵌套报错
@@ -225,16 +387,16 @@ class _ImageDetailedState extends State<ImageDetailed> {
                             context,
                             MaterialPageRoute(
                                 builder: (context) => PhotpGalleryPage(
-                                    photoList: detailsImageData,
+                                    photoList: res.data.posts.images,
                                     index: index)));
                       },
                       child: CachedNetworkImage(
                         fit: BoxFit.cover,
-                        imageUrl: detailsImageData[index]['url'],
+                        imageUrl: res.data?.posts.images[index].url,
                       ),
                     );
                   },
-                  itemCount: detailsImageData.length,
+                  itemCount: res.data?.posts.images.length,
                 )
               ],
             )));
@@ -246,7 +408,7 @@ class _ImageDetailedState extends State<ImageDetailed> {
       padding: EdgeInsets.symmetric(horizontal: 10, vertical: 10),
       decoration: BoxDecoration(
           border: Border(bottom: BorderSide(width: 1, color: Colors.grey))),
-      child: Text("评论 : 10"),
+      child: Text("评论 : ${res.data?.comments.length}"),
     ));
   }
 
@@ -254,14 +416,14 @@ class _ImageDetailedState extends State<ImageDetailed> {
     return SliverList(
       delegate: SliverChildBuilderDelegate(
         (context, index) {
-          return _mySliverCommentItem();
+          return _mySliverCommentItem(res.data?.comments[index]);
         },
-        childCount: 20,
+        childCount: res.data?.comments.length,
       ),
     );
   }
 
-  Widget _mySliverCommentItem() {
+  Widget _mySliverCommentItem(Comment comments) {
     return Container(
       padding: EdgeInsets.symmetric(horizontal: 10, vertical: 10),
       child:
@@ -283,8 +445,7 @@ class _ImageDetailedState extends State<ImageDetailed> {
                                 placeholder: (context, url) => Container(
                                       color: Colors.grey[200],
                                     ),
-                                imageUrl:
-                                    'http://photocdn.sohu.com/tvmobilemvms/20150907/144160323071011277.jpg')),
+                                imageUrl: comments.user.avatar)),
                       )),
                   Expanded(
                       child: Container(
@@ -293,13 +454,11 @@ class _ImageDetailedState extends State<ImageDetailed> {
                           child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: <Widget>[
-                                Text("昵称",
+                                Text(comments.user.username,
                                     style: TextStyle(
                                         color: Colors.grey[600],
                                         fontWeight: FontWeight.bold)),
-                                Text(
-                                    "评论评论评论评论评论评论评论评论评论评论评论评论评论评论评论评论评论评论评论评论评论评论评论评论评论评论评论评论评论"
-                                    "评论评论评论评论评论评论评论评论评论评论评论评论评论评论评论评论评论评论评论评论评论评论评论评论评论评论评论评论评论",
+                                Text(comments.text,
                                     style: TextStyle(
                                         color: Colors.black,
                                         fontWeight: FontWeight.bold)),
@@ -394,11 +553,34 @@ class _ImageDetailedState extends State<ImageDetailed> {
     FocusScope.of(context).requestFocus(blankNode);
   }
 
+  Future _initArticleInfo(postId) async {
+    final response = await XHttp.postJson(NWApi.postsDetails, {
+      "limit": 10,
+      "page": 1,
+      "postId": postId,
+    });
+    PostsDetailsModel _res = PostsDetailsModel.fromJson(response);
+    setState(() {
+      res = _res;
+    });
+
+    if (_res.data.posts.voice != null) {
+      Map<String, dynamic> voiceData =
+          JsonDecoder().convert(_res.data.posts.voice);
+      print(voiceData);
+      String url = voiceData['videohost'] + voiceData['videofid'];
+      controller.setNetworkDataSource(url, autoPlay: true);
+    }
+  }
+
   @override
   void initState() {
-    controller.setNetworkDataSource(
-        'http://clips.vorwaerts-gmbh.de/big_buck_bunny.mp4',
-        autoPlay: true);
+    // controller.setNetworkDataSource(
+    //     'http://clips.vorwaerts-gmbh.de/big_buck_bunny.mp4',
+    //     autoPlay: true);
+    if (widget.postId != null) {
+      _initArticleInfo(widget.postId);
+    }
     super.initState();
   }
 
@@ -424,8 +606,10 @@ class _ImageDetailedState extends State<ImageDetailed> {
               // 去除滑动波纹
               physics: BouncingScrollPhysics(),
               slivers: [
-                _mySliverPersistentHeaderVideo(),
-                _mySliverTitle(),
+                res.data.posts.voice != null
+                    ? _mySliverPersistentHeaderVideo()
+                    : _mySliverAppBar(),
+                // _mySliverTitle(),
                 _mySliverContent(),
                 _mySliverCommentCount(),
                 _mySliverComment(),

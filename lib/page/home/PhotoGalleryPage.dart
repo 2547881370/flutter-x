@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_template/models/posts_details_model.dart';
 import 'package:photo_view/photo_view.dart';
 import 'package:photo_view/photo_view_gallery.dart';
 
 class PhotpGalleryPage extends StatefulWidget {
-  final List photoList;
+  final List<DetailsImage> photoList;
   final int index;
   PhotpGalleryPage({this.photoList, this.index});
   @override
@@ -50,7 +51,7 @@ class _PhotpGalleryPageState extends State<PhotpGalleryPage> {
               width: ScreenUtil().setWidth(750),
               height: ScreenUtil().setHeight(100),
               padding: EdgeInsets.only(left: 20, right: 14),
-              // decoration: BoxDecoration(color: Colors.white),
+              decoration: BoxDecoration(color: Colors.black),
               child: Stack(
                 children: <Widget>[
                   InkWell(
@@ -92,11 +93,10 @@ class _PhotpGalleryPageState extends State<PhotpGalleryPage> {
                   scrollPhysics: const BouncingScrollPhysics(),
                   builder: (BuildContext context, int index) {
                     return PhotoViewGalleryPageOptions(
-                      imageProvider:
-                          NetworkImage(widget.photoList[index]['url']),
+                      imageProvider: NetworkImage(widget.photoList[index].url),
                       initialScale: PhotoViewComputedScale.contained * 1,
                       heroAttributes: PhotoViewHeroAttributes(
-                          tag: widget.photoList[index]['imgId']),
+                          tag: widget.photoList[index].imgId),
                     );
                   },
                   itemCount: widget.photoList.length,
