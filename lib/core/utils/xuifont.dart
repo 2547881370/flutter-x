@@ -78,11 +78,11 @@ class XUIIcons {
   static const IconData logout =
       const IconData(0xe723, fontFamily: 'xuifont', matchTextDirection: true);
   static const IconData shoucang_ash =
-      const IconData(0xe60f, fontFamily: 'comment', matchTextDirection: true);
+      const IconData(0xf4f8, fontFamily: 'comment', matchTextDirection: true);
   static const IconData dianzan_ash =
       const IconData(0xe60c, fontFamily: 'comment', matchTextDirection: true);
   static const IconData shoucang =
-      const IconData(0xf4cf, fontFamily: 'comment', matchTextDirection: true);
+      const IconData(0xf4f8, fontFamily: 'comment', matchTextDirection: true);
   static const IconData dianzan =
       const IconData(0xf4d9, fontFamily: 'comment', matchTextDirection: true);
 }
