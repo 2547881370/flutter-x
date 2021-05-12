@@ -228,10 +228,13 @@ class _ImageDetailedState extends State<ImageDetailed> {
       ),
       expandedHeight: 200,
       flexibleSpace: FlexibleSpaceBar(
-        background: Image.network(
-          res.data?.posts.images[res.data?.posts.images.length - 1].url,
-          fit: BoxFit.cover,
-        ),
+        background: CachedNetworkImage(
+            fit: BoxFit.cover,
+            placeholder: (context, url) => Container(
+                  color: Colors.grey[200],
+                ),
+            imageUrl:
+                res.data?.posts.images[res.data?.posts.images.length - 1].url),
         collapseMode: CollapseMode.parallax,
       ),
     );
@@ -615,7 +618,7 @@ class _ImageDetailedState extends State<ImageDetailed> {
                 _mySliverComment(),
                 SliverToBoxAdapter(
                   child: Container(
-                    height: ScreenUtil().setHeight(100),
+                    height: ScreenUtil().setHeight(130),
                   ),
                 )
               ],
