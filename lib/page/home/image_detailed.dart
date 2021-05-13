@@ -6,13 +6,21 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:flutter_template/core/http/baseApi.dart';
 import 'package:flutter_template/core/http/http.dart';
+import 'package:flutter_template/core/http/request/request.dart';
+import 'package:flutter_template/core/utils/toast.dart';
 import 'package:flutter_template/core/utils/xuifont.dart';
+import 'package:flutter_template/core/widget/loading_dialog.dart';
 import 'package:flutter_template/generated/i18n.dart';
 import 'package:flutter_template/models/posts_details_model.dart';
+import 'package:flutter_template/models/posts_praise_error_model.dart';
+import 'package:flutter_template/models/posts_praise_model.dart';
+import 'package:flutter_template/models/query_user_praise_one_model.dart';
 import 'package:flutter_template/router/route_map.gr.dart';
 import 'package:flutter_template/router/router.dart';
+import 'package:flutter_template/utils/sputils.dart';
 import 'package:like_button/like_button.dart';
 import 'package:flutter_ijkplayer/flutter_ijkplayer.dart';
 
@@ -484,27 +492,59 @@ class _ImageDetailedState extends State<ImageDetailed> {
             children: <Widget>[
               Expanded(
                   flex: 2,
-                  child: Container(
-                    child: Container(
-                      height: ScreenUtil().setHeight(80),
-                      alignment: Alignment.bottomLeft,
-                      decoration: BoxDecoration(
-                          color: Colors.grey[200],
-                          borderRadius: BorderRadius.all(Radius.circular(8))),
-                      child: TextFormField(
-                          autofocus: false,
-                          controller: _commentController,
-                          decoration: InputDecoration(
-                            // labelText: I18n.of(context).loginName,
-                            hintText: '一起来吐槽',
-                            hintStyle: TextStyle(fontSize: 12),
-                            border:
-                                OutlineInputBorder(borderSide: BorderSide.none),
+                  child: Row(children: <Widget>[
+                    Expanded(
+                        flex: 2,
+                        child: Container(
+                          child: Container(
+                            height: ScreenUtil().setHeight(80),
+                            alignment: Alignment.bottomLeft,
+                            decoration: BoxDecoration(
+                                color: Colors.grey[200],
+                                borderRadius:
+                                    BorderRadius.all(Radius.circular(5))),
+                            child: TextFormField(
+                                autofocus: false,
+                                controller: _commentController,
+                                decoration: InputDecoration(
+                                  // labelText: I18n.of(context).loginName,
+                                  hintText: '说说你的看法',
+                                  hintStyle: TextStyle(fontSize: 12),
+                                  border: OutlineInputBorder(
+                                      borderSide: BorderSide.none),
+                                ),
+                                //校验用户名
+                                validator: (v) {}),
                           ),
-                          //校验用户名
-                          validator: (v) {}),
+                        )),
+                    SizedBox(
+                      width: ScreenUtil().setWidth(10),
                     ),
-                  )),
+                    Expanded(
+                        flex: 1,
+                        child: Container(
+                            child: FlatButton(
+                          color: Theme.of(context).primaryColor,
+                          highlightColor: Colors.blue[700],
+                          colorBrightness: Brightness.dark,
+                          splashColor: Colors.grey,
+                          child: Text("评论"),
+                          onPressed: () async {
+                            if (_commentController.text == '') {
+                              ToastUtils.error("内容不能为空");
+                              return false;
+                            }
+                            print(_commentController.text);
+                            bool flag = await _createPostsComment(
+                                ArticleComment(text: _commentController.text));
+                            if (flag) {
+                              _init();
+                            }
+                            _commentController.text = '';
+                            closeKeyboard(context);
+                          },
+                        ))),
+                  ])),
               SizedBox(
                 width: ScreenUtil().setWidth(80),
               ),
@@ -515,9 +555,17 @@ class _ImageDetailedState extends State<ImageDetailed> {
                     children: <Widget>[
                       LikeButton(
                         onTap: (bool isLiked) async {
-                          setState(() {
-                            collectionState = !collectionState;
-                          });
+                          bool _isFlag = await _postsCollection(
+                              ArticleOraiseRequset(postId: widget.postId),
+                              status: collectionState
+                                  ? ArticleStatus.cancel
+                                  : ArticleStatus.determine);
+                          if (_isFlag) {
+                            setState(() {
+                              collectionState = !collectionState;
+                            });
+                            return collectionState;
+                          }
                           return collectionState;
                         },
                         likeBuilder: (bool isLiked) {
@@ -529,10 +577,18 @@ class _ImageDetailedState extends State<ImageDetailed> {
                       ),
                       LikeButton(
                         onTap: (bool isLiked) async {
-                          setState(() {
-                            likeState = !likeState;
-                          });
-                          return !likeState;
+                          bool _isFlag = await _postsPraise(
+                              ArticleOraiseRequset(postId: widget.postId),
+                              status: likeState
+                                  ? ArticleStatus.cancel
+                                  : ArticleStatus.determine);
+                          if (_isFlag) {
+                            setState(() {
+                              likeState = !likeState;
+                            });
+                            return likeState;
+                          }
+                          return likeState;
                         },
                         likeBuilder: (bool isLiked) {
                           return Icon(
@@ -556,9 +612,10 @@ class _ImageDetailedState extends State<ImageDetailed> {
     FocusScope.of(context).requestFocus(blankNode);
   }
 
+  // 获取文章详情
   Future _initArticleInfo(postId) async {
     final response = await XHttp.postJson(NWApi.postsDetails, {
-      "limit": 10,
+      "limit": 1000,
       "page": 1,
       "postId": postId,
     });
@@ -576,14 +633,159 @@ class _ImageDetailedState extends State<ImageDetailed> {
     }
   }
 
+  // 点赞
+  Future _postsPraise(ArticleOraiseRequset query, {int status}) async {
+    showDialog(
+        context: context,
+        barrierDismissible: false,
+        builder: (BuildContext context) {
+          return LoadingDialog(
+            showContent: false,
+            backgroundColor: Colors.black38,
+            loadingView: SpinKitCircle(color: Colors.white),
+          );
+        });
+    query.status = status;
+    try {
+      final response = await XHttp.postJson(NWApi.praise, {
+        "status": query.status,
+        "postId": query.postId,
+        "userId": SPUtils.getUserInfo().data.userId
+      });
+      ToastUtils.success(response["message"]);
+      return true;
+    } catch (err) {
+      PostsPraiseErrorModel resError =
+          PostsPraiseErrorModel.fromJson(err.response.data);
+      ToastUtils.error(resError.message);
+      return false;
+    } finally {
+      Navigator.pop(context);
+    }
+  }
+
+  // 获取用户是否点赞
+  Future _istUserPostsPraise(IsArticleOraiseRequset query) async {
+    try {
+      final response = await XHttp.postJson(NWApi.queryUserPraiseOne, {
+        "postId": query.postId,
+        "userId": SPUtils.getUserInfo().data.userId
+      });
+      QueryUserPraiseOneModel _res = QueryUserPraiseOneModel.fromJson(response);
+      print(_res);
+      setState(() {
+        likeState = true;
+      });
+      return true;
+    } catch (err) {
+      print(err);
+      setState(() {
+        likeState = false;
+      });
+      return false;
+    }
+  }
+
+  // 收藏
+  Future _postsCollection(ArticleOraiseRequset query, {int status}) async {
+    showDialog(
+        context: context,
+        barrierDismissible: false,
+        builder: (BuildContext context) {
+          return LoadingDialog(
+            showContent: false,
+            backgroundColor: Colors.black38,
+            loadingView: SpinKitCircle(color: Colors.white),
+          );
+        });
+
+    query.status = status;
+    try {
+      final response = await XHttp.postJson(NWApi.collection, {
+        "status": query.status,
+        "postId": query.postId,
+        "userId": SPUtils.getUserInfo().data.userId
+      });
+      ToastUtils.success(response["message"]);
+      return true;
+    } catch (err) {
+      PostsPraiseErrorModel resError =
+          PostsPraiseErrorModel.fromJson(err.response.data);
+      ToastUtils.error(resError.message);
+    } finally {
+      Navigator.pop(context);
+    }
+  }
+
+  // 获取用户是否收藏
+  Future _istUserPostsCollection(IsArticleOraiseRequset query) async {
+    try {
+      final response = await XHttp.postJson(NWApi.queryUserCollectionOne, {
+        "postId": query.postId,
+        "userId": SPUtils.getUserInfo().data.userId
+      });
+      QueryUserPraiseOneModel _res = QueryUserPraiseOneModel.fromJson(response);
+      print(_res);
+      setState(() {
+        collectionState = true;
+      });
+      return true;
+    } catch (err) {
+      print(err);
+      setState(() {
+        collectionState = false;
+      });
+      return false;
+    }
+  }
+
+  // 用户评论
+  Future _createPostsComment(ArticleComment query) async {
+    showDialog(
+        context: context,
+        barrierDismissible: false,
+        builder: (BuildContext context) {
+          return LoadingDialog(
+            showContent: false,
+            backgroundColor: Colors.black38,
+            loadingView: SpinKitCircle(color: Colors.white),
+          );
+        });
+    try {
+      final response = await XHttp.postJson(NWApi.createPostsComment, {
+        "postId": widget.postId,
+        "userId": SPUtils.getUserInfo().data.userId,
+        "text": query.text
+      });
+      ToastUtils.success(response["message"]);
+      return true;
+    } catch (err) {
+      PostsPraiseErrorModel resError =
+          PostsPraiseErrorModel.fromJson(err.response.data);
+      ToastUtils.error(resError.message);
+      return false;
+    } finally {
+      Navigator.pop(context);
+    }
+  }
+
+  Future _init() async {
+    await _istUserPostsPraise(IsArticleOraiseRequset(postId: widget.postId));
+
+    await _istUserPostsCollection(
+        IsArticleOraiseRequset(postId: widget.postId));
+
+    await _initArticleInfo(widget.postId);
+  }
+
   @override
   void initState() {
-    // controller.setNetworkDataSource(
-    //     'http://clips.vorwaerts-gmbh.de/big_buck_bunny.mp4',
-    //     autoPlay: true);
+    print('postId =>>>>>>>>' + widget.postId);
+    print('userId =>>>>>>>>' + SPUtils.getUserInfo().data.userId.toString());
     if (widget.postId != null) {
-      _initArticleInfo(widget.postId);
+      _init();
     }
+
     super.initState();
   }
 
