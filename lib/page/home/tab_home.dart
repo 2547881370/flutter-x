@@ -686,21 +686,25 @@ class TabHomeTopRightSearch extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Expanded(
-        child: Container(
-            padding: EdgeInsets.only(top: ScreenUtil().setHeight(25)),
-            alignment: Alignment.centerLeft,
+        child: InkWell(
+            onTap: () {
+              XRouter.push(Routes.searchPage);
+            },
             child: Container(
-                margin: EdgeInsets.only(right: ScreenUtil().setWidth(30)),
-                padding:
-                    EdgeInsets.symmetric(horizontal: ScreenUtil().setWidth(20)),
-                width: double.infinity,
-                height: ScreenUtil().setHeight(80),
+                padding: EdgeInsets.only(top: ScreenUtil().setHeight(25)),
                 alignment: Alignment.centerLeft,
-                decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(10),
-                    border: Border.all(width: 1, color: Colors.white)),
-                child: Text("请输入帖子名字......",
-                    style: TextStyle(color: Colors.white)))));
+                child: Container(
+                    margin: EdgeInsets.only(right: ScreenUtil().setWidth(30)),
+                    padding: EdgeInsets.symmetric(
+                        horizontal: ScreenUtil().setWidth(20)),
+                    width: double.infinity,
+                    height: ScreenUtil().setHeight(80),
+                    alignment: Alignment.centerLeft,
+                    decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(10),
+                        border: Border.all(width: 1, color: Colors.white)),
+                    child: Text("请输入帖子名字......",
+                        style: TextStyle(color: Colors.white))))));
   }
 }
 

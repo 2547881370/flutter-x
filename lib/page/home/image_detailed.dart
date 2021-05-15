@@ -24,7 +24,7 @@ import 'package:flutter_template/utils/sputils.dart';
 import 'package:like_button/like_button.dart';
 import 'package:flutter_ijkplayer/flutter_ijkplayer.dart';
 
-import 'PhotoGalleryPage.dart';
+import 'photo_gallery_page.dart';
 
 class ImageDetailed extends StatefulWidget {
   final String postId;
@@ -504,26 +504,35 @@ class _ImageDetailedState extends State<ImageDetailed> {
                     Expanded(
                         flex: 2,
                         child: Container(
-                          child: Container(
-                            height: ScreenUtil().setHeight(80),
-                            alignment: Alignment.bottomLeft,
-                            decoration: BoxDecoration(
-                                color: Colors.grey[200],
-                                borderRadius:
-                                    BorderRadius.all(Radius.circular(5))),
-                            child: TextFormField(
-                                autofocus: false,
-                                controller: _commentController,
-                                decoration: InputDecoration(
-                                  // labelText: I18n.of(context).loginName,
-                                  hintText: '说说你的看法',
-                                  hintStyle: TextStyle(fontSize: 12),
-                                  border: OutlineInputBorder(
-                                      borderSide: BorderSide.none),
-                                ),
-                                //校验用户名
-                                validator: (v) {}),
-                          ),
+                          child: Stack(children: <Widget>[
+                            Positioned(
+                                top: ScreenUtil()
+                                    .setHeight((100 / 2) - (80 / 2)),
+                                child: Container(
+                                    width: MediaQuery.of(context).size.width,
+                                    alignment: Alignment.center,
+                                    height: ScreenUtil().setHeight(80),
+                                    decoration: BoxDecoration(
+                                        color: Colors.grey[100],
+                                        borderRadius: BorderRadius.all(
+                                            Radius.circular(5))))),
+                            Container(
+                              height: ScreenUtil().setHeight(100),
+                              alignment: Alignment.bottomLeft,
+                              child: TextFormField(
+                                  autofocus: false,
+                                  controller: _commentController,
+                                  decoration: InputDecoration(
+                                    // labelText: I18n.of(context).loginName,
+                                    hintText: '说说你的看法',
+                                    hintStyle: TextStyle(fontSize: 12),
+                                    border: OutlineInputBorder(
+                                        borderSide: BorderSide.none),
+                                  ),
+                                  //校验用户名
+                                  validator: (v) {}),
+                            )
+                          ]),
                         )),
                     SizedBox(
                       width: ScreenUtil().setWidth(10),
