@@ -317,8 +317,8 @@ class _ImageDetailedState extends State<ImageDetailed> {
         child: Container(
             padding: EdgeInsets.symmetric(horizontal: 10, vertical: 10),
             decoration: BoxDecoration(
-                border:
-                    Border(bottom: BorderSide(width: 1, color: Colors.grey))),
+                border: Border(
+                    bottom: BorderSide(width: 1, color: Colors.grey[200]))),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
@@ -418,7 +418,8 @@ class _ImageDetailedState extends State<ImageDetailed> {
         child: Container(
       padding: EdgeInsets.symmetric(horizontal: 10, vertical: 10),
       decoration: BoxDecoration(
-          border: Border(bottom: BorderSide(width: 1, color: Colors.grey))),
+          border:
+              Border(bottom: BorderSide(width: 1, color: Colors.grey[200]))),
       child: Text("评论 : ${res.data?.comments.length}"),
     ));
   }
@@ -447,7 +448,7 @@ class _ImageDetailedState extends State<ImageDetailed> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: <Widget>[
                   Container(
-                      height: ScreenUtil().setHeight(100),
+                      height: ScreenUtil().setHeight(60),
                       child: AspectRatio(
                         aspectRatio: 1,
                         child: ClipOval(
@@ -465,14 +466,21 @@ class _ImageDetailedState extends State<ImageDetailed> {
                           child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: <Widget>[
+                                SizedBox(
+                                  height: ScreenUtil().setHeight(10),
+                                ),
                                 Text(comments.user.username,
                                     style: TextStyle(
                                         color: Colors.grey[600],
                                         fontWeight: FontWeight.bold)),
+                                SizedBox(
+                                  height: ScreenUtil().setHeight(10),
+                                ),
                                 Text(comments.text,
                                     style: TextStyle(
-                                        color: Colors.black,
-                                        fontWeight: FontWeight.bold)),
+                                      fontSize: ScreenUtil().setSp(30),
+                                      color: Colors.black,
+                                    )),
                               ])))
                 ]))),
       ]),
