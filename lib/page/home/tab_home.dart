@@ -11,6 +11,8 @@ import 'package:flutter_template/core/utils/toast.dart';
 import 'package:flutter_template/core/widget/list/one_image_item.dart';
 import 'package:flutter_template/core/widget/list/three_image_item.dart';
 import 'package:flutter_template/models/posts_list_model.dart';
+import 'package:flutter_template/router/route_map.gr.dart';
+import 'package:flutter_template/router/router.dart';
 import 'package:gzx_dropdown_menu/gzx_dropdown_menu.dart';
 
 import 'package:extended_nested_scroll_view/extended_nested_scroll_view.dart'
@@ -31,11 +33,9 @@ import 'package:extended_nested_scroll_view/extended_nested_scroll_view.dart'
 class SortCondition {
   String name;
   bool isSelected;
+  final int sort_by;
 
-  SortCondition({
-    this.name,
-    this.isSelected,
-  });
+  SortCondition({this.name, this.isSelected, this.sort_by});
 }
 
 class TagId {
@@ -52,6 +52,13 @@ class CarouselMapData {
   final int postID;
   final String url;
   CarouselMapData({this.postID, this.url});
+}
+
+class PostsQueryForm {
+  final int limit;
+  int page;
+  int tag_id;
+  PostsQueryForm({this.limit = 10, this.page, this.tag_id});
 }
 
 class TabHomePage extends StatefulWidget {
@@ -106,21 +113,37 @@ class _TabHomePageState extends State<TabHomePage>
   PostsListModel postsListModelNetworkData;
   int networkArr = 1;
 
+  // queryForm
+  Map<int, PostsQueryForm> queryForm = {};
+  // active appBarSelect
+  SortCondition activeSortCondition;
+
   @override
   void initState() {
     super.initState();
 
-    _distanceSortConditions.add(SortCondition(name: '回复时间', isSelected: true));
-    _distanceSortConditions.add(SortCondition(name: '发布时间', isSelected: false));
+    _distanceSortConditions
+        .add(SortCondition(name: '回复时间', isSelected: true, sort_by: 0));
+    _distanceSortConditions
+        .add(SortCondition(name: '发布时间', isSelected: false, sort_by: 1));
 
     _selectDistanceSortCondition = _distanceSortConditions[0];
 
     _tabController = TabController(vsync: this, length: _tagIds.length);
 
+    // 获取轮播图
     _getArticleCarouselMap();
-    _getPostsList(TAB_ID_ARR, pageArr);
-    _getPostsList(TAB_ID_ORIGINAL, originalArr);
-    _getPostsList(TAB_ID_NETWORK, networkArr);
+
+    activeSortCondition = _distanceSortConditions[0];
+
+    queryForm[0] = PostsQueryForm(page: pageArr, tag_id: TAB_ID_ARR);
+    queryForm[1] = PostsQueryForm(page: originalArr, tag_id: TAB_ID_ORIGINAL);
+    queryForm[2] = PostsQueryForm(page: networkArr, tag_id: TAB_ID_NETWORK);
+
+    // _getPostsList(TAB_ID_ARR, pageArr);
+    // _getPostsList(TAB_ID_ORIGINAL, originalArr);
+    // _getPostsList(TAB_ID_NETWORK, networkArr);
+    _initData();
   }
 
   @override
@@ -130,41 +153,55 @@ class _TabHomePageState extends State<TabHomePage>
     super.dispose();
   }
 
-  Future _getPostsList(int tagId, int page) async {
-    final response = await XHttp.postJson(NWApi.postslist,
-        {"limit": 10, "page": page, "tag_id": tagId, "sort_by": ""});
+  Future _getPostsList({int tag_id, isBuild = true}) async {
+    PostsQueryForm _queryForm = queryForm[_tabController.index];
+    final response = await XHttp.postJson(NWApi.postslist, {
+      "limit": 10,
+      "page": _queryForm.page,
+      "tag_id": tag_id != null ? tag_id : _queryForm.tag_id,
+      "sort_by": activeSortCondition.sort_by
+    });
     PostsListModel res = PostsListModel.fromJson(response);
     if (res.code == 200) {
-      switch (tagId) {
+      switch (tag_id != null ? tag_id : _queryForm.tag_id) {
         case TAB_ID_ARR:
-          if (postsListModelArrData != null && page != 1) {
+          if (postsListModelArrData != null && _queryForm.page != 1) {
             var _data = postsListModelArrData;
             _data.data.addAll(res.data);
             res = _data;
           }
-          setState(() {
-            postsListModelArrData = res;
-          });
+          postsListModelArrData = res;
+          if (isBuild) {
+            setState(() {
+              postsListModelArrData = res;
+            });
+          }
           break;
         case TAB_ID_ORIGINAL:
-          if (postsListModelOriginalData != null && page != 1) {
+          if (postsListModelOriginalData != null && _queryForm.page != 1) {
             var _data = postsListModelOriginalData;
             _data.data.addAll(res.data);
             res = _data;
           }
-          setState(() {
-            postsListModelOriginalData = res;
-          });
+          postsListModelOriginalData = res;
+          if (isBuild) {
+            setState(() {
+              postsListModelOriginalData = res;
+            });
+          }
           break;
         case TAB_ID_NETWORK:
-          if (postsListModelNetworkData != null && page != 1) {
+          if (postsListModelNetworkData != null && _queryForm.page != 1) {
             var _data = postsListModelNetworkData;
             _data.data.addAll(res.data);
             res = _data;
           }
-          setState(() {
-            postsListModelNetworkData = res;
-          });
+          postsListModelNetworkData = res;
+          if (isBuild) {
+            setState(() {
+              postsListModelNetworkData = res;
+            });
+          }
           break;
       }
     }
@@ -183,6 +220,18 @@ class _TabHomePageState extends State<TabHomePage>
     setState(() {
       urls = _urls;
     });
+  }
+
+  Future _initData() async {
+    await _getPostsList(tag_id: TAB_ID_ARR, isBuild: false);
+    await _getPostsList(tag_id: TAB_ID_ORIGINAL, isBuild: false);
+    await _getPostsList(tag_id: TAB_ID_NETWORK, isBuild: false);
+    setState(() {
+      postsListModelArrData = postsListModelArrData;
+      postsListModelOriginalData = postsListModelOriginalData;
+      postsListModelNetworkData = postsListModelNetworkData;
+    });
+    return true;
   }
 
   @override
@@ -244,6 +293,10 @@ class _TabHomePageState extends State<TabHomePage>
                         Container(
                             color: Colors.white,
                             child: TabHomeTabBar(
+                                onTap: (int index) async {
+                                  print("重新build =>>>>>${index}");
+                                  // await _getPostsList();
+                                },
                                 tabController: _tabController,
                                 tagIds: _tagIds)),
 
@@ -259,12 +312,12 @@ class _TabHomePageState extends State<TabHomePage>
                                     header: MaterialHeader(),
                                     footer: MaterialFooter(),
                                     onRefresh: () async {
-                                      pageArr = 1;
-                                      await _getPostsList(TAB_ID_ARR, 1);
+                                      queryForm[0].page = 1;
+                                      await _getPostsList();
                                     },
                                     onLoad: () async {
-                                      pageArr = pageArr + 1;
-                                      await _getPostsList(TAB_ID_ARR, pageArr);
+                                      queryForm[0].page = queryForm[0].page + 1;
+                                      await _getPostsList();
                                     },
                                     child: ListView.builder(
                                       itemCount: postsListModelArrData != null
@@ -314,13 +367,12 @@ class _TabHomePageState extends State<TabHomePage>
                                     header: MaterialHeader(),
                                     footer: MaterialFooter(),
                                     onRefresh: () async {
-                                      originalArr = 1;
-                                      await _getPostsList(TAB_ID_ORIGINAL, 1);
+                                      queryForm[1].page = 1;
+                                      await _getPostsList();
                                     },
                                     onLoad: () async {
-                                      originalArr = originalArr + 1;
-                                      await _getPostsList(
-                                          TAB_ID_ORIGINAL, originalArr);
+                                      queryForm[1].page = queryForm[1].page + 1;
+                                      await _getPostsList();
                                     },
                                     child: ListView.builder(
                                       itemCount:
@@ -339,7 +391,7 @@ class _TabHomePageState extends State<TabHomePage>
                                           info.images =
                                               info.images.sublist(0, 3);
                                           return ThreeImageItem(
-                                              postId: index,
+                                              postId: info.postId,
                                               images: info.images
                                                   .map((b) => b.url)
                                                   .toList(),
@@ -350,7 +402,7 @@ class _TabHomePageState extends State<TabHomePage>
                                               hit: info.hit);
                                         } else if (imgLength >= 1) {
                                           return OneImageItem(
-                                              postId: index,
+                                              postId: info.postId,
                                               images: info.images
                                                   .map((b) => b.url)
                                                   .toList(),
@@ -372,13 +424,12 @@ class _TabHomePageState extends State<TabHomePage>
                                     header: MaterialHeader(),
                                     footer: MaterialFooter(),
                                     onRefresh: () async {
-                                      networkArr = 1;
-                                      await _getPostsList(TAB_ID_NETWORK, 1);
+                                      queryForm[2].page = 1;
+                                      await _getPostsList();
                                     },
                                     onLoad: () async {
-                                      networkArr = networkArr + 1;
-                                      await _getPostsList(
-                                          TAB_ID_NETWORK, networkArr);
+                                      queryForm[2].page = queryForm[2].page + 1;
+                                      await _getPostsList();
                                     },
                                     child: ListView.builder(
                                       itemCount:
@@ -397,7 +448,7 @@ class _TabHomePageState extends State<TabHomePage>
                                           info.images =
                                               info.images.sublist(0, 3);
                                           return ThreeImageItem(
-                                              postId: index,
+                                              postId: info.postId,
                                               images: info.images
                                                   .map((b) => b.url)
                                                   .toList(),
@@ -408,7 +459,7 @@ class _TabHomePageState extends State<TabHomePage>
                                               hit: info.hit);
                                         } else if (imgLength >= 1) {
                                           return OneImageItem(
-                                              postId: index,
+                                              postId: info.postId,
                                               images: info.images
                                                   .map((b) => b.url)
                                                   .toList(),
@@ -494,13 +545,28 @@ class _TabHomePageState extends State<TabHomePage>
       void itemOnTap(SortCondition sortCondition), BuildContext context) {
     SortCondition goodsSortCondition = items[index];
     return GestureDetector(
-      onTap: () {
+      onTap: () async {
         for (var value in items) {
           value.isSelected = false;
         }
         goodsSortCondition.isSelected = true;
 
         itemOnTap(goodsSortCondition);
+
+        // 保存下拉框值
+        activeSortCondition = _distanceSortConditions[index];
+
+        // 初始化queryFrom
+        queryForm[0] = PostsQueryForm(page: 1, tag_id: TAB_ID_ARR);
+        queryForm[1] = PostsQueryForm(page: 1, tag_id: TAB_ID_ORIGINAL);
+        queryForm[2] = PostsQueryForm(page: 1, tag_id: TAB_ID_NETWORK);
+
+        // 初始化列表数据
+        postsListModelArrData = null;
+        postsListModelOriginalData = null;
+        postsListModelNetworkData = null;
+
+        await _initData();
       },
       child: Container(
         height: 40,
@@ -557,10 +623,11 @@ class _TabHomePageState extends State<TabHomePage>
           );
         },
         onTap: (value) {
-          ToastUtils.toast("点击--->" +
-              value.toString() +
-              '--->' +
-              urls[value].postID.toString());
+          // ToastUtils.toast("点击--->" +
+          //     value.toString() +
+          //     '--->' +
+          //     urls[value].postID.toString());
+          XRouter.push('${Routes.imageDetailed}?postId=${urls[value].postID}');
         },
         itemCount: urls.length,
         pagination: SwiperPagination(),
@@ -570,11 +637,13 @@ class _TabHomePageState extends State<TabHomePage>
 }
 
 class TabHomeTabBar extends StatelessWidget {
-  const TabHomeTabBar({
-    Key key,
-    @required TabController tabController,
-    @required List<TagId> tagIds,
-  })  : _tabController = tabController,
+  final Function onTap;
+  const TabHomeTabBar(
+      {Key key,
+      @required TabController tabController,
+      @required List<TagId> tagIds,
+      Function this.onTap})
+      : _tabController = tabController,
         _tagIds = tagIds,
         super(key: key);
 
@@ -585,7 +654,8 @@ class TabHomeTabBar extends StatelessWidget {
   Widget build(BuildContext context) {
     return TabBar(
       onTap: (index) {
-        print(index);
+        // print(index);
+        onTap(index);
       },
       labelStyle: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
       unselectedLabelStyle: TextStyle(fontSize: 16),
