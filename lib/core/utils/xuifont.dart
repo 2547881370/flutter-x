@@ -30,7 +30,9 @@ class XUIIcons {
     shoucang_ash,
     dianzan_ash,
     shoucang,
-    dianzan
+    dianzan,
+    my_history,
+    my_contacts
   ];
 
   static const IconData file =
@@ -85,4 +87,8 @@ class XUIIcons {
       const IconData(0xf4f8, fontFamily: 'comment', matchTextDirection: true);
   static const IconData dianzan =
       const IconData(0xf4d9, fontFamily: 'comment', matchTextDirection: true);
+  static const IconData my_history =
+      const IconData(0xe60f, fontFamily: 'my', matchTextDirection: true);
+  static const IconData my_contacts =
+      const IconData(0xe66d, fontFamily: 'my', matchTextDirection: true);
 }

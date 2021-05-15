@@ -5,6 +5,7 @@ import 'package:flutter_template/core/utils/toast.dart';
 import 'package:flutter_template/core/utils/xupdate.dart';
 import 'package:flutter_template/generated/i18n.dart';
 import 'package:flutter_template/page/home/tab_home.dart';
+import 'package:flutter_template/page/user/user_homt.dart';
 import 'package:flutter_template/router/router.dart';
 import 'package:flutter_template/utils/provider.dart';
 import 'package:provider/provider.dart';
@@ -37,7 +38,7 @@ class _MainHomePageState extends State<MainHomePage> {
         Center(child: Text(I18n.of(context).category)),
         Center(child: Text(I18n.of(context).activity)),
         Center(child: Text(I18n.of(context).message)),
-        Center(child: Text(I18n.of(context).profile)),
+        UserHome(),
       ];
 
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();

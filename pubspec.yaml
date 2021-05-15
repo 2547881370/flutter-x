@@ -70,7 +70,9 @@ flutter:
     - family: xuifont  #指定一个字体名
       fonts:
         - asset: assets/fonts/iconfont.ttf
-        - asset: assets/fonts/comment.ttf
     - family: comment  #指定一个字体名
       fonts:
         - asset: assets/fonts/comment.ttf
+    - family: my  #指定一个字体名
+      fonts:
+        - asset: assets/fonts/my.ttf
