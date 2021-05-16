@@ -3,6 +3,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_template/core/utils/xuifont.dart';
+import 'package:flutter_template/router/route_map.gr.dart';
+import 'package:flutter_template/router/router.dart';
 import 'package:flutter_template/utils/sputils.dart';
 
 class UserEnumItem {
@@ -62,7 +64,9 @@ class _UserHomeState extends State<UserHome> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
             InkWell(
-                onTap: () {},
+                onTap: () {
+                  XRouter.push('${Routes.userConfigPage}');
+                },
                 child: Container(
                   width: ScreenUtil().setWidth(140),
                   child: ClipOval(

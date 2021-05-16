@@ -22,6 +22,8 @@ import '../page/menu/register.dart';
 import '../page/menu/settings.dart';
 import '../page/menu/sponsor.dart';
 import '../page/menu/theme_color.dart';
+import '../page/user/user_config_page.dart';
+import '../page/user/user_config_username_page.dart';
 import 'route_map.dart';
 
 class Routes {
@@ -37,6 +39,8 @@ class Routes {
   static const String imageDetailed = '/image-detailed';
   static const String photpGalleryPage = '/photp-gallery-page';
   static const String searchPage = '/search-page';
+  static const String userConfigPage = '/user-config-page';
+  static const String userConfigUsernamePage = '/user-config-username-page';
   static const all = <String>{
     splashPage,
     mainHomePage,
@@ -50,6 +54,8 @@ class Routes {
     imageDetailed,
     photpGalleryPage,
     searchPage,
+    userConfigPage,
+    userConfigUsernamePage,
   };
 }
 
@@ -69,6 +75,8 @@ class RouterMap extends RouterBase {
     RouteDef(Routes.imageDetailed, page: ImageDetailed),
     RouteDef(Routes.photpGalleryPage, page: PhotpGalleryPage),
     RouteDef(Routes.searchPage, page: SearchPage),
+    RouteDef(Routes.userConfigPage, page: UserConfigPage),
+    RouteDef(Routes.userConfigUsernamePage, page: UserConfigUsernamePage),
   ];
   @override
   Map<Type, AutoRouteFactory> get pagesMap => _pagesMap;
@@ -192,6 +200,28 @@ class RouterMap extends RouterBase {
     SearchPage: (data) {
       return PageRouteBuilder<dynamic>(
         pageBuilder: (context, animation, secondaryAnimation) => SearchPage(),
+        settings: data,
+        opaque: false,
+        barrierDismissible: false,
+        transitionsBuilder: getTransitions,
+        transitionDuration: const Duration(milliseconds: 800),
+      );
+    },
+    UserConfigPage: (data) {
+      return PageRouteBuilder<dynamic>(
+        pageBuilder: (context, animation, secondaryAnimation) =>
+            UserConfigPage(),
+        settings: data,
+        opaque: false,
+        barrierDismissible: false,
+        transitionsBuilder: getTransitions,
+        transitionDuration: const Duration(milliseconds: 800),
+      );
+    },
+    UserConfigUsernamePage: (data) {
+      return PageRouteBuilder<dynamic>(
+        pageBuilder: (context, animation, secondaryAnimation) =>
+            UserConfigUsernamePage(),
         settings: data,
         opaque: false,
         barrierDismissible: false,

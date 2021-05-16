@@ -13,6 +13,8 @@ import 'package:flutter_template/page/menu/register.dart';
 import 'package:flutter_template/page/menu/settings.dart';
 import 'package:flutter_template/page/menu/sponsor.dart';
 import 'package:flutter_template/page/menu/theme_color.dart';
+import 'package:flutter_template/page/user/user_config_page.dart';
+import 'package:flutter_template/page/user/user_config_username_page.dart';
 import 'package:flutter_template/router/route_map.gr.dart';
 import 'package:flutter_template/utils/sputils.dart';
 
@@ -31,6 +33,8 @@ import 'package:flutter_template/utils/sputils.dart';
       AutoRoute(page: ImageDetailed),
       AutoRoute(page: PhotpGalleryPage),
       AutoRoute(page: SearchPage),
+      AutoRoute(page: UserConfigPage),
+      AutoRoute(page: UserConfigUsernamePage),
     ],
     routesClassName: 'Routes',
     transitionsBuilder: getTransitions,

@@ -52,6 +52,7 @@ class _SearchPageState extends State<SearchPage> {
 
   Widget _searchSliverAppBar() {
     return AppBar(
+        elevation: 0.0, //去掉阴影效果
         // pinned: true,
         backgroundColor: Colors.white,
         leading: IconButton(

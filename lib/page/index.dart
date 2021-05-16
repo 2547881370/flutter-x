@@ -23,21 +23,21 @@ class _MainHomePageState extends State<MainHomePage> {
   List<BottomNavigationBarItem> getTabs(BuildContext context) => [
         BottomNavigationBarItem(
             label: I18n.of(context).home, icon: Icon(Icons.home)),
-        BottomNavigationBarItem(
-            label: I18n.of(context).category, icon: Icon(Icons.list)),
-        BottomNavigationBarItem(
-            label: I18n.of(context).activity, icon: Icon(Icons.local_activity)),
-        BottomNavigationBarItem(
-            label: I18n.of(context).message, icon: Icon(Icons.notifications)),
+        // BottomNavigationBarItem(
+        //     label: I18n.of(context).category, icon: Icon(Icons.list)),
+        // BottomNavigationBarItem(
+        //     label: I18n.of(context).activity, icon: Icon(Icons.local_activity)),
+        // BottomNavigationBarItem(
+        //     label: I18n.of(context).message, icon: Icon(Icons.notifications)),
         BottomNavigationBarItem(
             label: I18n.of(context).profile, icon: Icon(Icons.person)),
       ];
 
   List<Widget> getTabWidget(BuildContext context) => [
         TabHomePage(),
-        Center(child: Text(I18n.of(context).category)),
-        Center(child: Text(I18n.of(context).activity)),
-        Center(child: Text(I18n.of(context).message)),
+        // Center(child: Text(I18n.of(context).category)),
+        // Center(child: Text(I18n.of(context).activity)),
+        // Center(child: Text(I18n.of(context).message)),
         UserHome(),
       ];
 
