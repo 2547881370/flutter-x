@@ -1,14 +1,14 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
-import 'package:flutter_template/core/http/http.dart';
-import 'package:flutter_template/core/utils/toast.dart';
-import 'package:flutter_template/generated/i18n.dart';
-import 'package:flutter_template/router/route_map.dart';
-import 'package:flutter_template/router/route_map.gr.dart';
-import 'package:flutter_template/router/router.dart';
-import 'package:flutter_template/utils/provider.dart';
-import 'package:flutter_template/utils/sputils.dart';
+import 'package:tutu/core/http/http.dart';
+import 'package:tutu/core/utils/toast.dart';
+import 'package:tutu/generated/i18n.dart';
+import 'package:tutu/router/route_map.dart';
+import 'package:tutu/router/route_map.gr.dart';
+import 'package:tutu/router/router.dart';
+import 'package:tutu/utils/provider.dart';
+import 'package:tutu/utils/sputils.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 

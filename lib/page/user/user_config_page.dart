@@ -1,8 +1,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:flutter_template/router/route_map.gr.dart';
-import 'package:flutter_template/router/router.dart';
+import 'package:tutu/router/route_map.gr.dart';
+import 'package:tutu/router/router.dart';
 import 'package:image_picker/image_picker.dart';
 
 class UserConfigPage extends StatefulWidget {

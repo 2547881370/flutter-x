@@ -2,8 +2,8 @@ import 'dart:io';
 
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_template/generated/i18n.dart';
-import 'package:flutter_template/router/router.dart';
+import 'package:tutu/generated/i18n.dart';
+import 'package:tutu/router/router.dart';
 import 'utils.dart';
 
 //隐私弹窗工具
@@ -12,7 +12,7 @@ class PrivacyUtils {
 
   //隐私服务政策地址
   static const PRIVACY_URL =
-      'https://gitee.com/xuexiangjys/flutter_template/raw/master/LICENSE';
+      'https://gitee.com/xuexiangjys/tutu/raw/master/LICENSE';
 
   static void showPrivacyDialog(BuildContext context,
       {VoidCallback onAgressCallback}) {

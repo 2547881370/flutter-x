@@ -1,9 +1,9 @@
 import 'package:cookie_jar/cookie_jar.dart';
 import 'package:dio/dio.dart';
 import 'package:dio_cookie_manager/dio_cookie_manager.dart';
-import 'package:flutter_template/core/utils/path.dart';
-import 'package:flutter_template/core/utils/toast.dart';
-import 'package:flutter_template/utils/sputils.dart';
+import 'package:tutu/core/utils/path.dart';
+import 'package:tutu/core/utils/toast.dart';
+import 'package:tutu/utils/sputils.dart';
 
 import 'baseApi.dart';
 

@@ -2,10 +2,10 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:flutter_template/core/utils/xuifont.dart';
-import 'package:flutter_template/router/route_map.gr.dart';
-import 'package:flutter_template/router/router.dart';
-import 'package:flutter_template/utils/sputils.dart';
+import 'package:tutu/core/utils/xuifont.dart';
+import 'package:tutu/router/route_map.gr.dart';
+import 'package:tutu/router/router.dart';
+import 'package:tutu/utils/sputils.dart';
 
 class UserEnumItem {
   Icon icon;

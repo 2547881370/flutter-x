@@ -5,14 +5,14 @@ import 'package:flutter_easyrefresh/material_footer.dart';
 import 'package:flutter_easyrefresh/material_header.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_swiper/flutter_swiper.dart';
-import 'package:flutter_template/core/http/baseApi.dart';
-import 'package:flutter_template/core/http/http.dart';
-import 'package:flutter_template/core/utils/toast.dart';
-import 'package:flutter_template/core/widget/list/one_image_item.dart';
-import 'package:flutter_template/core/widget/list/three_image_item.dart';
-import 'package:flutter_template/models/posts_list_model.dart';
-import 'package:flutter_template/router/route_map.gr.dart';
-import 'package:flutter_template/router/router.dart';
+import 'package:tutu/core/http/baseApi.dart';
+import 'package:tutu/core/http/http.dart';
+import 'package:tutu/core/utils/toast.dart';
+import 'package:tutu/core/widget/list/one_image_item.dart';
+import 'package:tutu/core/widget/list/three_image_item.dart';
+import 'package:tutu/models/posts_list_model.dart';
+import 'package:tutu/router/route_map.gr.dart';
+import 'package:tutu/router/router.dart';
 import 'package:gzx_dropdown_menu/gzx_dropdown_menu.dart';
 
 import 'package:extended_nested_scroll_view/extended_nested_scroll_view.dart'

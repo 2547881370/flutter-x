@@ -2,12 +2,12 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_easyrefresh/easy_refresh.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:flutter_template/core/http/baseApi.dart';
-import 'package:flutter_template/core/http/http.dart';
-import 'package:flutter_template/core/widget/list/one_image_item.dart';
-import 'package:flutter_template/core/widget/list/three_image_item.dart';
-import 'package:flutter_template/models/posts_list_model.dart';
-import 'package:flutter_template/page/home/tab_home.dart';
+import 'package:tutu/core/http/baseApi.dart';
+import 'package:tutu/core/http/http.dart';
+import 'package:tutu/core/widget/list/one_image_item.dart';
+import 'package:tutu/core/widget/list/three_image_item.dart';
+import 'package:tutu/models/posts_list_model.dart';
+import 'package:tutu/page/home/tab_home.dart';
 
 class SearchPage extends StatefulWidget {
   @override

@@ -1,6 +1,6 @@
 import 'dart:io';
 
-import 'package:flutter_template/core/utils/toast.dart';
+import 'package:tutu/core/utils/toast.dart';
 import 'package:flutter_xupdate/flutter_xupdate.dart';
 
 ///版本更新工具

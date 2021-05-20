@@ -3,7 +3,7 @@ import 'dart:ui';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_template/models/auth_%E2%80%8Blogin_model.dart';
+import 'package:tutu/models/auth_%E2%80%8Blogin_model.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'dart:convert' as convert;
 

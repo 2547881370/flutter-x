@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_template/generated/i18n.dart';
-import 'package:flutter_template/models/auth_%E2%80%8Blogin_model.dart';
-import 'package:flutter_template/models/auth_add_user_model.dart';
+import 'package:tutu/generated/i18n.dart';
+import 'package:tutu/models/auth_%E2%80%8Blogin_model.dart';
+import 'package:tutu/models/auth_add_user_model.dart';
 import 'package:provider/provider.dart';
 
 import 'sputils.dart';

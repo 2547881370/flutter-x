@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
-import 'package:flutter_template/core/http/baseApi.dart';
-import 'package:flutter_template/core/http/http.dart';
-import 'package:flutter_template/core/utils/toast.dart';
-import 'package:flutter_template/core/widget/loading_dialog.dart';
-import 'package:flutter_template/generated/i18n.dart';
-import 'package:flutter_template/models/auth_add_user_model.dart';
+import 'package:tutu/core/http/baseApi.dart';
+import 'package:tutu/core/http/http.dart';
+import 'package:tutu/core/utils/toast.dart';
+import 'package:tutu/core/widget/loading_dialog.dart';
+import 'package:tutu/generated/i18n.dart';
+import 'package:tutu/models/auth_add_user_model.dart';
 
 import 'login.dart';
 

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_template/generated/i18n.dart';
-import 'package:flutter_template/utils/provider.dart';
+import 'package:tutu/generated/i18n.dart';
+import 'package:tutu/utils/provider.dart';
 
 class ThemeColorPage extends StatefulWidget {
   @override

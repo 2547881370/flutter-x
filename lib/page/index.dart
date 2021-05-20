@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_template/core/utils/click.dart';
-import 'package:flutter_template/core/utils/privacy.dart';
-import 'package:flutter_template/core/utils/toast.dart';
-import 'package:flutter_template/core/utils/xupdate.dart';
-import 'package:flutter_template/generated/i18n.dart';
-import 'package:flutter_template/page/home/tab_home.dart';
-import 'package:flutter_template/page/user/user_homt.dart';
-import 'package:flutter_template/router/router.dart';
-import 'package:flutter_template/utils/provider.dart';
+import 'package:tutu/core/utils/click.dart';
+import 'package:tutu/core/utils/privacy.dart';
+import 'package:tutu/core/utils/toast.dart';
+import 'package:tutu/core/utils/xupdate.dart';
+import 'package:tutu/generated/i18n.dart';
+import 'package:tutu/page/home/tab_home.dart';
+import 'package:tutu/page/user/user_homt.dart';
+import 'package:tutu/router/router.dart';
+import 'package:tutu/utils/provider.dart';
 import 'package:provider/provider.dart';
 
 import 'menu/menu_drawer.dart';

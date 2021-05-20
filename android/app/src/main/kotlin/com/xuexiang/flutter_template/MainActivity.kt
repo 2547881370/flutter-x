@@ -1,4 +1,4 @@
-package com.xuexiang.flutter_template
+package com.xuexiang.tutu
 
 import androidx.annotation.NonNull;
 import io.flutter.embedding.android.FlutterActivity

@@ -1,8 +1,8 @@
 import 'package:extended_image/extended_image.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_template/core/utils/toast.dart';
-import 'package:flutter_template/core/utils/utils.dart';
-import 'package:flutter_template/generated/i18n.dart';
+import 'package:tutu/core/utils/toast.dart';
+import 'package:tutu/core/utils/utils.dart';
+import 'package:tutu/generated/i18n.dart';
 import 'package:image_picker_saver/image_picker_saver.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:share/share.dart';
