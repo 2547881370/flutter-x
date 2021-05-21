@@ -47,7 +47,7 @@ class _SearchPageState extends State<SearchPage> {
         searchData = res;
       });
     }
-    return res.data;
+    return true;
   }
 
   Widget _searchSliverAppBar() {
@@ -63,40 +63,53 @@ class _SearchPageState extends State<SearchPage> {
           },
         ),
         title: Container(
-            alignment: Alignment.center,
-            child: Stack(children: <Widget>[
+          alignment: Alignment.center,
+          child: Stack(
+            children: <Widget>[
               Positioned(
-                  top: MediaQuery.of(context).padding.top / 2,
-                  left: 0,
-                  child: Container(
-                      width: MediaQuery.of(context).size.width,
-                      alignment: Alignment.centerLeft,
-                      height: ScreenUtil().setHeight(70),
-                      decoration: BoxDecoration(
-                          color: Colors.grey[100],
-                          borderRadius: BorderRadius.circular(5.0)))),
-              Row(children: <Widget>[
-                SizedBox(width: ScreenUtil().setWidth(20)),
-                Container(child: Icon(Icons.search)),
-                Expanded(
-                    flex: 1,
-                    child: Container(
-                        alignment: Alignment.centerLeft,
-                        child: TextFormField(
-                            scrollPadding: EdgeInsets.all(0.0),
-                            autofocus: false,
-                            controller: _searchController,
-                            decoration: InputDecoration(
-                              // labelText: I18n.of(context).loginName,
-                              hintText: '请输入标题',
-                              hintStyle: TextStyle(fontSize: 12),
-                              border: OutlineInputBorder(
-                                  borderSide: BorderSide.none),
-                            ),
-                            //校验用户名
-                            validator: (v) {}))),
-              ])
-            ])),
+                top: ScreenUtil()
+                    .setHeight(MediaQuery.of(context).padding.top / 3),
+                left: 0,
+                child: Container(
+                  width: MediaQuery.of(context).size.width,
+                  alignment: Alignment.centerLeft,
+                  height: ScreenUtil().setHeight(70),
+                  decoration: BoxDecoration(
+                    color: Colors.grey[100],
+                    borderRadius: BorderRadius.circular(5.0),
+                  ),
+                ),
+              ),
+              Row(
+                children: <Widget>[
+                  SizedBox(
+                    width: ScreenUtil().setWidth(20),
+                  ),
+                  Container(
+                    child: Icon(Icons.search),
+                  ),
+                  Expanded(
+                      flex: 1,
+                      child: Container(
+                          alignment: Alignment.centerLeft,
+                          child: TextFormField(
+                              scrollPadding: EdgeInsets.all(0.0),
+                              autofocus: false,
+                              controller: _searchController,
+                              decoration: InputDecoration(
+                                // labelText: I18n.of(context).loginName,
+                                hintText: '请输入标题',
+                                hintStyle: TextStyle(fontSize: 12),
+                                border: OutlineInputBorder(
+                                    borderSide: BorderSide.none),
+                              ),
+                              //校验用户名
+                              validator: (v) {}))),
+                ],
+              )
+            ],
+          ),
+        ),
         actions: <Widget>[
           Container(
               margin: EdgeInsets.only(right: ScreenUtil().setWidth(20)),
@@ -117,6 +130,7 @@ class _SearchPageState extends State<SearchPage> {
                   queryForm.page = 1;
                   await _getPostsList();
                   _controller.jumpTo(0);
+                  return true;
                 },
               ))
         ]);

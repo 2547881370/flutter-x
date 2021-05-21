@@ -205,7 +205,7 @@ class _TabHomePageState extends State<TabHomePage>
           break;
       }
     }
-    return res.data;
+    return true;
   }
 
   Future _getArticleCarouselMap() async {
@@ -252,16 +252,18 @@ class _TabHomePageState extends State<TabHomePage>
                   height: kToolbarHeight + MediaQuery.of(context).padding.top,
                   color: Theme.of(context).primaryColor,
                   alignment: Alignment.center,
-                  child: Row(children: <Widget>[
-                    //=====下拉选择=====//
-                    TabHomeTopLeftSelect(
-                        dropDownHeaderItemStrings: _dropDownHeaderItemStrings,
-                        stackKey: _stackKey,
-                        dropdownMenuController: _dropdownMenuController),
+                  child: Row(
+                    children: <Widget>[
+                      //=====下拉选择=====//
+                      TabHomeTopLeftSelect(
+                          dropDownHeaderItemStrings: _dropDownHeaderItemStrings,
+                          stackKey: _stackKey,
+                          dropdownMenuController: _dropdownMenuController),
 
-                    //=====搜索=====//
-                    TabHomeTopRightSearch()
-                  ]),
+                      //=====搜索=====//
+                      TabHomeTopRightSearch()
+                    ],
+                  ),
                 )),
 
             //=====内容区域=====//
@@ -309,56 +311,56 @@ class _TabHomePageState extends State<TabHomePage>
                                   .NestedScrollViewInnerScrollPositionKeyWidget(
                                 const Key('Tab0'),
                                 EasyRefresh(
-                                    header: MaterialHeader(),
-                                    footer: MaterialFooter(),
-                                    onRefresh: () async {
-                                      queryForm[0].page = 1;
-                                      await _getPostsList();
-                                    },
-                                    onLoad: () async {
-                                      queryForm[0].page = queryForm[0].page + 1;
-                                      await _getPostsList();
-                                    },
-                                    child: ListView.builder(
-                                      itemCount: postsListModelArrData != null
-                                          ? postsListModelArrData.data.length
-                                          : 0,
-                                      key: const PageStorageKey<String>('Tab0'),
-                                      physics: const ClampingScrollPhysics(),
-                                      itemBuilder: (context, index) {
-                                        var info =
-                                            postsListModelArrData.data[index];
+                                  header: MaterialHeader(),
+                                  footer: MaterialFooter(),
+                                  onRefresh: () async {
+                                    queryForm[0].page = 1;
+                                    return await _getPostsList();
+                                  },
+                                  onLoad: () async {
+                                    queryForm[0].page = queryForm[0].page + 1;
+                                    return await _getPostsList();
+                                  },
+                                  child: ListView.builder(
+                                    itemCount: postsListModelArrData != null
+                                        ? postsListModelArrData.data.length
+                                        : 0,
+                                    key: const PageStorageKey<String>('Tab0'),
+                                    physics: const ClampingScrollPhysics(),
+                                    itemBuilder: (context, index) {
+                                      var info =
+                                          postsListModelArrData.data[index];
 
-                                        int imgLength = info.images.length;
-                                        if (imgLength >= 3) {
-                                          info.images =
-                                              info.images.sublist(0, 3);
-                                          return ThreeImageItem(
-                                              postId: info.postId,
-                                              images: info.images
-                                                  .map((b) => b.url)
-                                                  .toList(),
-                                              title: info.title,
-                                              userName: info.user.username,
-                                              detail: info.detail,
-                                              commentCount: info.commentCount,
-                                              hit: info.hit);
-                                        } else if (imgLength >= 1) {
-                                          return OneImageItem(
-                                              postId: info.postId,
-                                              images: info.images
-                                                  .map((b) => b.url)
-                                                  .toList(),
-                                              title: info.title,
-                                              userName: info.user.username,
-                                              detail: info.detail,
-                                              commentCount: info.commentCount,
-                                              hit: info.hit);
-                                        } else {
-                                          return Container();
-                                        }
-                                      },
-                                    )),
+                                      int imgLength = info.images.length;
+                                      if (imgLength >= 3) {
+                                        info.images = info.images.sublist(0, 3);
+                                        return ThreeImageItem(
+                                            postId: info.postId,
+                                            images: info.images
+                                                .map((b) => b.url)
+                                                .toList(),
+                                            title: info.title,
+                                            userName: info.user.username,
+                                            detail: info.detail,
+                                            commentCount: info.commentCount,
+                                            hit: info.hit);
+                                      } else if (imgLength >= 1) {
+                                        return OneImageItem(
+                                            postId: info.postId,
+                                            images: info.images
+                                                .map((b) => b.url)
+                                                .toList(),
+                                            title: info.title,
+                                            userName: info.user.username,
+                                            detail: info.detail,
+                                            commentCount: info.commentCount,
+                                            hit: info.hit);
+                                      } else {
+                                        return Container();
+                                      }
+                                    },
+                                  ),
+                                ),
                               ),
                               extended
                                   .NestedScrollViewInnerScrollPositionKeyWidget(
@@ -368,11 +370,11 @@ class _TabHomePageState extends State<TabHomePage>
                                     footer: MaterialFooter(),
                                     onRefresh: () async {
                                       queryForm[1].page = 1;
-                                      await _getPostsList();
+                                      return await _getPostsList();
                                     },
                                     onLoad: () async {
                                       queryForm[1].page = queryForm[1].page + 1;
-                                      await _getPostsList();
+                                      return await _getPostsList();
                                     },
                                     child: ListView.builder(
                                       itemCount:
@@ -425,11 +427,11 @@ class _TabHomePageState extends State<TabHomePage>
                                     footer: MaterialFooter(),
                                     onRefresh: () async {
                                       queryForm[2].page = 1;
-                                      await _getPostsList();
+                                      return await _getPostsList();
                                     },
                                     onLoad: () async {
                                       queryForm[2].page = queryForm[2].page + 1;
-                                      await _getPostsList();
+                                      return await _getPostsList();
                                     },
                                     child: ListView.builder(
                                       itemCount:
@@ -698,7 +700,7 @@ class TabHomeTopRightSearch extends StatelessWidget {
                     padding: EdgeInsets.symmetric(
                         horizontal: ScreenUtil().setWidth(20)),
                     width: double.infinity,
-                    height: ScreenUtil().setHeight(80),
+                    height: MediaQuery.of(context).padding.top,
                     alignment: Alignment.centerLeft,
                     decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(10),
