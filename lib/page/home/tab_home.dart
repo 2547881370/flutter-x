@@ -253,6 +253,7 @@ class _TabHomePageState extends State<TabHomePage>
                   color: Theme.of(context).primaryColor,
                   alignment: Alignment.center,
                   child: Row(
+                    crossAxisAlignment: CrossAxisAlignment.end,
                     children: <Widget>[
                       //=====下拉选择=====//
                       TabHomeTopLeftSelect(
@@ -693,8 +694,9 @@ class TabHomeTopRightSearch extends StatelessWidget {
               XRouter.push(Routes.searchPage);
             },
             child: Container(
-                padding: EdgeInsets.only(top: ScreenUtil().setHeight(25)),
-                alignment: Alignment.centerLeft,
+                // color: Colors.green,
+                // padding: EdgeInsets.only(top: ScreenUtil().setHeight(25)),
+                // alignment: Alignment.center,
                 child: Container(
                     margin: EdgeInsets.only(right: ScreenUtil().setWidth(30)),
                     padding: EdgeInsets.symmetric(
@@ -729,19 +731,19 @@ class TabHomeTopLeftSelect extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
         width: ScreenUtil().setWidth(250),
-        alignment: Alignment.center,
-        height: ScreenUtil().setHeight(120),
-        // color: Colors.cyanAccent,
+        height: ScreenUtil().setHeight(100),
         child: GZXDropDownHeader(
           // 下拉的头部项，目前每一项，只能自定义显示的文字、图标、图标大小修改
           items: [
-            GZXDropDownHeaderItem(_dropDownHeaderItemStrings[0],
-                iconData: Icons.keyboard_arrow_down,
-                iconDropDownData: Icons.keyboard_arrow_up,
-                style: TextStyle(
-                    color: Colors.white,
-                    fontSize: ScreenUtil().setSp(35),
-                    fontWeight: FontWeight.bold)),
+            GZXDropDownHeaderItem(
+              _dropDownHeaderItemStrings[0],
+              iconData: Icons.keyboard_arrow_down,
+              iconDropDownData: Icons.keyboard_arrow_up,
+              style: TextStyle(
+                  color: Colors.white,
+                  fontSize: ScreenUtil().setSp(35),
+                  fontWeight: FontWeight.bold),
+            ),
           ],
           // GZXDropDownHeader对应第一父级Stack的key
           stackKey: _stackKey,

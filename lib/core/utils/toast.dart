@@ -18,6 +18,7 @@ class ToastUtils {
       textPadding: EdgeInsets.fromLTRB(20, 10, 20, 10),
       child: child,
       duration: DEFAULT_TOAST_DURATION,
+      position: ToastPosition.bottom,
     );
   }
 

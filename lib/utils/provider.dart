@@ -59,7 +59,7 @@ class AppTheme with ChangeNotifier {
     Colors.yellow,
     Colors.lightGreen,
     Colors.green,
-    Colors.lime
+    Colors.lime,
   ];
 
   MaterialColor _themeColor;
