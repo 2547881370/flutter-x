@@ -89,7 +89,9 @@ class OneImageItem extends StatelessWidget implements ImageItemInfo {
                                       detail,
                                       maxLines: 1,
                                       style: TextStyle(
-                                          fontSize: 12, color: Colors.black87),
+                                        fontSize: 12,
+                                        color: Colors.black87,
+                                      ),
                                       overflow: TextOverflow.ellipsis,
                                     ),
                                     SizedBox(height: 10),
@@ -97,15 +99,22 @@ class OneImageItem extends StatelessWidget implements ImageItemInfo {
                                       mainAxisAlignment:
                                           MainAxisAlignment.spaceAround,
                                       children: <Widget>[
-                                        Container(
-                                          child: Text(userName,
+                                        Expanded(
+                                          child: Container(
+                                            child: Text(
+                                              userName,
+                                              maxLines: 1,
                                               style: TextStyle(
-                                                  fontSize:
-                                                      ScreenUtil().setSp(24),
-                                                  color: Colors.black)),
+                                                fontSize:
+                                                    ScreenUtil().setSp(24),
+                                                color: Colors.black,
+                                              ),
+                                              overflow: TextOverflow.ellipsis,
+                                            ),
+                                          ),
                                         ),
                                         Expanded(
-                                            flex: 1,
+                                            flex: 2,
                                             child: Container(
                                                 padding: EdgeInsets.symmetric(
                                                     vertical: 1),
@@ -121,12 +130,18 @@ class OneImageItem extends StatelessWidget implements ImageItemInfo {
                                                         Icon(
                                                             Icons
                                                                 .message_outlined,
-                                                            color: Colors.grey),
+                                                            color: Colors.grey,
+                                                            size: ScreenUtil()
+                                                                .setSp(25)),
                                                         SizedBox(width: 10),
                                                         Text(
                                                             commentCount
                                                                 .toString(),
                                                             style: TextStyle(
+                                                                fontSize:
+                                                                    ScreenUtil()
+                                                                        .setSp(
+                                                                            25),
                                                                 color: Colors
                                                                     .black))
                                                       ]))),
@@ -139,14 +154,21 @@ class OneImageItem extends StatelessWidget implements ImageItemInfo {
                                                               children: <
                                                                   Widget>[
                                                         Icon(
-                                                            Icons
-                                                                .remove_red_eye,
-                                                            color: Colors.grey),
+                                                          Icons.remove_red_eye,
+                                                          color: Colors.grey,
+                                                          size: ScreenUtil()
+                                                              .setSp(25),
+                                                        ),
                                                         SizedBox(width: 10),
-                                                        Text(hit.toString(),
-                                                            style: TextStyle(
-                                                                color: Colors
-                                                                    .black))
+                                                        Text(
+                                                          hit.toString(),
+                                                          style: TextStyle(
+                                                            fontSize:
+                                                                ScreenUtil()
+                                                                    .setSp(25),
+                                                            color: Colors.black,
+                                                          ),
+                                                        )
                                                       ])))
                                                 ])))
                                       ],

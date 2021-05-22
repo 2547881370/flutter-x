@@ -1,3 +1,4 @@
+import 'package:extended_image/extended_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -12,9 +13,10 @@ class UserConfigPage extends StatefulWidget {
 
 class _UserConfigPageState extends State<UserConfigPage> {
   final picker = ImagePicker();
+  File _image;
 
   Future getImageBuff() async {
-    final pickedFile = await picker.getImage(source: ImageSource.camera);
+    final pickedFile = await picker.getImage(source: ImageSource.gallery);
 
     if (pickedFile == null || pickedFile.path == null) return false;
   }

@@ -234,6 +234,7 @@ class _ImageDetailedState extends State<ImageDetailed> {
 
   Widget _mySliverAppBarImage() {
     return SliverAppBar(
+      pinned: true,
       leading: IconButton(
         color: Colors.white,
         icon: Icon(Icons.navigate_before),
@@ -243,6 +244,13 @@ class _ImageDetailedState extends State<ImageDetailed> {
       ),
       expandedHeight: 300,
       flexibleSpace: FlexibleSpaceBar(
+        centerTitle: true,
+        title: Text(
+          res.data?.posts.title,
+          style: TextStyle(
+            color: Colors.white,
+          ),
+        ),
         background: CachedNetworkImage(
             fit: BoxFit.cover,
             placeholder: (context, url) => Container(
@@ -269,7 +277,7 @@ class _ImageDetailedState extends State<ImageDetailed> {
             maxHeight: 300.0,
             child: Container(
               width: ScreenUtil().setWidth(750),
-              height: 200.0,
+              height: 300.0,
               child: IjkPlayer(
                 mediaController: controller,
               ),
@@ -278,15 +286,31 @@ class _ImageDetailedState extends State<ImageDetailed> {
 
   Widget _mySliverAppBarNoImage() {
     return SliverAppBar(
-      leading: IconButton(
-        color: Colors.white,
-        icon: Icon(Icons.navigate_before),
-        onPressed: () {
-          Navigator.pop(context);
-        },
-      ),
-      // expandedHeight: 300,
-    );
+        pinned: true,
+        leading: IconButton(
+          color: Colors.white,
+          icon: Icon(Icons.navigate_before),
+          onPressed: () {
+            Navigator.pop(context);
+          },
+        ),
+        flexibleSpace: FlexibleSpaceBar(
+          titlePadding: EdgeInsets.symmetric(
+            horizontal: ScreenUtil().setWidth(80),
+            vertical: MediaQuery.of(context).padding.top / 2,
+          ),
+          centerTitle: true,
+          title: Text(
+            res.data?.posts.title,
+            style: TextStyle(
+              color: Colors.white,
+            ),
+            maxLines: 1,
+            overflow: TextOverflow.ellipsis,
+          ),
+        )
+        // expandedHeight: 300,
+        );
   }
 
   Widget _mySliverAppbar() {
@@ -357,54 +381,53 @@ class _ImageDetailedState extends State<ImageDetailed> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Row(crossAxisAlignment: CrossAxisAlignment.start, children: <
-                    Widget>[
-                  Expanded(
-                      flex: 1,
-                      child: Container(
-                          child: Row(
-                              mainAxisAlignment: MainAxisAlignment.start,
-                              children: <Widget>[
-                            Container(
-                                height: ScreenUtil().setHeight(100),
-                                child: AspectRatio(
-                                  aspectRatio: 1,
-                                  child: ClipOval(
-                                      child: CachedNetworkImage(
-                                          fit: BoxFit.cover,
-                                          placeholder: (context, url) =>
-                                              Container(
-                                                color: Colors.grey[200],
-                                              ),
-                                          imageUrl:
-                                              res.data?.posts.user.avatar)),
-                                )),
-                            Expanded(
-                                child: Container(
-                                    alignment: Alignment.centerLeft,
-                                    margin: EdgeInsets.only(left: 10),
-                                    child: Column(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
-                                        children: <Widget>[
-                                          Text(res.data?.posts.user.username,
-                                              style: TextStyle(
-                                                  color: Colors.black,
-                                                  fontWeight: FontWeight.bold)),
-                                          Text(res.data?.posts.user.nick,
-                                              style: TextStyle(
-                                                  color: Colors.black,
-                                                  fontWeight: FontWeight.bold))
-                                        ])))
-                          ]))),
-                  Container(
-                      alignment: Alignment.topRight,
-                      width: ScreenUtil().setWidth(100),
-                      child: Text("楼主",
-                          style: TextStyle(
-                              color: Colors.green,
-                              fontWeight: FontWeight.bold)))
-                ]),
+                Row(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: <Widget>[
+                      Expanded(
+                          flex: 1,
+                          child: Container(
+                              child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.start,
+                                  children: <Widget>[
+                                Container(
+                                    height: ScreenUtil().setHeight(100),
+                                    child: AspectRatio(
+                                      aspectRatio: 1,
+                                      child: ClipOval(
+                                          child: CachedNetworkImage(
+                                              fit: BoxFit.cover,
+                                              placeholder: (context, url) =>
+                                                  Container(
+                                                    color: Colors.grey[200],
+                                                  ),
+                                              imageUrl:
+                                                  res.data?.posts.user.avatar)),
+                                    )),
+                                Expanded(
+                                    child: Container(
+                                        alignment: Alignment.centerLeft,
+                                        margin: EdgeInsets.only(left: 10),
+                                        child: Column(
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.start,
+                                            children: <Widget>[
+                                              Text(
+                                                  res.data?.posts.user.username,
+                                                  style: TextStyle(
+                                                      color: Colors.black,
+                                                      fontWeight:
+                                                          FontWeight.bold)),
+                                            ])))
+                              ]))),
+                      Container(
+                          alignment: Alignment.bottomRight,
+                          width: ScreenUtil().setWidth(100),
+                          child: Text("楼主",
+                              style: TextStyle(
+                                  color: Colors.green,
+                                  fontWeight: FontWeight.bold)))
+                    ]),
                 SizedBox(
                   height: 10,
                 ),
@@ -924,7 +947,7 @@ class _ImageDetailedState extends State<ImageDetailed> {
           children: <Widget>[
             CustomScrollView(
               // 去除滑动波纹
-              // physics: BouncingScrollPhysics(),
+              physics: BouncingScrollPhysics(),
               slivers: [
                 _mySliverAppbar(),
                 // _mySliverTitle(),

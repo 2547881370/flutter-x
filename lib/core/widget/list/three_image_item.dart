@@ -160,10 +160,13 @@ class ThreeImageItem extends StatelessWidget implements ImageItemInfo {
                                                     MainAxisAlignment.end,
                                                 children: <Widget>[
                                           Icon(Icons.message_outlined,
+                                              size: ScreenUtil().setSp(25),
                                               color: Colors.grey),
                                           SizedBox(width: 10),
                                           Text(commentCount.toString(),
                                               style: TextStyle(
+                                                  fontSize:
+                                                      ScreenUtil().setSp(25),
                                                   color: Colors.black))
                                         ]))),
                                     Expanded(
@@ -173,11 +176,16 @@ class ThreeImageItem extends StatelessWidget implements ImageItemInfo {
                                                     MainAxisAlignment.end,
                                                 children: <Widget>[
                                           Icon(Icons.remove_red_eye,
+                                              size: ScreenUtil().setSp(25),
                                               color: Colors.grey),
                                           SizedBox(width: 10),
-                                          Text(hit.toString(),
-                                              style: TextStyle(
-                                                  color: Colors.black))
+                                          Text(
+                                            hit.toString(),
+                                            style: TextStyle(
+                                                fontSize:
+                                                    ScreenUtil().setSp(25),
+                                                color: Colors.black),
+                                          )
                                         ])))
                                   ])))
                         ],

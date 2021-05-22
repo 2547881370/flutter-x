@@ -56,7 +56,6 @@ class _UserHomeState extends State<UserHome> {
     return SliverToBoxAdapter(
       child: Container(
         color: Colors.grey[600],
-        height: ScreenUtil().setHeight(330),
         padding: EdgeInsets.symmetric(
             horizontal: ScreenUtil().setWidth(30),
             vertical: ScreenUtil().setHeight(80)),

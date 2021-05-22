@@ -116,14 +116,15 @@ class NoImageItem extends StatelessWidget implements ImageItemInfo {
                                                   mainAxisAlignment:
                                                       MainAxisAlignment.end,
                                                   children: <Widget>[
-                                            Icon(
-                                              Icons.message_outlined,
-                                              color: Colors.grey,
-                                            ),
+                                            Icon(Icons.message_outlined,
+                                                color: Colors.grey,
+                                                size: ScreenUtil().setSp(25)),
                                             SizedBox(width: 10),
                                             Text(
                                               commentCount.toString(),
                                               style: TextStyle(
+                                                  fontSize:
+                                                      ScreenUtil().setSp(25),
                                                   color: Colors.black),
                                             )
                                           ]))),
@@ -134,11 +135,14 @@ class NoImageItem extends StatelessWidget implements ImageItemInfo {
                                                 MainAxisAlignment.end,
                                             children: <Widget>[
                                               Icon(Icons.remove_red_eye,
+                                                  size: ScreenUtil().setSp(25),
                                                   color: Colors.grey),
                                               SizedBox(width: 10),
                                               Text(
                                                 hit.toString(),
                                                 style: TextStyle(
+                                                    fontSize:
+                                                        ScreenUtil().setSp(25),
                                                     color: Colors.black),
                                               )
                                             ],
