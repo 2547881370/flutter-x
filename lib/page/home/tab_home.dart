@@ -8,6 +8,7 @@ import 'package:flutter_swiper/flutter_swiper.dart';
 import 'package:tutu/core/http/baseApi.dart';
 import 'package:tutu/core/http/http.dart';
 import 'package:tutu/core/utils/toast.dart';
+import 'package:tutu/core/widget/list/no_image_item.dart';
 import 'package:tutu/core/widget/list/one_image_item.dart';
 import 'package:tutu/core/widget/list/three_image_item.dart';
 import 'package:tutu/models/posts_list_model.dart';
@@ -357,7 +358,17 @@ class _TabHomePageState extends State<TabHomePage>
                                             commentCount: info.commentCount,
                                             hit: info.hit);
                                       } else {
-                                        return Container();
+                                        return NoImageItem(
+                                          postId: info.postId,
+                                          images: info.images
+                                              .map((b) => b.url)
+                                              .toList(),
+                                          title: info.title,
+                                          userName: info.user.username,
+                                          detail: info.detail,
+                                          commentCount: info.commentCount,
+                                          hit: info.hit,
+                                        );
                                       }
                                     },
                                   ),

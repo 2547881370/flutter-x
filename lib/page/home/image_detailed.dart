@@ -6,11 +6,13 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_html/flutter_html.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:tutu/core/http/baseApi.dart';
 import 'package:tutu/core/http/http.dart';
 import 'package:tutu/core/http/request/request.dart';
+import 'package:tutu/core/utils/HLHtml.dart';
 import 'package:tutu/core/utils/toast.dart';
 import 'package:tutu/core/utils/xuifont.dart';
 import 'package:tutu/core/widget/loading_dialog.dart';
@@ -230,7 +232,7 @@ class _ImageDetailedState extends State<ImageDetailed> {
     "message": "请求成功"
   });
 
-  Widget _mySliverAppBar() {
+  Widget _mySliverAppBarImage() {
     return SliverAppBar(
       leading: IconButton(
         color: Colors.white,
@@ -272,6 +274,29 @@ class _ImageDetailedState extends State<ImageDetailed> {
                 mediaController: controller,
               ),
             )));
+  }
+
+  Widget _mySliverAppBarNoImage() {
+    return SliverAppBar(
+      leading: IconButton(
+        color: Colors.white,
+        icon: Icon(Icons.navigate_before),
+        onPressed: () {
+          Navigator.pop(context);
+        },
+      ),
+      // expandedHeight: 300,
+    );
+  }
+
+  Widget _mySliverAppbar() {
+    if (res.data.posts.voice != null) {
+      return _mySliverPersistentHeaderVideo();
+    } else if (res.data.posts.images.length > 0) {
+      return _mySliverAppBarImage();
+    } else {
+      return _mySliverAppBarNoImage();
+    }
   }
 
   Widget _mySliverTitle() {
@@ -384,41 +409,49 @@ class _ImageDetailedState extends State<ImageDetailed> {
                   height: 10,
                 ),
                 Container(
-                    padding: EdgeInsets.symmetric(
-                        horizontal: ScreenUtil().setWidth(10)),
-                    child: Text(
-                      res.data?.posts.detail,
-                    )),
-                GridView.builder(
-                  shrinkWrap: true, //解决 listview 嵌套报错
-                  physics: NeverScrollableScrollPhysics(), //禁用滑动事件
-                  gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                      //横轴元素个数
-                      crossAxisCount: 2,
-                      //纵轴间距
-                      mainAxisSpacing: 10.0,
-                      //横轴间距
-                      crossAxisSpacing: 10.0,
-                      //子组件宽高长度比例
-                      childAspectRatio: 1.0),
-                  itemBuilder: (BuildContext context, int index) {
-                    return GestureDetector(
-                      onTap: () async {
-                        Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => PhotpGalleryPage(
-                                    photoList: res.data.posts.images,
-                                    index: index)));
-                      },
-                      child: CachedNetworkImage(
-                        fit: BoxFit.cover,
-                        imageUrl: res.data?.posts.images[index].url,
-                      ),
-                    );
-                  },
-                  itemCount: res.data?.posts.images.length,
-                )
+                  padding: EdgeInsets.symmetric(
+                      horizontal: ScreenUtil().setWidth(10)),
+                  child: Html(
+                    data: HlHtml.toHTml(res.data?.posts.detail),
+                  ),
+                  //     Text(
+                  //   res.data?.posts.detail,
+                  // ),
+                ),
+                res.data?.posts.images.length > 0
+                    ? GridView.builder(
+                        shrinkWrap: true, //解决 listview 嵌套报错
+                        physics: NeverScrollableScrollPhysics(), //禁用滑动事件
+                        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                            //横轴元素个数
+                            crossAxisCount: 2,
+                            //纵轴间距
+                            mainAxisSpacing: 10.0,
+                            //横轴间距
+                            crossAxisSpacing: 10.0,
+                            //子组件宽高长度比例
+                            childAspectRatio: 1.0),
+                        itemBuilder: (BuildContext context, int index) {
+                          return GestureDetector(
+                            onTap: () async {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => PhotpGalleryPage(
+                                      photoList: res.data.posts.images,
+                                      index: index),
+                                ),
+                              );
+                            },
+                            child: CachedNetworkImage(
+                              fit: BoxFit.cover,
+                              imageUrl: res.data?.posts.images[index].url,
+                            ),
+                          );
+                        },
+                        itemCount: res.data?.posts.images.length,
+                      )
+                    : Container(),
               ],
             )));
   }
@@ -893,9 +926,7 @@ class _ImageDetailedState extends State<ImageDetailed> {
               // 去除滑动波纹
               // physics: BouncingScrollPhysics(),
               slivers: [
-                res.data.posts.voice != null
-                    ? _mySliverPersistentHeaderVideo()
-                    : _mySliverAppBar(),
+                _mySliverAppbar(),
                 // _mySliverTitle(),
                 _mySliverContent(),
                 _mySliverCommentCount(),
