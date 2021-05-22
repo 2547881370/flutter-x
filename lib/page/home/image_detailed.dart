@@ -5,6 +5,7 @@ import 'package:auto_route/auto_route_annotations.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:tutu/core/http/baseApi.dart';
@@ -71,6 +72,10 @@ class _ImageDetailedState extends State<ImageDetailed> {
   // 点赞
   bool likeState = false;
   IjkMediaController controller = IjkMediaController();
+
+  // 复制文本记录按下和松开之间的时间间隔
+  int _copyStartTime = 0;
+  int _copyEndTime = 0;
 
   PostsDetailsModel res = PostsDetailsModel.fromJson({
     "data": {
@@ -234,7 +239,7 @@ class _ImageDetailedState extends State<ImageDetailed> {
           Navigator.pop(context);
         },
       ),
-      expandedHeight: 200,
+      expandedHeight: 300,
       flexibleSpace: FlexibleSpaceBar(
         background: CachedNetworkImage(
             fit: BoxFit.cover,
@@ -259,7 +264,7 @@ class _ImageDetailedState extends State<ImageDetailed> {
             //缩小后的布局高度
             minHeight: 100.0,
             //展开后的高度
-            maxHeight: 200.0,
+            maxHeight: 300.0,
             child: Container(
               width: ScreenUtil().setWidth(750),
               height: 200.0,
@@ -317,8 +322,13 @@ class _ImageDetailedState extends State<ImageDetailed> {
         child: Container(
             padding: EdgeInsets.symmetric(horizontal: 10, vertical: 10),
             decoration: BoxDecoration(
-                border: Border(
-                    bottom: BorderSide(width: 1, color: Colors.grey[200]))),
+              border: Border(
+                bottom: BorderSide(
+                  width: 1,
+                  color: Colors.grey[100],
+                ),
+              ),
+            ),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
@@ -418,8 +428,13 @@ class _ImageDetailedState extends State<ImageDetailed> {
         child: Container(
       padding: EdgeInsets.symmetric(horizontal: 10, vertical: 10),
       decoration: BoxDecoration(
-          border:
-              Border(bottom: BorderSide(width: 1, color: Colors.grey[200]))),
+        border: Border(
+          bottom: BorderSide(
+            width: 1,
+            color: Colors.grey[100],
+          ),
+        ),
+      ),
       child: Text("评论 : ${res.data?.comments.length}"),
     ));
   }
@@ -428,7 +443,30 @@ class _ImageDetailedState extends State<ImageDetailed> {
     return SliverList(
       delegate: SliverChildBuilderDelegate(
         (context, index) {
-          return _mySliverCommentItem(res.data?.comments[index]);
+          // return _mySliverCommentItem(res.data?.comments[index]);
+          return MaterialButton(
+            padding: EdgeInsets.all(0),
+            child: _mySliverCommentItem(res.data?.comments[index]),
+            onPressed: () {
+              if (_copyEndTime - _copyStartTime >= 100) {
+                // 复制剪切板
+                Clipboard.setData(
+                  ClipboardData(text: res.data?.comments[index].text),
+                );
+                // 提示
+                ToastUtils.toast(
+                  "已复制${res.data?.comments[index].user.username}的评论",
+                );
+              }
+            },
+            onHighlightChanged: (val) {
+              if (val) {
+                _copyStartTime = new DateTime.now().millisecondsSinceEpoch;
+              } else {
+                _copyEndTime = new DateTime.now().millisecondsSinceEpoch;
+              }
+            },
+          );
         },
         childCount: res.data?.comments.length,
       ),
@@ -438,6 +476,14 @@ class _ImageDetailedState extends State<ImageDetailed> {
   Widget _mySliverCommentItem(Comment comments) {
     return Container(
       padding: EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+      decoration: BoxDecoration(
+        border: Border(
+          bottom: BorderSide(
+            width: 1,
+            color: Colors.grey[100],
+          ),
+        ),
+      ),
       child:
           Row(crossAxisAlignment: CrossAxisAlignment.start, children: <Widget>[
         Expanded(
@@ -489,140 +535,154 @@ class _ImageDetailedState extends State<ImageDetailed> {
 
   Widget _myPositionedCommentInput() {
     return Positioned(
-        bottom: 0,
-        child: Container(
-          decoration: BoxDecoration(
-              color: Colors.white,
-              border: Border(top: BorderSide(width: 1, color: Colors.grey))),
-          padding: EdgeInsets.symmetric(vertical: 10, horizontal: 10),
-          width: ScreenUtil().setWidth(750),
-          child: Row(
-            children: <Widget>[
-              Expanded(
-                  flex: 2,
-                  child: Row(children: <Widget>[
-                    Expanded(
-                        flex: 2,
-                        child: Container(
-                          child: Stack(children: <Widget>[
-                            Positioned(
-                                top: ScreenUtil()
-                                    .setHeight((100 / 2) - (80 / 2)),
-                                child: Container(
-                                    width: MediaQuery.of(context).size.width,
-                                    alignment: Alignment.center,
-                                    height: ScreenUtil().setHeight(80),
-                                    decoration: BoxDecoration(
-                                        color: Colors.grey[100],
-                                        borderRadius: BorderRadius.all(
-                                            Radius.circular(5))))),
-                            Container(
-                              height: ScreenUtil().setHeight(100),
-                              alignment: Alignment.bottomLeft,
-                              child: TextFormField(
-                                  autofocus: false,
-                                  controller: _commentController,
-                                  decoration: InputDecoration(
-                                    // labelText: I18n.of(context).loginName,
-                                    hintText: '说说你的看法',
-                                    hintStyle: TextStyle(fontSize: 12),
-                                    border: OutlineInputBorder(
-                                        borderSide: BorderSide.none),
-                                  ),
-                                  //校验用户名
-                                  validator: (v) {}),
-                            )
-                          ]),
-                        )),
-                    SizedBox(
-                      width: ScreenUtil().setWidth(10),
-                    ),
-                    Expanded(
-                        flex: 1,
-                        child: Container(
-                            child: FlatButton(
-                          color: Theme.of(context).primaryColor,
-                          highlightColor: Colors.blue[700],
-                          colorBrightness: Brightness.dark,
-                          splashColor: Colors.grey,
-                          child: Text("评论"),
-                          onPressed: () async {
-                            if (_commentController.text == '') {
-                              ToastUtils.error("内容不能为空");
-                              return false;
-                            }
-                            print(_commentController.text);
-                            bool flag = await _createPostsComment(
-                                ArticleComment(text: _commentController.text));
-                            if (flag) {
-                              _init();
-                            }
-                            _commentController.text = '';
-                            closeKeyboard(context);
-                          },
-                        ))),
-                  ])),
-              SizedBox(
-                width: ScreenUtil().setWidth(80),
-              ),
-              Expanded(
-                  flex: 1,
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: <Widget>[
-                      LikeButton(
-                        onTap: (bool isLiked) async {
-                          bool _isFlag = await _postsCollection(
-                              ArticleOraiseRequset(postId: widget.postId),
-                              status: collectionState
-                                  ? ArticleStatus.cancel
-                                  : ArticleStatus.determine);
-                          if (_isFlag) {
-                            setState(() {
-                              collectionState = !collectionState;
-                            });
-                            return collectionState;
-                          }
-                          return collectionState;
-                        },
-                        likeBuilder: (bool isLiked) {
-                          return Icon(
-                            XUIIcons.shoucang_ash,
-                            color: collectionState ? Colors.red : Colors.grey,
-                          );
-                        },
-                      ),
-                      LikeButton(
-                        onTap: (bool isLiked) async {
-                          bool _isFlag = await _postsPraise(
-                              ArticleOraiseRequset(postId: widget.postId),
-                              status: likeState
-                                  ? ArticleStatus.cancel
-                                  : ArticleStatus.determine);
-                          if (_isFlag) {
-                            setState(() {
-                              likeState = !likeState;
-                            });
-                            return likeState;
-                          }
-                          return likeState;
-                        },
-                        likeBuilder: (bool isLiked) {
-                          return Icon(
-                            XUIIcons.dianzan_ash,
-                            color: likeState
-                                ? Colors.deepPurpleAccent
-                                : Colors.grey,
-                          );
-                        },
-                      ),
-                      // IconButton(
-                      //     icon: Icon(XUIIcons.dianzan_ash), onPressed: () {}),
-                    ],
-                  )),
-            ],
+      bottom: 0,
+      child: Container(
+        decoration: BoxDecoration(
+          color: Colors.white,
+          border: Border(
+            top: BorderSide(
+              width: 1,
+              color: Colors.grey[100],
+            ),
           ),
-        ));
+        ),
+        padding: EdgeInsets.symmetric(vertical: 10, horizontal: 10),
+        width: ScreenUtil().setWidth(750),
+        child: Row(
+          children: <Widget>[
+            Expanded(
+              flex: 3,
+              child: Row(
+                children: <Widget>[
+                  Expanded(
+                      flex: 3,
+                      child: Container(
+                        padding: EdgeInsets.only(left: 10),
+                        child: Stack(children: <Widget>[
+                          Positioned(
+                            top: ScreenUtil().setHeight((100 / 2) - (60 / 2)),
+                            child: Container(
+                              width: MediaQuery.of(context).size.width,
+                              alignment: Alignment.center,
+                              height: ScreenUtil().setHeight(60),
+                              decoration: BoxDecoration(
+                                color: Colors.grey[100],
+                                borderRadius: BorderRadius.all(
+                                  Radius.circular(5),
+                                ),
+                              ),
+                            ),
+                          ),
+                          Container(
+                            height: ScreenUtil().setHeight(100),
+                            alignment: Alignment.bottomLeft,
+                            child: TextFormField(
+                                autofocus: false,
+                                controller: _commentController,
+                                decoration: InputDecoration(
+                                  // labelText: I18n.of(context).loginName,
+                                  hintText: '说说你的看法',
+                                  hintStyle: TextStyle(fontSize: 12),
+                                  border: OutlineInputBorder(
+                                      borderSide: BorderSide.none),
+                                ),
+                                //校验用户名
+                                validator: (v) {}),
+                          )
+                        ]),
+                      )),
+                  SizedBox(
+                    width: ScreenUtil().setWidth(10),
+                  ),
+                  Expanded(
+                      flex: 1,
+                      child: Container(
+                          child: FlatButton(
+                        color: Theme.of(context).primaryColor,
+                        highlightColor: Colors.blue[700],
+                        colorBrightness: Brightness.dark,
+                        splashColor: Colors.grey,
+                        child: Text("评论"),
+                        onPressed: () async {
+                          if (_commentController.text == '') {
+                            ToastUtils.error("内容不能为空");
+                            return false;
+                          }
+                          print(_commentController.text);
+                          bool flag = await _createPostsComment(
+                              ArticleComment(text: _commentController.text));
+                          if (flag) {
+                            _init();
+                          }
+                          _commentController.text = '';
+                          closeKeyboard(context);
+                        },
+                      ))),
+                ],
+              ),
+            ),
+            SizedBox(
+              width: ScreenUtil().setWidth(30),
+            ),
+            Expanded(
+                flex: 1,
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                  children: <Widget>[
+                    LikeButton(
+                      onTap: (bool isLiked) async {
+                        bool _isFlag = await _postsCollection(
+                          ArticleOraiseRequset(postId: widget.postId),
+                          status: collectionState
+                              ? ArticleStatus.cancel
+                              : ArticleStatus.determine,
+                        );
+                        if (_isFlag) {
+                          setState(() {
+                            collectionState = !collectionState;
+                          });
+                          return collectionState;
+                        }
+                        return collectionState;
+                      },
+                      likeBuilder: (bool isLiked) {
+                        return Icon(
+                          XUIIcons.shoucang_ash,
+                          color: collectionState ? Colors.red : Colors.grey,
+                        );
+                      },
+                    ),
+                    LikeButton(
+                      onTap: (bool isLiked) async {
+                        bool _isFlag = await _postsPraise(
+                            ArticleOraiseRequset(postId: widget.postId),
+                            status: likeState
+                                ? ArticleStatus.cancel
+                                : ArticleStatus.determine);
+                        if (_isFlag) {
+                          setState(() {
+                            likeState = !likeState;
+                          });
+                          return likeState;
+                        }
+                        return likeState;
+                      },
+                      likeBuilder: (bool isLiked) {
+                        return Icon(
+                          XUIIcons.dianzan_ash,
+                          color:
+                              likeState ? Colors.deepPurpleAccent : Colors.grey,
+                        );
+                      },
+                    ),
+                    // IconButton(
+                    //     icon: Icon(XUIIcons.dianzan_ash), onPressed: () {}),
+                  ],
+                )),
+          ],
+        ),
+      ),
+    );
   }
 
   void closeKeyboard(BuildContext context) {
@@ -640,6 +700,11 @@ class _ImageDetailedState extends State<ImageDetailed> {
     setState(() {
       res = _res;
     });
+
+    VideoInfo info = await controller.getVideoInfo();
+    if (info.isPlaying != null) {
+      return true;
+    }
 
     if (_res.data.posts.voice != null) {
       Map<String, dynamic> voiceData =
@@ -826,7 +891,7 @@ class _ImageDetailedState extends State<ImageDetailed> {
           children: <Widget>[
             CustomScrollView(
               // 去除滑动波纹
-              physics: BouncingScrollPhysics(),
+              // physics: BouncingScrollPhysics(),
               slivers: [
                 res.data.posts.voice != null
                     ? _mySliverPersistentHeaderVideo()
