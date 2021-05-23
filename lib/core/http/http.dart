@@ -66,6 +66,7 @@ class XHttp {
 
   ///get请求
   static Future get(String url, [Map<String, dynamic> params]) async {
+    dio.options.headers['token'] = SPUtils.getToken();
     Response response;
     if (params != null) {
       response = await dio.get(url, queryParameters: params);
@@ -77,12 +78,14 @@ class XHttp {
 
   ///post 表单请求
   static Future post(String url, [Map<String, dynamic> params]) async {
+    dio.options.headers['token'] = SPUtils.getToken();
     Response response = await dio.post(url, queryParameters: params);
     return response.data;
   }
 
   ///post body请求
   static Future postJson(String url, [Map<String, dynamic> data]) async {
+    dio.options.headers['token'] = SPUtils.getToken();
     Response response = await dio.post(url, data: data);
     return response.data;
   }
