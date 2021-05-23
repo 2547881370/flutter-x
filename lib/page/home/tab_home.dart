@@ -257,13 +257,32 @@ class _TabHomePageState extends State<TabHomePage>
                     crossAxisAlignment: CrossAxisAlignment.end,
                     children: <Widget>[
                       //=====下拉选择=====//
-                      TabHomeTopLeftSelect(
-                          dropDownHeaderItemStrings: _dropDownHeaderItemStrings,
-                          stackKey: _stackKey,
-                          dropdownMenuController: _dropdownMenuController),
+                      Expanded(
+                        flex: 1,
+                        child: Container(
+                          padding: EdgeInsets.only(
+                              top: MediaQuery.of(context).padding.top / 2.5),
+                          // color: Colors.grey,
+                          alignment: Alignment.center,
+                          child: TabHomeTopLeftSelect(
+                              dropDownHeaderItemStrings:
+                                  _dropDownHeaderItemStrings,
+                              stackKey: _stackKey,
+                              dropdownMenuController: _dropdownMenuController),
+                        ),
+                      ),
 
                       //=====搜索=====//
-                      TabHomeTopRightSearch()
+                      Expanded(
+                        flex: 2,
+                        child: Container(
+                          padding: EdgeInsets.only(
+                              top: MediaQuery.of(context).padding.top / 2),
+                          alignment: Alignment.centerLeft,
+                          // color: Colors.green,
+                          child: TabHomeTopRightSearch(),
+                        ),
+                      ),
                     ],
                   ),
                 )),
@@ -699,27 +718,27 @@ class TabHomeTopRightSearch extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Expanded(
-        child: InkWell(
-            onTap: () {
-              XRouter.push(Routes.searchPage);
-            },
+    return InkWell(
+        onTap: () {
+          XRouter.push(Routes.searchPage);
+        },
+        child: Container(
+            // color: Colors.deepPurpleAccent,
+            padding: EdgeInsets.only(top: ScreenUtil().setHeight(25)),
+            alignment: Alignment.center,
             child: Container(
-                // color: Colors.green,
-                // padding: EdgeInsets.only(top: ScreenUtil().setHeight(25)),
-                // alignment: Alignment.center,
-                child: Container(
-                    margin: EdgeInsets.only(right: ScreenUtil().setWidth(30)),
-                    padding: EdgeInsets.symmetric(
-                        horizontal: ScreenUtil().setWidth(20)),
-                    width: double.infinity,
-                    height: MediaQuery.of(context).padding.top,
-                    alignment: Alignment.centerLeft,
-                    decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(10),
-                        border: Border.all(width: 1, color: Colors.white)),
-                    child: Text("请输入帖子名字......",
-                        style: TextStyle(color: Colors.white))))));
+                margin: EdgeInsets.only(right: ScreenUtil().setWidth(30)),
+                padding:
+                    EdgeInsets.symmetric(horizontal: ScreenUtil().setWidth(20)),
+                width: double.infinity,
+                height: MediaQuery.of(context).padding.top +
+                    (MediaQuery.of(context).padding.top * 0.1),
+                alignment: Alignment.centerLeft,
+                decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(10),
+                    border: Border.all(width: 1, color: Colors.white)),
+                child: Text("请输入帖子名字......",
+                    style: TextStyle(color: Colors.white)))));
   }
 }
 
@@ -742,7 +761,6 @@ class TabHomeTopLeftSelect extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
         width: ScreenUtil().setWidth(250),
-        height: ScreenUtil().setHeight(100),
         child: GZXDropDownHeader(
           // 下拉的头部项，目前每一项，只能自定义显示的文字、图标、图标大小修改
           items: [

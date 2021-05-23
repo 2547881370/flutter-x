@@ -1,6 +1,16 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
+import 'package:provider/provider.dart';
+import 'package:tutu/core/http/baseApi.dart';
+import 'package:tutu/core/http/http.dart';
+import 'package:tutu/core/utils/toast.dart';
+import 'package:tutu/core/widget/loading_dialog.dart';
+import 'package:tutu/models/auth_%E2%80%8Blogin_model.dart';
+import 'package:tutu/models/posts_praise_error_model.dart';
+import 'package:tutu/utils/provider.dart';
+import 'package:tutu/utils/sputils.dart';
 
 class UserConfigUsernamePage extends StatefulWidget {
   @override
@@ -10,6 +20,37 @@ class UserConfigUsernamePage extends StatefulWidget {
 class _UserConfigUsernamePageState extends State<UserConfigUsernamePage> {
   TextEditingController _fromTextEditingController = TextEditingController();
   FocusNode blankNode = FocusNode();
+
+  Future _setUserNameApi() async {
+    showDialog(
+        context: context,
+        barrierDismissible: false,
+        builder: (BuildContext context) {
+          return LoadingDialog(
+            showContent: false,
+            backgroundColor: Colors.black38,
+            loadingView: SpinKitCircle(color: Colors.white),
+          );
+        });
+    try {
+      final response = await XHttp.postJson(NWApi.authUpdateUsername, {
+        "username": _fromTextEditingController.text,
+        "userID": SPUtils.getUserInfo().data.userId,
+      });
+      UserProfile userProfile =
+          Provider.of<UserProfile>(context, listen: false);
+      AuthLoginModel res = AuthLoginModel.fromJson(response);
+      userProfile.nickName = res.data.username;
+      userProfile.userInfo = res;
+      ToastUtils.success(res.message);
+    } catch (err) {
+      PostsPraiseErrorModel resError =
+          PostsPraiseErrorModel.fromJson(err.response.data);
+      ToastUtils.error(resError.message);
+    } finally {
+      Navigator.pop(context);
+    }
+  }
 
   Widget _userConfigUserNameAppBar() {
     return AppBar(
@@ -30,7 +71,13 @@ class _UserConfigUsernamePageState extends State<UserConfigUsernamePage> {
       ),
       actions: <Widget>[
         InkWell(
-          onTap: () {},
+          onTap: () {
+            if (_fromTextEditingController.text == null) {
+              ToastUtils.waring("名称不能为空");
+              return false;
+            }
+            _setUserNameApi();
+          },
           child: Container(
             margin: EdgeInsets.only(right: ScreenUtil().setWidth(20)),
             alignment: Alignment.center,

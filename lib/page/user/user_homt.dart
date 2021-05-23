@@ -2,9 +2,11 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:provider/provider.dart';
 import 'package:tutu/core/utils/xuifont.dart';
 import 'package:tutu/router/route_map.gr.dart';
 import 'package:tutu/router/router.dart';
+import 'package:tutu/utils/provider.dart';
 import 'package:tutu/utils/sputils.dart';
 
 class UserEnumItem {
@@ -187,24 +189,27 @@ class _UserHomeState extends State<UserHome> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: Container(
-        color: Colors.white,
-        child: CustomScrollView(
-            physics: BouncingScrollPhysics(),
-            slivers: <Widget>[
-              _userSliverAppBar(),
-              _userSliverInfo(),
-              SliverToBoxAdapter(
-                child: SizedBox(
-                  height: ScreenUtil().setHeight(30),
+    return Consumer<UserProfile>(
+        builder: (BuildContext context, UserProfile value, Widget child) {
+      return Scaffold(
+        body: Container(
+          color: Colors.white,
+          child: CustomScrollView(
+              physics: BouncingScrollPhysics(),
+              slivers: <Widget>[
+                _userSliverAppBar(),
+                _userSliverInfo(),
+                SliverToBoxAdapter(
+                  child: SizedBox(
+                    height: ScreenUtil().setHeight(30),
+                  ),
                 ),
-              ),
-              _userSliverText(),
-              _userSliverEnum(),
-              _userSliverTitle(),
-            ]),
-      ),
-    );
+                _userSliverText(),
+                _userSliverEnum(),
+                _userSliverTitle(),
+              ]),
+        ),
+      );
+    });
   }
 }

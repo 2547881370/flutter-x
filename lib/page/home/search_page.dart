@@ -65,16 +65,15 @@ class _SearchPageState extends State<SearchPage> {
         ),
         title: Container(
           alignment: Alignment.center,
+          // color: Colors.deepPurpleAccent,
           child: Stack(
             children: <Widget>[
               Positioned(
-                top: ScreenUtil()
-                    .setHeight(MediaQuery.of(context).padding.top / 3),
-                left: 0,
+                top: (kToolbarHeight / 2) - (50 / 2),
                 child: Container(
                   width: MediaQuery.of(context).size.width,
                   alignment: Alignment.centerLeft,
-                  height: ScreenUtil().setHeight(70),
+                  height: 50,
                   decoration: BoxDecoration(
                     color: Colors.grey[100],
                     borderRadius: BorderRadius.circular(5.0),
@@ -217,6 +216,9 @@ class _SearchPageState extends State<SearchPage> {
                 color: Colors.white,
                 child: Column(
                   children: <Widget>[
+                    SizedBox(
+                      height: MediaQuery.of(context).padding.top / 2,
+                    ),
                     _searchSliverAppBar(),
                     Expanded(
                       flex: 1,
