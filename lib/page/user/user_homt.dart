@@ -26,17 +26,23 @@ class _UserHomeState extends State<UserHome> {
     UserEnumItem(
       icon: Icon(XUIIcons.my_history, color: Colors.green),
       enumName: '浏览记录',
-      callback: () {},
+      callback: () {
+        XRouter.push(Routes.userHistoryPage);
+      },
     ),
     UserEnumItem(
       icon: Icon(XUIIcons.shoucang_ash, color: Colors.red),
       enumName: '我的喜欢',
-      callback: () {},
+      callback: () {
+        XRouter.push(Routes.userCollectionPage);
+      },
     ),
     UserEnumItem(
       icon: Icon(XUIIcons.dianzan_ash, color: Colors.deepPurpleAccent),
       enumName: '我的点赞',
-      callback: () {},
+      callback: () {
+        XRouter.push(Routes.userPraisePage);
+      },
     ),
     UserEnumItem(
       icon: Icon(XUIIcons.my_contacts, color: Colors.yellow),

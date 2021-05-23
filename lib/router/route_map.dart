@@ -13,9 +13,12 @@ import 'package:tutu/page/menu/register.dart';
 import 'package:tutu/page/menu/settings.dart';
 import 'package:tutu/page/menu/sponsor.dart';
 import 'package:tutu/page/menu/theme_color.dart';
+import 'package:tutu/page/user/user_collection_page.dart';
 import 'package:tutu/page/user/user_config_page.dart';
 import 'package:tutu/page/user/user_config_username_page.dart';
-import 'package:tutu/router/route_map.gr.dart';
+import 'package:tutu/page/user/user_history_page.dart';
+import 'package:tutu/page/user/user_praise_page.dart';
+// import 'package:tutu/router/route_map.gr.dart';
 import 'package:tutu/utils/sputils.dart';
 
 ///页面路由映射表
@@ -35,6 +38,9 @@ import 'package:tutu/utils/sputils.dart';
       AutoRoute(page: SearchPage),
       AutoRoute(page: UserConfigPage),
       AutoRoute(page: UserConfigUsernamePage),
+      AutoRoute(page: UserHistoryPage),
+      AutoRoute(page: UserCollectionPage),
+      AutoRoute(page: UserPraisePage),
     ],
     routesClassName: 'Routes',
     transitionsBuilder: getTransitions,
@@ -48,7 +54,7 @@ class AuthGuard extends RouteGuard {
     if (SPUtils.isLogined()) {
       return true;
     }
-    navigator.replace(Routes.loginPage);
+    // navigator.replace(Routes.loginPage);
     return false;
   }
 }

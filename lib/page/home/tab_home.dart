@@ -445,7 +445,17 @@ class _TabHomePageState extends State<TabHomePage>
                                               commentCount: info.commentCount,
                                               hit: info.hit);
                                         } else {
-                                          return Container();
+                                          return NoImageItem(
+                                            postId: info.postId,
+                                            images: info.images
+                                                .map((b) => b.url)
+                                                .toList(),
+                                            title: info.title,
+                                            userName: info.user.username,
+                                            detail: info.detail,
+                                            commentCount: info.commentCount,
+                                            hit: info.hit,
+                                          );
                                         }
                                       },
                                     )),
@@ -502,7 +512,17 @@ class _TabHomePageState extends State<TabHomePage>
                                               commentCount: info.commentCount,
                                               hit: info.hit);
                                         } else {
-                                          return Container();
+                                          return NoImageItem(
+                                            postId: info.postId,
+                                            images: info.images
+                                                .map((b) => b.url)
+                                                .toList(),
+                                            title: info.title,
+                                            userName: info.user.username,
+                                            detail: info.detail,
+                                            commentCount: info.commentCount,
+                                            hit: info.hit,
+                                          );
                                         }
                                       },
                                     )),

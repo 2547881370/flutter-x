@@ -207,6 +207,7 @@ class _SearchPageState extends State<SearchPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+        appBar: _searchSliverAppBar(),
         body: GestureDetector(
             onTap: () {
               // 点击空白页面关闭键盘
@@ -216,10 +217,10 @@ class _SearchPageState extends State<SearchPage> {
                 color: Colors.white,
                 child: Column(
                   children: <Widget>[
-                    SizedBox(
-                      height: MediaQuery.of(context).padding.top / 2,
-                    ),
-                    _searchSliverAppBar(),
+                    // SizedBox(
+                    //   height: MediaQuery.of(context).padding.top / 2,
+                    // ),
+                    // _searchSliverAppBar(),
                     Expanded(
                       flex: 1,
                       child: Container(

@@ -1,28 +1,29 @@
 // To parse this JSON data, do
 //
-//     final postsListModel = postsListModelFromJson(jsonString);
+//     final queryHistoryListModel = queryHistoryListModelFromJson(jsonString);
 
 import 'dart:convert';
 
-PostsListModel postsListModelFromJson(String str) =>
-    PostsListModel.fromJson(json.decode(str));
+QueryHistoryListModel queryHistoryListModelFromJson(String str) =>
+    QueryHistoryListModel.fromJson(json.decode(str));
 
-String postsListModelToJson(PostsListModel data) => json.encode(data.toJson());
+String queryHistoryListModelToJson(QueryHistoryListModel data) =>
+    json.encode(data.toJson());
 
-class PostsListModel {
-  PostsListModel({
+class QueryHistoryListModel {
+  QueryHistoryListModel({
     this.data,
     this.code,
     this.message,
   });
 
-  List<DatumList> data;
+  List<Datum> data;
   int code;
   String message;
 
-  factory PostsListModel.fromJson(Map<String, dynamic> json) => PostsListModel(
-        data: List<DatumList>.from(
-            json["data"].map((x) => DatumList.fromJson(x))),
+  factory QueryHistoryListModel.fromJson(Map<String, dynamic> json) =>
+      QueryHistoryListModel(
+        data: List<Datum>.from(json["data"].map((x) => Datum.fromJson(x))),
         code: json["code"],
         message: json["message"],
       );
@@ -34,11 +35,41 @@ class PostsListModel {
       };
 }
 
-class DatumList {
-  DatumList({
+class Datum {
+  Datum({
+    this.historyId,
+    this.createTime,
+    this.posts,
+    this.user,
+  });
+
+  int historyId;
+  String createTime;
+  Posts posts;
+  User user;
+
+  factory Datum.fromJson(Map<String, dynamic> json) => Datum(
+        historyId: json["historyID"],
+        createTime: json["createTime"],
+        posts: Posts.fromJson(json["posts"]),
+        user: User.fromJson(json["user"]),
+      );
+
+  Map<String, dynamic> toJson() => {
+        "historyID": historyId,
+        "createTime": createTime,
+        "posts": posts.toJson(),
+        "user": user.toJson(),
+      };
+}
+
+class Posts {
+  Posts({
     this.postId,
     this.title,
     this.detail,
+    this.voice,
+    this.recommendationLevel,
     this.score,
     this.scoreTxt,
     this.hit,
@@ -58,13 +89,15 @@ class DatumList {
     this.isAppPost,
     this.appSize,
     this.isGif,
-    this.user,
     this.images,
+    this.user,
   });
 
   int postId;
   String title;
   String detail;
+  String voice;
+  int recommendationLevel;
   int score;
   String scoreTxt;
   int hit;
@@ -84,13 +117,15 @@ class DatumList {
   int isAppPost;
   int appSize;
   int isGif;
+  List<Image> images;
   User user;
-  List<Images> images;
 
-  factory DatumList.fromJson(Map<String, dynamic> json) => DatumList(
+  factory Posts.fromJson(Map<String, dynamic> json) => Posts(
         postId: json["postID"],
         title: json["title"],
         detail: json["detail"],
+        voice: json["voice"] == null ? null : json["voice"],
+        recommendationLevel: json["recommendationLevel"],
         score: json["score"],
         scoreTxt: json["scoreTxt"],
         hit: json["hit"],
@@ -110,15 +145,16 @@ class DatumList {
         isAppPost: json["isAppPost"],
         appSize: json["appSize"],
         isGif: json["isGif"],
+        images: List<Image>.from(json["images"].map((x) => Image.fromJson(x))),
         user: User.fromJson(json["user"]),
-        images:
-            List<Images>.from(json["images"].map((x) => Images.fromJson(x))),
       );
 
   Map<String, dynamic> toJson() => {
         "postID": postId,
         "title": title,
         "detail": detail,
+        "voice": voice == null ? null : voice,
+        "recommendationLevel": recommendationLevel,
         "score": score,
         "scoreTxt": scoreTxt,
         "hit": hit,
@@ -138,13 +174,13 @@ class DatumList {
         "isAppPost": isAppPost,
         "appSize": appSize,
         "isGif": isGif,
-        "user": user.toJson(),
         "images": List<dynamic>.from(images.map((x) => x.toJson())),
+        "user": user.toJson(),
       };
 }
 
-class Images {
-  Images({
+class Image {
+  Image({
     this.imgId,
     this.url,
   });
@@ -152,7 +188,7 @@ class Images {
   int imgId;
   String url;
 
-  factory Images.fromJson(Map<String, dynamic> json) => Images(
+  factory Image.fromJson(Map<String, dynamic> json) => Image(
         imgId: json["imgId"],
         url: json["url"],
       );
@@ -194,7 +230,7 @@ class User {
   int role;
   int experience;
   int credits;
-  String identityTitle;
+  IdentityTitle identityTitle;
   String identityColor;
   int level;
   String levelColor;
@@ -213,7 +249,7 @@ class User {
         role: json["role"],
         experience: json["experience"],
         credits: json["credits"],
-        identityTitle: json["identityTitle"],
+        identityTitle: identityTitleValues.map[json["identityTitle"]],
         identityColor: json["identityColor"],
         level: json["level"],
         levelColor: json["levelColor"],
@@ -225,7 +261,7 @@ class User {
 
   Map<String, dynamic> toJson() => {
         "userID": userId,
-        "username": usernameValues.reverse[username],
+        "username": username,
         "password": password,
         "nick": nick,
         "avatar": avatar,
@@ -234,7 +270,7 @@ class User {
         "role": role,
         "experience": experience,
         "credits": credits,
-        "identityTitle": identityTitle,
+        "identityTitle": identityTitleValues.reverse[identityTitle],
         "identityColor": identityColor,
         "level": level,
         "levelColor": levelColor,
@@ -244,9 +280,13 @@ class User {
       };
 }
 
-enum Username { SH }
+enum IdentityTitle { EMPTY, IDENTITY_TITLE, PURPLE }
 
-final usernameValues = EnumValues({"SH": Username.SH});
+final identityTitleValues = EnumValues({
+  "": IdentityTitle.EMPTY,
+  "次元征服者": IdentityTitle.IDENTITY_TITLE,
+  "三当家": IdentityTitle.PURPLE
+});
 
 class EnumValues<T> {
   Map<String, T> map;

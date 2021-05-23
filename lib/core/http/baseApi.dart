@@ -15,4 +15,5 @@ class NWApi {
       '/posts/queryUserCollectionOne'; // 文章是否被用户收藏
   static final createPostsComment = '/posts/createPostsComment'; //新增评论
   static final authUpdateUsername = '/auth/updateUsername'; //修改昵称
+  static final queryHistoryList = '/posts/queryHistoryList'; //获取历史记录列表
 }

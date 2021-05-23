@@ -22,8 +22,11 @@ import '../page/menu/register.dart';
 import '../page/menu/settings.dart';
 import '../page/menu/sponsor.dart';
 import '../page/menu/theme_color.dart';
+import '../page/user/user_collection_page.dart';
 import '../page/user/user_config_page.dart';
 import '../page/user/user_config_username_page.dart';
+import '../page/user/user_history_page.dart';
+import '../page/user/user_praise_page.dart';
 import 'route_map.dart';
 
 class Routes {
@@ -41,6 +44,9 @@ class Routes {
   static const String searchPage = '/search-page';
   static const String userConfigPage = '/user-config-page';
   static const String userConfigUsernamePage = '/user-config-username-page';
+  static const String userHistoryPage = '/user-history-page';
+  static const String userCollectionPage = '/user-collection-page';
+  static const String userPraisePage = '/user-praise-page';
   static const all = <String>{
     splashPage,
     mainHomePage,
@@ -56,6 +62,9 @@ class Routes {
     searchPage,
     userConfigPage,
     userConfigUsernamePage,
+    userHistoryPage,
+    userCollectionPage,
+    userPraisePage,
   };
 }
 
@@ -77,6 +86,9 @@ class RouterMap extends RouterBase {
     RouteDef(Routes.searchPage, page: SearchPage),
     RouteDef(Routes.userConfigPage, page: UserConfigPage),
     RouteDef(Routes.userConfigUsernamePage, page: UserConfigUsernamePage),
+    RouteDef(Routes.userHistoryPage, page: UserHistoryPage),
+    RouteDef(Routes.userCollectionPage, page: UserCollectionPage),
+    RouteDef(Routes.userPraisePage, page: UserPraisePage),
   ];
   @override
   Map<Type, AutoRouteFactory> get pagesMap => _pagesMap;
@@ -222,6 +234,39 @@ class RouterMap extends RouterBase {
       return PageRouteBuilder<dynamic>(
         pageBuilder: (context, animation, secondaryAnimation) =>
             UserConfigUsernamePage(),
+        settings: data,
+        opaque: false,
+        barrierDismissible: false,
+        transitionsBuilder: getTransitions,
+        transitionDuration: const Duration(milliseconds: 800),
+      );
+    },
+    UserHistoryPage: (data) {
+      return PageRouteBuilder<dynamic>(
+        pageBuilder: (context, animation, secondaryAnimation) =>
+            UserHistoryPage(),
+        settings: data,
+        opaque: false,
+        barrierDismissible: false,
+        transitionsBuilder: getTransitions,
+        transitionDuration: const Duration(milliseconds: 800),
+      );
+    },
+    UserCollectionPage: (data) {
+      return PageRouteBuilder<dynamic>(
+        pageBuilder: (context, animation, secondaryAnimation) =>
+            UserCollectionPage(),
+        settings: data,
+        opaque: false,
+        barrierDismissible: false,
+        transitionsBuilder: getTransitions,
+        transitionDuration: const Duration(milliseconds: 800),
+      );
+    },
+    UserPraisePage: (data) {
+      return PageRouteBuilder<dynamic>(
+        pageBuilder: (context, animation, secondaryAnimation) =>
+            UserPraisePage(),
         settings: data,
         opaque: false,
         barrierDismissible: false,
