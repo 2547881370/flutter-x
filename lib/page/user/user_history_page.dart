@@ -91,10 +91,10 @@ class _UserHistoryPageState extends State<UserHistoryPage> {
             child: Stack(
               alignment: Alignment.center,
               children: <Widget>[
-                // Container(
-                //   margin: EdgeInsets.only(left: 50),
-                //   child: _item(imgLength: imgLength, info: info.posts),
-                // ),
+                Container(
+                  margin: EdgeInsets.only(left: 50),
+                  child: _item(imgLength: imgLength, info: info.posts),
+                ),
                 // InkWell(
                 //   onTap: () {
                 //     setState(() {
