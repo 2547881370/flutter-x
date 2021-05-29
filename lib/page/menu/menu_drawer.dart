@@ -81,50 +81,23 @@ class MenuDrawer extends StatelessWidget {
                     selected: status.tabIndex == TAB_HOME_INDEX,
                   ),
                   ListTile(
-                    leading: Icon(Icons.list),
-                    title: Text(I18n.of(context).category),
+                    leading: Icon(Icons.person),
+                    title: Text(I18n.of(context).profile),
                     onTap: () {
                       status.tabIndex = TAB_CATEGORY_INDEX;
                       Navigator.pop(context);
                     },
                     selected: status.tabIndex == TAB_CATEGORY_INDEX,
                   ),
-                  ListTile(
-                    leading: Icon(Icons.local_activity),
-                    title: Text(I18n.of(context).activity),
-                    onTap: () {
-                      status.tabIndex = TAB_ACTIVITY_INDEX;
-                      Navigator.pop(context);
-                    },
-                    selected: status.tabIndex == TAB_ACTIVITY_INDEX,
-                  ),
-                  ListTile(
-                    leading: Icon(Icons.notifications),
-                    title: Text(I18n.of(context).message),
-                    onTap: () {
-                      status.tabIndex = TAB_MESSAGE_INDEX;
-                      Navigator.pop(context);
-                    },
-                    selected: status.tabIndex == TAB_MESSAGE_INDEX,
-                  ),
-                  ListTile(
-                    leading: Icon(Icons.person),
-                    title: Text(I18n.of(context).profile),
-                    onTap: () {
-                      status.tabIndex = TAB_PROFILE_INDEX;
-                      Navigator.pop(context);
-                    },
-                    selected: status.tabIndex == TAB_PROFILE_INDEX,
-                  ),
                   //设置、关于、赞助
                   Divider(height: 1.0, color: Colors.grey),
-                  ListTile(
-                    leading: Icon(Icons.attach_money),
-                    title: Text(I18n.of(context).sponsor),
-                    onTap: () {
-                      XRouter.push(Routes.sponsorPage);
-                    },
-                  ),
+                  // ListTile(
+                  //   leading: Icon(Icons.attach_money),
+                  //   title: Text(I18n.of(context).sponsor),
+                  //   onTap: () {
+                  //     XRouter.push(Routes.sponsorPage);
+                  //   },
+                  // ),
                   ListTile(
                     leading: Icon(Icons.settings),
                     title: Text(I18n.of(context).settings),
@@ -132,13 +105,13 @@ class MenuDrawer extends StatelessWidget {
                       XRouter.push(Routes.settingsPage);
                     },
                   ),
-                  ListTile(
-                    leading: Icon(Icons.error_outline),
-                    title: Text(I18n.of(context).about),
-                    onTap: () {
-                      XRouter.push(Routes.aboutPage);
-                    },
-                  ),
+                  // ListTile(
+                  //   leading: Icon(Icons.error_outline),
+                  //   title: Text(I18n.of(context).about),
+                  //   onTap: () {
+                  //     XRouter.push(Routes.aboutPage);
+                  //   },
+                  // ),
                   //退出
                   Divider(height: 1.0, color: Colors.grey),
                   ListTile(

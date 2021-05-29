@@ -2,9 +2,11 @@ import 'package:extended_image/extended_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:provider/provider.dart';
 import 'package:tutu/router/route_map.gr.dart';
 import 'package:tutu/router/router.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:tutu/utils/provider.dart';
 
 class UserConfigPage extends StatefulWidget {
   @override
@@ -77,7 +79,13 @@ class _UserConfigPageState extends State<UserConfigPage> {
                       style: TextStyle(
                           fontSize: ScreenUtil().setSp(30),
                           fontWeight: FontWeight.bold)),
-                  onPressed: () async {},
+                  onPressed: () async {
+                    UserProfile userProfile =
+                        Provider.of<UserProfile>(context, listen: false);
+                    userProfile.nickName = "";
+                    userProfile.userInfo = null;
+                    XRouter.replace(Routes.loginPage);
+                  },
                 ))
           ],
         ),

@@ -18,7 +18,7 @@ import 'package:tutu/page/user/user_config_page.dart';
 import 'package:tutu/page/user/user_config_username_page.dart';
 import 'package:tutu/page/user/user_history_page.dart';
 import 'package:tutu/page/user/user_praise_page.dart';
-// import 'package:tutu/router/route_map.gr.dart';
+import 'package:tutu/router/route_map.gr.dart';
 import 'package:tutu/utils/sputils.dart';
 
 ///页面路由映射表
@@ -54,7 +54,7 @@ class AuthGuard extends RouteGuard {
     if (SPUtils.isLogined()) {
       return true;
     }
-    // navigator.replace(Routes.loginPage);
+    navigator.replace(Routes.loginPage);
     return false;
   }
 }

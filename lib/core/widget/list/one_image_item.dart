@@ -114,63 +114,81 @@ class OneImageItem extends StatelessWidget implements ImageItemInfo {
                                           ),
                                         ),
                                         Expanded(
-                                            flex: 2,
-                                            child: Container(
-                                                padding: EdgeInsets.symmetric(
-                                                    vertical: 1),
-                                                child: Row(children: <Widget>[
-                                                  Expanded(
-                                                      child: Container(
-                                                          child: Row(
-                                                              mainAxisAlignment:
-                                                                  MainAxisAlignment
-                                                                      .end,
-                                                              children: <
-                                                                  Widget>[
-                                                        Icon(
-                                                            Icons
-                                                                .message_outlined,
-                                                            color: Colors.grey,
-                                                            size: ScreenUtil()
-                                                                .setSp(25)),
-                                                        SizedBox(width: 10),
-                                                        Text(
-                                                            commentCount
-                                                                .toString(),
-                                                            style: TextStyle(
-                                                                fontSize:
-                                                                    ScreenUtil()
-                                                                        .setSp(
-                                                                            25),
-                                                                color: Colors
-                                                                    .black))
-                                                      ]))),
-                                                  Expanded(
-                                                      child: Container(
-                                                          child: Row(
-                                                              mainAxisAlignment:
-                                                                  MainAxisAlignment
-                                                                      .end,
-                                                              children: <
-                                                                  Widget>[
+                                          flex: 2,
+                                          child: Container(
+                                            padding: EdgeInsets.symmetric(
+                                                vertical: 1),
+                                            child: Row(
+                                              children: <Widget>[
+                                                Expanded(
+                                                    child: Container(
+                                                        child: Row(
+                                                            mainAxisAlignment:
+                                                                MainAxisAlignment
+                                                                    .spaceAround,
+                                                            children: <Widget>[
+                                                      Icon(
+                                                        Icons.message_outlined,
+                                                        color: Colors.grey,
+                                                        size: ScreenUtil()
+                                                            .setSp(25),
+                                                      ),
+                                                      // SizedBox(width: 10),
+                                                      Expanded(
+                                                        child: Text(
+                                                          commentCount
+                                                              .toString(),
+                                                          maxLines: 1,
+                                                          overflow: TextOverflow
+                                                              .ellipsis,
+                                                          style: TextStyle(
+                                                              fontSize:
+                                                                  ScreenUtil()
+                                                                      .setSp(
+                                                                          25),
+                                                              color:
+                                                                  Colors.black),
+                                                        ),
+                                                      ),
+                                                    ]))),
+                                                Expanded(
+                                                  child: Container(
+                                                    child: Row(
+                                                      mainAxisAlignment:
+                                                          MainAxisAlignment
+                                                              .spaceAround,
+                                                      children: <Widget>[
                                                         Icon(
                                                           Icons.remove_red_eye,
                                                           color: Colors.grey,
                                                           size: ScreenUtil()
                                                               .setSp(25),
                                                         ),
-                                                        SizedBox(width: 10),
-                                                        Text(
-                                                          hit.toString(),
-                                                          style: TextStyle(
-                                                            fontSize:
-                                                                ScreenUtil()
-                                                                    .setSp(25),
-                                                            color: Colors.black,
+                                                        Expanded(
+                                                          child: Text(
+                                                            hit.toString(),
+                                                            maxLines: 1,
+                                                            overflow:
+                                                                TextOverflow
+                                                                    .ellipsis,
+                                                            style: TextStyle(
+                                                              fontSize:
+                                                                  ScreenUtil()
+                                                                      .setSp(
+                                                                          20),
+                                                              color:
+                                                                  Colors.black,
+                                                            ),
                                                           ),
-                                                        )
-                                                      ])))
-                                                ])))
+                                                        ),
+                                                      ],
+                                                    ),
+                                                  ),
+                                                )
+                                              ],
+                                            ),
+                                          ),
+                                        )
                                       ],
                                     )
                                   ])))

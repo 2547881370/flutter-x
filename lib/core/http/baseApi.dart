@@ -16,4 +16,11 @@ class NWApi {
   static final createPostsComment = '/posts/createPostsComment'; //新增评论
   static final authUpdateUsername = '/auth/updateUsername'; //修改昵称
   static final queryHistoryList = '/posts/queryHistoryList'; //获取历史记录列表
+  static final postsHistory = '/posts/history'; //历史记录
+  static final postsDeletePraise = '/posts/deletePraise'; //删除用户点赞
+  static final postsDeleteCollection = '/posts/deleteCollection'; //用户删除收藏
+  static final postsQueryUserPraiseList =
+      '/posts/queryUserPraiseList'; //获取用户点赞列表
+  static final postsQueryUserCollectionList =
+      '/posts/queryUserCollectionList'; //获取用户收藏列表
 }
