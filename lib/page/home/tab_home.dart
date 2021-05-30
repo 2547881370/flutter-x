@@ -132,9 +132,6 @@ class _TabHomePageState extends State<TabHomePage>
 
     _tabController = TabController(vsync: this, length: _tagIds.length);
 
-    // 获取轮播图
-    _getArticleCarouselMap();
-
     activeSortCondition = _distanceSortConditions[0];
 
     queryForm[0] = PostsQueryForm(page: pageArr, tag_id: TAB_ID_ARR);
@@ -224,6 +221,9 @@ class _TabHomePageState extends State<TabHomePage>
   }
 
   Future _initData() async {
+    // 获取轮播图
+    await _getArticleCarouselMap();
+
     await _getPostsList(tag_id: TAB_ID_ARR, isBuild: false);
     await _getPostsList(tag_id: TAB_ID_ORIGINAL, isBuild: false);
     await _getPostsList(tag_id: TAB_ID_NETWORK, isBuild: false);
@@ -336,6 +336,7 @@ class _TabHomePageState extends State<TabHomePage>
                                   footer: MaterialFooter(),
                                   onRefresh: () async {
                                     queryForm[0].page = 1;
+                                    await _getArticleCarouselMap();
                                     return await _getPostsList();
                                   },
                                   onLoad: () async {
@@ -401,6 +402,7 @@ class _TabHomePageState extends State<TabHomePage>
                                     footer: MaterialFooter(),
                                     onRefresh: () async {
                                       queryForm[1].page = 1;
+                                      await _getArticleCarouselMap();
                                       return await _getPostsList();
                                     },
                                     onLoad: () async {
@@ -468,6 +470,7 @@ class _TabHomePageState extends State<TabHomePage>
                                     footer: MaterialFooter(),
                                     onRefresh: () async {
                                       queryForm[2].page = 1;
+                                      await _getArticleCarouselMap();
                                       return await _getPostsList();
                                     },
                                     onLoad: () async {

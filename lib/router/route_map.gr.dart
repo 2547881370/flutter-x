@@ -20,7 +20,6 @@ import '../page/menu/language.dart';
 import '../page/menu/login.dart';
 import '../page/menu/register.dart';
 import '../page/menu/settings.dart';
-import '../page/menu/sponsor.dart';
 import '../page/menu/theme_color.dart';
 import '../page/user/user_collection_page.dart';
 import '../page/user/user_config_page.dart';
@@ -32,7 +31,6 @@ import 'route_map.dart';
 class Routes {
   static const String splashPage = '/';
   static const String mainHomePage = '/main-home-page';
-  static const String sponsorPage = '/menu/sponsor-page';
   static const String settingsPage = '/menu/settings-page';
   static const String aboutPage = '/menu/about-page';
   static const String loginPage = '/login-page';
@@ -50,7 +48,6 @@ class Routes {
   static const all = <String>{
     splashPage,
     mainHomePage,
-    sponsorPage,
     settingsPage,
     aboutPage,
     loginPage,
@@ -74,7 +71,6 @@ class RouterMap extends RouterBase {
   final _routes = <RouteDef>[
     RouteDef(Routes.splashPage, page: SplashPage),
     RouteDef(Routes.mainHomePage, page: MainHomePage, guards: [AuthGuard]),
-    RouteDef(Routes.sponsorPage, page: SponsorPage),
     RouteDef(Routes.settingsPage, page: SettingsPage),
     RouteDef(Routes.aboutPage, page: AboutPage),
     RouteDef(Routes.loginPage, page: LoginPage),
@@ -115,12 +111,6 @@ class RouterMap extends RouterBase {
         barrierDismissible: false,
         transitionsBuilder: getTransitions,
         transitionDuration: const Duration(milliseconds: 800),
-      );
-    },
-    SponsorPage: (data) {
-      return PageRouteBuilder<dynamic>(
-        pageBuilder: (context, animation, secondaryAnimation) => SponsorPage(),
-        settings: data,
       );
     },
     SettingsPage: (data) {

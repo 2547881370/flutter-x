@@ -37,26 +37,26 @@ class QueryCollectionListModel {
 
 class Datum {
   Datum({
-    this.praiseId,
+    this.collectionId,
     this.createTime,
     this.posts,
     this.user,
   });
 
-  int praiseId;
+  int collectionId;
   String createTime;
   Posts posts;
   User user;
 
   factory Datum.fromJson(Map<String, dynamic> json) => Datum(
-        praiseId: json["praiseId"],
+        collectionId: json["collectionId"],
         createTime: json["createTime"],
         posts: Posts.fromJson(json["posts"]),
         user: User.fromJson(json["user"]),
       );
 
   Map<String, dynamic> toJson() => {
-        "praiseId": praiseId,
+        "collectionId": collectionId,
         "createTime": createTime,
         "posts": posts.toJson(),
         "user": user.toJson(),

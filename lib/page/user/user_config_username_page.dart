@@ -40,9 +40,9 @@ class _UserConfigUsernamePageState extends State<UserConfigUsernamePage> {
       UserProfile userProfile =
           Provider.of<UserProfile>(context, listen: false);
       AuthLoginModel res = AuthLoginModel.fromJson(response);
-      userProfile.nickName = res.data.username;
-      userProfile.userInfo = res;
+      await userProfile.refreshUserInfo();
       ToastUtils.success(res.message);
+      Navigator.pop(context);
     } catch (err) {
       PostsPraiseErrorModel resError =
           PostsPraiseErrorModel.fromJson(err.response.data);

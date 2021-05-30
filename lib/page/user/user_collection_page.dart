@@ -35,9 +35,9 @@ class PostsCollectionDeleteArrStatus {
 
 class PostsCollectionQueryForm {
   int userId;
-  List<int> praiseIds = [];
+  List<int> collectionIds = [];
   int arrDelete;
-  PostsCollectionQueryForm({this.userId, this.praiseIds, this.arrDelete});
+  PostsCollectionQueryForm({this.userId, this.collectionIds, this.arrDelete});
 }
 
 class UserCollectionPage extends StatefulWidget {
@@ -256,13 +256,13 @@ class _UserCollectionPageState extends State<UserCollectionPage> {
       return b.isStatus == true;
     }).toList();
 
-    List<int> praiseIds = _chcekCollectionItem
-        .map((ChcekCollectionItem e) => e.data.praiseId)
+    List<int> collectionIds = _chcekCollectionItem
+        .map((ChcekCollectionItem e) => e.data.collectionId)
         .toList();
 
     PostsCollectionQueryForm queryForm = PostsCollectionQueryForm(
       userId: SPUtils.getUserInfo().data.userId,
-      praiseIds: praiseIds,
+      collectionIds: collectionIds,
     );
 
     showDialog(
@@ -278,7 +278,7 @@ class _UserCollectionPageState extends State<UserCollectionPage> {
     try {
       await XHttp.postJson(NWApi.postsDeleteCollection, {
         "userId": queryForm.userId,
-        "praiseIds": praiseIds,
+        "collectionIds": collectionIds,
       });
       _refresh();
     } catch (err) {

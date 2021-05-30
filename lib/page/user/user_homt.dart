@@ -3,6 +3,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:provider/provider.dart';
+import 'package:tutu/core/http/baseApi.dart';
 import 'package:tutu/core/utils/xuifont.dart';
 import 'package:tutu/router/route_map.gr.dart';
 import 'package:tutu/router/router.dart';
@@ -51,6 +52,16 @@ class _UserHomeState extends State<UserHome> {
     ),
   ];
 
+  String _getUserAvatar() {
+    RegExp reg = new RegExp(r"https?\:\/\/", dotAll: true);
+    String avatar = SPUtils.getUserInfo().data.avatar;
+    if (reg.hasMatch(avatar)) {
+      return avatar;
+    } else {
+      return '${NWApi.baseApi}/file/images${avatar}';
+    }
+  }
+
   Widget _userSliverAppBar() {
     return SliverAppBar(
         backgroundColor: Colors.white,
@@ -75,14 +86,16 @@ class _UserHomeState extends State<UserHome> {
                   XRouter.push('${Routes.userConfigPage}');
                 },
                 child: Container(
-                  width: ScreenUtil().setWidth(140),
+                  width: 80,
+                  height: 80,
                   child: ClipOval(
                     child: CachedNetworkImage(
-                        fit: BoxFit.cover,
-                        placeholder: (context, url) => Container(
-                              color: Colors.grey[200],
-                            ),
-                        imageUrl: SPUtils.getUserInfo().data.avatar),
+                      fit: BoxFit.cover,
+                      placeholder: (context, url) => Container(
+                        color: Colors.grey[200],
+                      ),
+                      imageUrl: _getUserAvatar(),
+                    ),
                   ),
                 )),
             SizedBox(

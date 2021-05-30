@@ -1,5 +1,5 @@
 class NWApi {
-  static final baseApi = "http://192.168.43.220:3000";
+  static final baseApi = "http://192.168.43.220:3000"; // 尾部不能有/
   static final loginPath = "/auth/login";
   static final addUser = '/auth/addUser';
   static final postslist = '/posts/list';
@@ -23,4 +23,8 @@ class NWApi {
       '/posts/queryUserPraiseList'; //获取用户点赞列表
   static final postsQueryUserCollectionList =
       '/posts/queryUserCollectionList'; //获取用户收藏列表
+  static final fileUploadFile = '/file/uploadFile'; //文件上传
+  static final fileImages = '/file/images/'; // 头像预览
+  static final authGetUserInfo = '/auth/getUserInfo'; // 获取用户信息
+
 }

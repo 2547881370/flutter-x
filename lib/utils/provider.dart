@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:tutu/core/http/baseApi.dart';
+import 'package:tutu/core/http/http.dart';
 import 'package:tutu/generated/i18n.dart';
 import 'package:tutu/models/auth_%E2%80%8Blogin_model.dart';
 import 'package:tutu/models/auth_add_user_model.dart';
 import 'package:provider/provider.dart';
+import 'package:tutu/models/query_user_info_model.dart';
 
 import 'sputils.dart';
 
@@ -48,12 +51,12 @@ MaterialColor getDefaultTheme() {
 ///主题
 class AppTheme with ChangeNotifier {
   static final List<MaterialColor> materialColors = [
+    Colors.pink,
     Colors.lightBlue,
     Colors.orange,
     Colors.red,
     Colors.amber,
     Colors.blue,
-    Colors.pink,
     Colors.purple,
     Colors.grey,
     Colors.yellow,
@@ -127,6 +130,17 @@ class UserProfile with ChangeNotifier {
     _userInfo = userInfo;
     SPUtils.saveUserInfo(userInfo);
     notifyListeners();
+  }
+
+  Future refreshUserInfo() async {
+    final res = await XHttp.postJson(
+        NWApi.authGetUserInfo, {"userID": _userInfo.data.userId});
+    String token = SPUtils.getToken();
+    res["data"]["token"] = token;
+    AuthLoginModel _res = AuthLoginModel.fromJson(res);
+    nickName = _res.data.username;
+    userInfo = _res as AuthLoginModel;
+    return true;
   }
 }
 

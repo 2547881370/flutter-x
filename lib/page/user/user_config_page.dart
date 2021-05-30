@@ -2,11 +2,18 @@ import 'package:extended_image/extended_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:provider/provider.dart';
+import 'package:tutu/core/http/baseApi.dart';
+import 'package:tutu/core/utils/toast.dart';
+import 'package:tutu/core/widget/loading_dialog.dart';
+import 'package:tutu/generated/i18n.dart';
 import 'package:tutu/router/route_map.gr.dart';
 import 'package:tutu/router/router.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:tutu/utils/provider.dart';
+import 'package:dio/dio.dart' as _dio;
+import 'package:tutu/utils/sputils.dart';
 
 class UserConfigPage extends StatefulWidget {
   @override
@@ -19,8 +26,51 @@ class _UserConfigPageState extends State<UserConfigPage> {
 
   Future getImageBuff() async {
     final pickedFile = await picker.getImage(source: ImageSource.gallery);
-
     if (pickedFile == null || pickedFile.path == null) return false;
+
+    showDialog(
+        context: context,
+        barrierDismissible: false,
+        builder: (BuildContext context) {
+          return LoadingDialog(
+            showContent: false,
+            backgroundColor: Colors.black38,
+            loadingView: SpinKitCircle(color: Colors.white),
+          );
+        });
+
+    try {
+      ///创建Dio
+      _dio.Dio dio = new _dio.Dio();
+
+      String path = pickedFile.path;
+
+      Map<String, dynamic> map = Map();
+      map["file"] = await _dio.MultipartFile.fromFile(path);
+      map["userID"] = SPUtils.getUserInfo().data.userId;
+
+      ///通过FormData
+      _dio.FormData formData = _dio.FormData.fromMap(map);
+      print(formData);
+
+      dio.options.headers['token'] = SPUtils.getUserInfo().data.token;
+
+      _dio.Response response = await dio.post(
+        NWApi.baseApi + NWApi.fileUploadFile,
+        data: formData,
+        onSendProgress: (int progress, int total) {
+          print("当前进度是 $progress 总进度是  $total");
+        },
+      );
+      ToastUtils.toast("上传成功");
+      UserProfile userProfile =
+          Provider.of<UserProfile>(context, listen: false);
+      await userProfile.refreshUserInfo();
+    } catch (err) {
+      ToastUtils.toast("上传失败");
+    } finally {
+      Navigator.of(context).pop();
+    }
   }
 
   Widget _userConfigAppBar() {

@@ -11,7 +11,6 @@ import 'package:tutu/page/menu/language.dart';
 import 'package:tutu/page/menu/login.dart';
 import 'package:tutu/page/menu/register.dart';
 import 'package:tutu/page/menu/settings.dart';
-import 'package:tutu/page/menu/sponsor.dart';
 import 'package:tutu/page/menu/theme_color.dart';
 import 'package:tutu/page/user/user_collection_page.dart';
 import 'package:tutu/page/user/user_config_page.dart';
@@ -26,7 +25,6 @@ import 'package:tutu/utils/sputils.dart';
     routes: <AutoRoute>[
       AutoRoute(page: SplashPage, initial: true),
       AutoRoute(page: MainHomePage, guards: [AuthGuard]),
-      CustomRoute(page: SponsorPage, path: '/menu/sponsor-page'),
       CustomRoute(page: SettingsPage, path: '/menu/settings-page'),
       CustomRoute(page: AboutPage, path: '/menu/about-page'),
       AutoRoute(page: LoginPage),
