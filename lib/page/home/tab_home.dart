@@ -424,7 +424,7 @@ class _TabHomePageState extends State<TabHomePage>
                                     queryForm[0].page = 1;
                                     await _getArticleCarouselMap();
                                     await _getPostsList();
-                                    _controller0.finishRefresh(noMore: true);
+                                    _controller0.finishRefresh(noMore: false);
                                     setState(() {
                                       _firstRefresh0 = false;
                                     });
@@ -432,7 +432,7 @@ class _TabHomePageState extends State<TabHomePage>
                                   onLoad: () async {
                                     queryForm[0].page = queryForm[0].page + 1;
                                     await _getPostsList();
-                                    _controller0.finishLoad(noMore: true);
+                                    _controller0.finishLoad(noMore: false);
                                   },
                                   child: ListView.builder(
                                     itemCount: postsListModelArrData != null
@@ -564,7 +564,7 @@ class _TabHomePageState extends State<TabHomePage>
                                       queryForm[1].page = 1;
                                       await _getArticleCarouselMap();
                                       await _getPostsList();
-                                      _controller1.finishRefresh(noMore: true);
+                                      _controller1.finishRefresh(noMore: false);
                                       setState(() {
                                         _firstRefresh1 = false;
                                       });
@@ -572,7 +572,7 @@ class _TabHomePageState extends State<TabHomePage>
                                     onLoad: () async {
                                       queryForm[1].page = queryForm[1].page + 1;
                                       await _getPostsList();
-                                      _controller1.finishLoad(noMore: true);
+                                      _controller1.finishLoad(noMore: false);
                                     },
                                     child: ListView.builder(
                                       itemCount:
@@ -706,7 +706,7 @@ class _TabHomePageState extends State<TabHomePage>
                                       queryForm[2].page = 1;
                                       await _getArticleCarouselMap();
                                       await _getPostsList();
-                                      _controller2.finishRefresh(noMore: true);
+                                      _controller2.finishRefresh(noMore: false);
                                       setState(() {
                                         _firstRefresh2 = false;
                                       });
@@ -714,7 +714,7 @@ class _TabHomePageState extends State<TabHomePage>
                                     onLoad: () async {
                                       queryForm[2].page = queryForm[2].page + 1;
                                       await _getPostsList();
-                                      _controller2.finishLoad(noMore: true);
+                                      _controller2.finishLoad(noMore: false);
                                     },
                                     child: ListView.builder(
                                       itemCount:

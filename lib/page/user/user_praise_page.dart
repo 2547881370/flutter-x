@@ -360,7 +360,7 @@ class _UsePraiseyPageState extends State<UserPraisePage> {
     queryForm.page = 1;
     chcekPraiseItem = null;
     await _queryHistoryListApi(refresh: true);
-    _controller.finishRefresh(noMore: true);
+    _controller.finishRefresh(noMore: false);
     return true;
   }
 
@@ -400,7 +400,7 @@ class _UsePraiseyPageState extends State<UserPraisePage> {
                       onLoad: () async {
                         queryForm.page = queryForm.page + 1;
                         await _queryHistoryListApi();
-                        _controller.finishLoad(noMore: true);
+                        _controller.finishLoad(noMore: false);
                       },
                       onRefresh: () async {
                         await _refresh();

@@ -364,7 +364,7 @@ class _UserCollectionPageState extends State<UserCollectionPage> {
     queryForm.page = 1;
     chcekCollectionItem = null;
     await _queryHistoryListApi(refresh: true);
-    _controller.finishRefresh(noMore: true);
+    _controller.finishRefresh(noMore: false);
     return true;
   }
 
@@ -404,7 +404,7 @@ class _UserCollectionPageState extends State<UserCollectionPage> {
                       onLoad: () async {
                         queryForm.page = queryForm.page + 1;
                         await _queryHistoryListApi();
-                        _controller.finishLoad(noMore: true);
+                        _controller.finishLoad(noMore: false);
                       },
                       onRefresh: () async {
                         await _refresh();

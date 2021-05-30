@@ -369,7 +369,7 @@ class _UserHistoryPageState extends State<UserHistoryPage> {
     queryForm.page = 1;
     chcekHistoryItem = null;
     await _queryHistoryListApi(refresh: true);
-    _controller.finishRefresh(noMore: true);
+    _controller.finishRefresh(noMore: false);
     return true;
   }
 
@@ -409,7 +409,7 @@ class _UserHistoryPageState extends State<UserHistoryPage> {
                       onLoad: () async {
                         queryForm.page = queryForm.page + 1;
                         await _queryHistoryListApi();
-                        _controller.finishLoad(noMore: true);
+                        _controller.finishLoad(noMore: false);
                       },
                       onRefresh: () async {
                         await _refresh();
