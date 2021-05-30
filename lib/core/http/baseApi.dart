@@ -1,5 +1,5 @@
 class NWApi {
-  static final baseApi = "http://192.168.43.220:3000"; // 尾部不能有/
+  static final baseApi = "http://117.50.17.60:3000"; // 尾部不能有/
   static final loginPath = "/auth/login";
   static final addUser = '/auth/addUser';
   static final postslist = '/posts/list';

@@ -4,12 +4,14 @@ import 'package:flutter_easyrefresh/easy_refresh.dart';
 import 'package:flutter_easyrefresh/material_footer.dart';
 import 'package:flutter_easyrefresh/material_header.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:flutter_swiper/flutter_swiper.dart';
 import 'package:tutu/core/http/baseApi.dart';
 import 'package:tutu/core/http/http.dart';
 import 'package:tutu/core/utils/toast.dart';
 import 'package:tutu/core/widget/list/no_image_item.dart';
 import 'package:tutu/core/widget/list/one_image_item.dart';
+import 'package:tutu/core/widget/list/sample_list_item.dart';
 import 'package:tutu/core/widget/list/three_image_item.dart';
 import 'package:tutu/models/posts_list_model.dart';
 import 'package:tutu/router/route_map.gr.dart';
@@ -119,6 +121,18 @@ class _TabHomePageState extends State<TabHomePage>
   // active appBarSelect
   SortCondition activeSortCondition;
 
+  // 加载控制器
+  EasyRefreshController _controller0;
+  // 加载控制器
+  EasyRefreshController _controller1;
+  // 加载控制器
+  EasyRefreshController _controller2;
+
+  // 第一次加载
+  bool _firstRefresh0 = true;
+  bool _firstRefresh1 = true;
+  bool _firstRefresh2 = true;
+
   @override
   void initState() {
     super.initState();
@@ -133,6 +147,10 @@ class _TabHomePageState extends State<TabHomePage>
     _tabController = TabController(vsync: this, length: _tagIds.length);
 
     activeSortCondition = _distanceSortConditions[0];
+
+    _controller0 = EasyRefreshController();
+    _controller1 = EasyRefreshController();
+    _controller2 = EasyRefreshController();
 
     queryForm[0] = PostsQueryForm(page: pageArr, tag_id: TAB_ID_ARR);
     queryForm[1] = PostsQueryForm(page: originalArr, tag_id: TAB_ID_ORIGINAL);
@@ -332,16 +350,89 @@ class _TabHomePageState extends State<TabHomePage>
                                   .NestedScrollViewInnerScrollPositionKeyWidget(
                                 const Key('Tab0'),
                                 EasyRefresh(
+                                  enableControlFinishRefresh: true,
+                                  enableControlFinishLoad: true,
+                                  emptyWidget: postsListModelArrData == null
+                                      ? Container(
+                                          height: double.infinity,
+                                          child: Column(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.center,
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.center,
+                                            children: <Widget>[
+                                              Expanded(
+                                                child: SizedBox(),
+                                                flex: 2,
+                                              ),
+                                              SizedBox(
+                                                width: 100.0,
+                                                height: 100.0,
+                                                child: Image.asset(
+                                                    'assets/image/nodata.png'),
+                                              ),
+                                              Text(
+                                                '暂无数据',
+                                                style: TextStyle(
+                                                    fontSize: 16.0,
+                                                    color: Colors.grey[400]),
+                                              ),
+                                              Expanded(
+                                                child: SizedBox(),
+                                                flex: 3,
+                                              ),
+                                            ],
+                                          ),
+                                        )
+                                      : null,
+                                  firstRefresh: _firstRefresh0,
+                                  firstRefreshWidget: Container(
+                                    width: double.infinity,
+                                    height: double.infinity,
+                                    child: Center(
+                                        child: SizedBox(
+                                      height: 200.0,
+                                      width: 300.0,
+                                      child: Card(
+                                        child: Column(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.center,
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.center,
+                                          children: <Widget>[
+                                            Container(
+                                              width: 50.0,
+                                              height: 50.0,
+                                              child: SpinKitFadingCube(
+                                                color: Theme.of(context)
+                                                    .primaryColor,
+                                                size: 25.0,
+                                              ),
+                                            ),
+                                            Container(
+                                              child: Text("加载中..."),
+                                            )
+                                          ],
+                                        ),
+                                      ),
+                                    )),
+                                  ),
+                                  controller: _controller0,
                                   header: MaterialHeader(),
                                   footer: MaterialFooter(),
                                   onRefresh: () async {
                                     queryForm[0].page = 1;
                                     await _getArticleCarouselMap();
-                                    return await _getPostsList();
+                                    await _getPostsList();
+                                    _controller0.finishRefresh(noMore: true);
+                                    setState(() {
+                                      _firstRefresh0 = false;
+                                    });
                                   },
                                   onLoad: () async {
                                     queryForm[0].page = queryForm[0].page + 1;
-                                    return await _getPostsList();
+                                    await _getPostsList();
+                                    _controller0.finishLoad(noMore: true);
                                   },
                                   child: ListView.builder(
                                     itemCount: postsListModelArrData != null
@@ -398,16 +489,90 @@ class _TabHomePageState extends State<TabHomePage>
                                   .NestedScrollViewInnerScrollPositionKeyWidget(
                                 const Key('Tab1'),
                                 EasyRefresh(
+                                    enableControlFinishRefresh: true,
+                                    enableControlFinishLoad: true,
+                                    emptyWidget: postsListModelOriginalData ==
+                                            null
+                                        ? Container(
+                                            height: double.infinity,
+                                            child: Column(
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment.center,
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.center,
+                                              children: <Widget>[
+                                                Expanded(
+                                                  child: SizedBox(),
+                                                  flex: 2,
+                                                ),
+                                                SizedBox(
+                                                  width: 100.0,
+                                                  height: 100.0,
+                                                  child: Image.asset(
+                                                      'assets/image/nodata.png'),
+                                                ),
+                                                Text(
+                                                  '暂无数据',
+                                                  style: TextStyle(
+                                                      fontSize: 16.0,
+                                                      color: Colors.grey[400]),
+                                                ),
+                                                Expanded(
+                                                  child: SizedBox(),
+                                                  flex: 3,
+                                                ),
+                                              ],
+                                            ),
+                                          )
+                                        : null,
+                                    firstRefresh: _firstRefresh1,
+                                    firstRefreshWidget: Container(
+                                      width: double.infinity,
+                                      height: double.infinity,
+                                      child: Center(
+                                          child: SizedBox(
+                                        height: 200.0,
+                                        width: 300.0,
+                                        child: Card(
+                                          child: Column(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.center,
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.center,
+                                            children: <Widget>[
+                                              Container(
+                                                width: 50.0,
+                                                height: 50.0,
+                                                child: SpinKitFadingCube(
+                                                  color: Theme.of(context)
+                                                      .primaryColor,
+                                                  size: 25.0,
+                                                ),
+                                              ),
+                                              Container(
+                                                child: Text("加载中..."),
+                                              )
+                                            ],
+                                          ),
+                                        ),
+                                      )),
+                                    ),
+                                    controller: _controller1,
                                     header: MaterialHeader(),
                                     footer: MaterialFooter(),
                                     onRefresh: () async {
                                       queryForm[1].page = 1;
                                       await _getArticleCarouselMap();
-                                      return await _getPostsList();
+                                      await _getPostsList();
+                                      _controller1.finishRefresh(noMore: true);
+                                      setState(() {
+                                        _firstRefresh1 = false;
+                                      });
                                     },
                                     onLoad: () async {
                                       queryForm[1].page = queryForm[1].page + 1;
-                                      return await _getPostsList();
+                                      await _getPostsList();
+                                      _controller1.finishLoad(noMore: true);
                                     },
                                     child: ListView.builder(
                                       itemCount:
@@ -466,16 +631,90 @@ class _TabHomePageState extends State<TabHomePage>
                                   .NestedScrollViewInnerScrollPositionKeyWidget(
                                 const Key('Tab2'),
                                 EasyRefresh(
+                                    enableControlFinishRefresh: true,
+                                    enableControlFinishLoad: true,
+                                    emptyWidget: postsListModelNetworkData ==
+                                            null
+                                        ? Container(
+                                            height: double.infinity,
+                                            child: Column(
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment.center,
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.center,
+                                              children: <Widget>[
+                                                Expanded(
+                                                  child: SizedBox(),
+                                                  flex: 2,
+                                                ),
+                                                SizedBox(
+                                                  width: 100.0,
+                                                  height: 100.0,
+                                                  child: Image.asset(
+                                                      'assets/image/nodata.png'),
+                                                ),
+                                                Text(
+                                                  '暂无数据',
+                                                  style: TextStyle(
+                                                      fontSize: 16.0,
+                                                      color: Colors.grey[400]),
+                                                ),
+                                                Expanded(
+                                                  child: SizedBox(),
+                                                  flex: 3,
+                                                ),
+                                              ],
+                                            ),
+                                          )
+                                        : null,
+                                    firstRefresh: _firstRefresh2,
+                                    firstRefreshWidget: Container(
+                                      width: double.infinity,
+                                      height: double.infinity,
+                                      child: Center(
+                                          child: SizedBox(
+                                        height: 200.0,
+                                        width: 300.0,
+                                        child: Card(
+                                          child: Column(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.center,
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.center,
+                                            children: <Widget>[
+                                              Container(
+                                                width: 50.0,
+                                                height: 50.0,
+                                                child: SpinKitFadingCube(
+                                                  color: Theme.of(context)
+                                                      .primaryColor,
+                                                  size: 25.0,
+                                                ),
+                                              ),
+                                              Container(
+                                                child: Text("加载中..."),
+                                              )
+                                            ],
+                                          ),
+                                        ),
+                                      )),
+                                    ),
+                                    controller: _controller2,
                                     header: MaterialHeader(),
                                     footer: MaterialFooter(),
                                     onRefresh: () async {
                                       queryForm[2].page = 1;
                                       await _getArticleCarouselMap();
-                                      return await _getPostsList();
+                                      await _getPostsList();
+                                      _controller2.finishRefresh(noMore: true);
+                                      setState(() {
+                                        _firstRefresh2 = false;
+                                      });
                                     },
                                     onLoad: () async {
                                       queryForm[2].page = queryForm[2].page + 1;
-                                      return await _getPostsList();
+                                      await _getPostsList();
+                                      _controller2.finishLoad(noMore: true);
                                     },
                                     child: ListView.builder(
                                       itemCount:
