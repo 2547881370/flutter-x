@@ -86,6 +86,17 @@ class _ImageDetailedState extends State<ImageDetailed> {
   // 是否加载失败
   bool _isError = false;
 
+  BuildContext dialogContext;
+
+  String _getUserAvatar(avatar) {
+    RegExp reg = new RegExp(r"https?\:\/\/", dotAll: true);
+    if (reg.hasMatch(avatar)) {
+      return avatar;
+    } else {
+      return '${NWApi.baseApi}/file/images${avatar}';
+    }
+  }
+
   Widget _mySliverAppBarImage() {
     return SliverAppBar(
       pinned: true,
@@ -418,12 +429,14 @@ class _ImageDetailedState extends State<ImageDetailed> {
                       child: AspectRatio(
                         aspectRatio: 1,
                         child: ClipOval(
-                            child: CachedNetworkImage(
-                                fit: BoxFit.cover,
-                                placeholder: (context, url) => Container(
-                                      color: Colors.grey[200],
-                                    ),
-                                imageUrl: comments.user.avatar)),
+                          child: CachedNetworkImage(
+                            fit: BoxFit.cover,
+                            placeholder: (context, url) => Container(
+                              color: Colors.grey[200],
+                            ),
+                            imageUrl: _getUserAvatar(comments.user.avatar),
+                          ),
+                        ),
                       )),
                   Expanded(
                       child: Container(
@@ -621,6 +634,7 @@ class _ImageDetailedState extends State<ImageDetailed> {
         context: context,
         barrierDismissible: false,
         builder: (BuildContext context) {
+          dialogContext = context;
           return LoadingDialog(
             showContent: false,
             backgroundColor: Colors.black38,
@@ -655,7 +669,7 @@ class _ImageDetailedState extends State<ImageDetailed> {
     } catch (err) {
       setIsError(true);
     } finally {
-      Navigator.pop(context);
+      Navigator.pop(dialogContext);
     }
   }
 
