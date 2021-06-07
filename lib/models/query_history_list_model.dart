@@ -4,11 +4,9 @@
 
 import 'dart:convert';
 
-QueryHistoryListModel queryHistoryListModelFromJson(String str) =>
-    QueryHistoryListModel.fromJson(json.decode(str));
+QueryHistoryListModel queryHistoryListModelFromJson(String str) => QueryHistoryListModel.fromJson(json.decode(str));
 
-String queryHistoryListModelToJson(QueryHistoryListModel data) =>
-    json.encode(data.toJson());
+String queryHistoryListModelToJson(QueryHistoryListModel data) => json.encode(data.toJson());
 
 class QueryHistoryListModel {
   QueryHistoryListModel({
@@ -21,18 +19,17 @@ class QueryHistoryListModel {
   int code;
   String message;
 
-  factory QueryHistoryListModel.fromJson(Map<String, dynamic> json) =>
-      QueryHistoryListModel(
-        data: List<Datum>.from(json["data"].map((x) => Datum.fromJson(x))),
-        code: json["code"],
-        message: json["message"],
-      );
+  factory QueryHistoryListModel.fromJson(Map<String, dynamic> json) => QueryHistoryListModel(
+    data: List<Datum>.from(json["data"].map((x) => Datum.fromJson(x))),
+    code: json["code"],
+    message: json["message"],
+  );
 
   Map<String, dynamic> toJson() => {
-        "data": List<dynamic>.from(data.map((x) => x.toJson())),
-        "code": code,
-        "message": message,
-      };
+    "data": List<dynamic>.from(data.map((x) => x.toJson())),
+    "code": code,
+    "message": message,
+  };
 }
 
 class Datum {
@@ -40,27 +37,23 @@ class Datum {
     this.historyId,
     this.createTime,
     this.posts,
-    this.user,
   });
 
   int historyId;
   String createTime;
   Posts posts;
-  User user;
 
   factory Datum.fromJson(Map<String, dynamic> json) => Datum(
-        historyId: json["historyID"],
-        createTime: json["createTime"],
-        posts: Posts.fromJson(json["posts"]),
-        user: User.fromJson(json["user"]),
-      );
+    historyId: json["historyID"],
+    createTime: json["createTime"],
+    posts: Posts.fromJson(json["posts"]),
+  );
 
   Map<String, dynamic> toJson() => {
-        "historyID": historyId,
-        "createTime": createTime,
-        "posts": posts.toJson(),
-        "user": user.toJson(),
-      };
+    "historyID": historyId,
+    "createTime": createTime,
+    "posts": posts.toJson(),
+  };
 }
 
 class Posts {
@@ -96,7 +89,7 @@ class Posts {
   int postId;
   String title;
   String detail;
-  String voice;
+  dynamic voice;
   int recommendationLevel;
   int score;
   String scoreTxt;
@@ -121,62 +114,62 @@ class Posts {
   User user;
 
   factory Posts.fromJson(Map<String, dynamic> json) => Posts(
-        postId: json["postID"],
-        title: json["title"],
-        detail: json["detail"],
-        voice: json["voice"] == null ? null : json["voice"],
-        recommendationLevel: json["recommendationLevel"],
-        score: json["score"],
-        scoreTxt: json["scoreTxt"],
-        hit: json["hit"],
-        commentCount: json["commentCount"],
-        notice: json["notice"],
-        weight: json["weight"],
-        isGood: json["isGood"],
-        createTime: json["createTime"],
-        activeTime: json["activeTime"],
-        line: json["line"],
-        tagid: json["tagid"],
-        status: json["status"],
-        praise: json["praise"],
-        isAuthention: json["isAuthention"],
-        isRich: json["isRich"],
-        appOrientation: json["appOrientation"],
-        isAppPost: json["isAppPost"],
-        appSize: json["appSize"],
-        isGif: json["isGif"],
-        images: List<Image>.from(json["images"].map((x) => Image.fromJson(x))),
-        user: User.fromJson(json["user"]),
-      );
+    postId: json["postID"],
+    title: json["title"],
+    detail: json["detail"],
+    voice: json["voice"],
+    recommendationLevel: json["recommendationLevel"],
+    score: json["score"],
+    scoreTxt: json["scoreTxt"],
+    hit: json["hit"],
+    commentCount: json["commentCount"],
+    notice: json["notice"],
+    weight: json["weight"],
+    isGood: json["isGood"],
+    createTime: json["createTime"],
+    activeTime: json["activeTime"],
+    line: json["line"],
+    tagid: json["tagid"],
+    status: json["status"],
+    praise: json["praise"],
+    isAuthention: json["isAuthention"],
+    isRich: json["isRich"],
+    appOrientation: json["appOrientation"],
+    isAppPost: json["isAppPost"],
+    appSize: json["appSize"],
+    isGif: json["isGif"],
+    images: List<Image>.from(json["images"].map((x) => Image.fromJson(x))),
+    user: User.fromJson(json["user"]),
+  );
 
   Map<String, dynamic> toJson() => {
-        "postID": postId,
-        "title": title,
-        "detail": detail,
-        "voice": voice == null ? null : voice,
-        "recommendationLevel": recommendationLevel,
-        "score": score,
-        "scoreTxt": scoreTxt,
-        "hit": hit,
-        "commentCount": commentCount,
-        "notice": notice,
-        "weight": weight,
-        "isGood": isGood,
-        "createTime": createTime,
-        "activeTime": activeTime,
-        "line": line,
-        "tagid": tagid,
-        "status": status,
-        "praise": praise,
-        "isAuthention": isAuthention,
-        "isRich": isRich,
-        "appOrientation": appOrientation,
-        "isAppPost": isAppPost,
-        "appSize": appSize,
-        "isGif": isGif,
-        "images": List<dynamic>.from(images.map((x) => x.toJson())),
-        "user": user.toJson(),
-      };
+    "postID": postId,
+    "title": title,
+    "detail": detail,
+    "voice": voice,
+    "recommendationLevel": recommendationLevel,
+    "score": score,
+    "scoreTxt": scoreTxt,
+    "hit": hit,
+    "commentCount": commentCount,
+    "notice": notice,
+    "weight": weight,
+    "isGood": isGood,
+    "createTime": createTime,
+    "activeTime": activeTime,
+    "line": line,
+    "tagid": tagid,
+    "status": status,
+    "praise": praise,
+    "isAuthention": isAuthention,
+    "isRich": isRich,
+    "appOrientation": appOrientation,
+    "isAppPost": isAppPost,
+    "appSize": appSize,
+    "isGif": isGif,
+    "images": List<dynamic>.from(images.map((x) => x.toJson())),
+    "user": user.toJson(),
+  };
 }
 
 class Image {
@@ -189,14 +182,14 @@ class Image {
   String url;
 
   factory Image.fromJson(Map<String, dynamic> json) => Image(
-        imgId: json["imgId"],
-        url: json["url"],
-      );
+    imgId: json["imgId"],
+    url: json["url"],
+  );
 
   Map<String, dynamic> toJson() => {
-        "imgId": imgId,
-        "url": url,
-      };
+    "imgId": imgId,
+    "url": url,
+  };
 }
 
 class User {
@@ -230,7 +223,7 @@ class User {
   int role;
   int experience;
   int credits;
-  IdentityTitle identityTitle;
+  String identityTitle;
   String identityColor;
   int level;
   String levelColor;
@@ -239,65 +232,42 @@ class User {
   String integralNick;
 
   factory User.fromJson(Map<String, dynamic> json) => User(
-        userId: json["userID"],
-        username: json["username"],
-        password: json["password"],
-        nick: json["nick"],
-        avatar: json["avatar"],
-        gender: json["gender"],
-        age: json["age"],
-        role: json["role"],
-        experience: json["experience"],
-        credits: json["credits"],
-        identityTitle: identityTitleValues.map[json["identityTitle"]],
-        identityColor: json["identityColor"],
-        level: json["level"],
-        levelColor: json["levelColor"],
-        integral: json["integral"],
-        uuid: json["uuid"],
-        integralNick:
-            json["integralNick"] == null ? null : json["integralNick"],
-      );
+    userId: json["userID"],
+    username: json["username"],
+    password: json["password"],
+    nick: json["nick"],
+    avatar: json["avatar"],
+    gender: json["gender"],
+    age: json["age"],
+    role: json["role"],
+    experience: json["experience"],
+    credits: json["credits"],
+    identityTitle: json["identityTitle"],
+    identityColor: json["identityColor"],
+    level: json["level"],
+    levelColor: json["levelColor"],
+    integral: json["integral"],
+    uuid: json["uuid"],
+    integralNick: json["integralNick"] == null ? null : json["integralNick"],
+  );
 
   Map<String, dynamic> toJson() => {
-        "userID": userId,
-        "username": username,
-        "password": password,
-        "nick": nick,
-        "avatar": avatar,
-        "gender": gender,
-        "age": age,
-        "role": role,
-        "experience": experience,
-        "credits": credits,
-        "identityTitle": identityTitleValues.reverse[identityTitle],
-        "identityColor": identityColor,
-        "level": level,
-        "levelColor": levelColor,
-        "integral": integral,
-        "uuid": uuid,
-        "integralNick": integralNick == null ? null : integralNick,
-      };
-}
-
-enum IdentityTitle { EMPTY, IDENTITY_TITLE, PURPLE }
-
-final identityTitleValues = EnumValues({
-  "": IdentityTitle.EMPTY,
-  "次元征服者": IdentityTitle.IDENTITY_TITLE,
-  "三当家": IdentityTitle.PURPLE
-});
-
-class EnumValues<T> {
-  Map<String, T> map;
-  Map<T, String> reverseMap;
-
-  EnumValues(this.map);
-
-  Map<T, String> get reverse {
-    if (reverseMap == null) {
-      reverseMap = map.map((k, v) => new MapEntry(v, k));
-    }
-    return reverseMap;
-  }
+    "userID": userId,
+    "username": username,
+    "password": password,
+    "nick": nick,
+    "avatar": avatar,
+    "gender": gender,
+    "age": age,
+    "role": role,
+    "experience": experience,
+    "credits": credits,
+    "identityTitle": identityTitle,
+    "identityColor": identityColor,
+    "level": level,
+    "levelColor": levelColor,
+    "integral": integral,
+    "uuid": uuid,
+    "integralNick": integralNick == null ? null : integralNick,
+  };
 }

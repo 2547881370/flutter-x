@@ -128,10 +128,6 @@ class _TabHomePageState extends State<TabHomePage>
   // 加载控制器
   EasyRefreshController _controller2;
 
-  // 第一次加载
-  bool _firstRefresh0 = true;
-  bool _firstRefresh1 = true;
-  bool _firstRefresh2 = true;
 
   @override
   void initState() {
@@ -385,38 +381,6 @@ class _TabHomePageState extends State<TabHomePage>
                                           ),
                                         )
                                       : null,
-                                  firstRefresh: _firstRefresh0,
-                                  firstRefreshWidget: Container(
-                                    width: double.infinity,
-                                    height: double.infinity,
-                                    child: Center(
-                                        child: SizedBox(
-                                      height: 200.0,
-                                      width: 300.0,
-                                      child: Card(
-                                        child: Column(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.center,
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.center,
-                                          children: <Widget>[
-                                            Container(
-                                              width: 50.0,
-                                              height: 50.0,
-                                              child: SpinKitFadingCube(
-                                                color: Theme.of(context)
-                                                    .primaryColor,
-                                                size: 25.0,
-                                              ),
-                                            ),
-                                            Container(
-                                              child: Text("加载中..."),
-                                            )
-                                          ],
-                                        ),
-                                      ),
-                                    )),
-                                  ),
                                   controller: _controller0,
                                   header: MaterialHeader(),
                                   footer: MaterialFooter(),
@@ -425,9 +389,6 @@ class _TabHomePageState extends State<TabHomePage>
                                     await _getArticleCarouselMap();
                                     await _getPostsList();
                                     _controller0.finishRefresh(noMore: false);
-                                    setState(() {
-                                      _firstRefresh0 = false;
-                                    });
                                   },
                                   onLoad: () async {
                                     queryForm[0].page = queryForm[0].page + 1;
@@ -525,38 +486,6 @@ class _TabHomePageState extends State<TabHomePage>
                                             ),
                                           )
                                         : null,
-                                    firstRefresh: _firstRefresh1,
-                                    firstRefreshWidget: Container(
-                                      width: double.infinity,
-                                      height: double.infinity,
-                                      child: Center(
-                                          child: SizedBox(
-                                        height: 200.0,
-                                        width: 300.0,
-                                        child: Card(
-                                          child: Column(
-                                            mainAxisAlignment:
-                                                MainAxisAlignment.center,
-                                            crossAxisAlignment:
-                                                CrossAxisAlignment.center,
-                                            children: <Widget>[
-                                              Container(
-                                                width: 50.0,
-                                                height: 50.0,
-                                                child: SpinKitFadingCube(
-                                                  color: Theme.of(context)
-                                                      .primaryColor,
-                                                  size: 25.0,
-                                                ),
-                                              ),
-                                              Container(
-                                                child: Text("加载中..."),
-                                              )
-                                            ],
-                                          ),
-                                        ),
-                                      )),
-                                    ),
                                     controller: _controller1,
                                     header: MaterialHeader(),
                                     footer: MaterialFooter(),
@@ -565,9 +494,6 @@ class _TabHomePageState extends State<TabHomePage>
                                       await _getArticleCarouselMap();
                                       await _getPostsList();
                                       _controller1.finishRefresh(noMore: false);
-                                      setState(() {
-                                        _firstRefresh1 = false;
-                                      });
                                     },
                                     onLoad: () async {
                                       queryForm[1].page = queryForm[1].page + 1;
@@ -667,38 +593,6 @@ class _TabHomePageState extends State<TabHomePage>
                                             ),
                                           )
                                         : null,
-                                    firstRefresh: _firstRefresh2,
-                                    firstRefreshWidget: Container(
-                                      width: double.infinity,
-                                      height: double.infinity,
-                                      child: Center(
-                                          child: SizedBox(
-                                        height: 200.0,
-                                        width: 300.0,
-                                        child: Card(
-                                          child: Column(
-                                            mainAxisAlignment:
-                                                MainAxisAlignment.center,
-                                            crossAxisAlignment:
-                                                CrossAxisAlignment.center,
-                                            children: <Widget>[
-                                              Container(
-                                                width: 50.0,
-                                                height: 50.0,
-                                                child: SpinKitFadingCube(
-                                                  color: Theme.of(context)
-                                                      .primaryColor,
-                                                  size: 25.0,
-                                                ),
-                                              ),
-                                              Container(
-                                                child: Text("加载中..."),
-                                              )
-                                            ],
-                                          ),
-                                        ),
-                                      )),
-                                    ),
                                     controller: _controller2,
                                     header: MaterialHeader(),
                                     footer: MaterialFooter(),
@@ -707,9 +601,6 @@ class _TabHomePageState extends State<TabHomePage>
                                       await _getArticleCarouselMap();
                                       await _getPostsList();
                                       _controller2.finishRefresh(noMore: false);
-                                      setState(() {
-                                        _firstRefresh2 = false;
-                                      });
                                     },
                                     onLoad: () async {
                                       queryForm[2].page = queryForm[2].page + 1;
